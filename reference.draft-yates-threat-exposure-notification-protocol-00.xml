@@ -12,6 +12,6 @@
         <date year="2020" month="May" day="1" />
     </front>
     <seriesInfo name="Internet-Draft" value="draft-yates-threat-exposure-notification-protocol-00"/>
-    <format type="TXT" target="http://www.ietf.org/internet-drafts/txt/draft-yates-threat-exposure-notification-protocol-00.txt"/>
-    <format type="HTML" target="http://www.ietf.org/internet-drafts/html/draft-yates-threat-exposure-notification-protocol-00.html"/>
+    <format type="TXT" target="https://tenprotocol.org/rfc/txt/draft-yates-threat-exposure-notification-protocol-00.txt"/>
+    <format type="HTML" target="https://tenprotocol.org/rfc/html/draft-yates-threat-exposure-notification-protocol-00.html"/>
 </reference>
