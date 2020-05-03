@@ -11,6 +11,14 @@ hugo -t terminal
 # Go To Public folder
 cd ../public
 
+# Make the RFC output directory
+mkdir -p rfc/html rfc/txt rfc/reference
+
+# Copy the RFC's
+cp ../draft-yates-threat-exposure-notification-protocol-*.txt rfc/txt/
+cp ../draft-yates-threat-exposure-notification-protocol-*.html rfc/html/
+cp ../reference.draft-yates-threat-exposure-notification-protocol-*.xml rfc/reference/
+
 # Add changes to git.
 git add .
 
