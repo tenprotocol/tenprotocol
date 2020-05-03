@@ -42,11 +42,7 @@ jobs:
           key: go-mod-v1-{{ checksum "go.sum" }}
           paths:
             - "/go/pkg/mod"
-workflows:
-  version: 2
-  build:
-    jobs:
-      - build
-        filters:
-          branches:
-            only: master
+
+    branches:
+      only:
+        - master
