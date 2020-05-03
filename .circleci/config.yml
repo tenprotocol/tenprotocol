@@ -1,0 +1,13 @@
+version: 2
+jobs:
+  build:
+    docker:
+      # specify the version
+      - image: circleci/golang:1.14
+      # - image: circleci/python:3.8.2
+
+    working_directory: /go/src/github.com/tenprotocol/tenprotocol
+    steps:
+      - checkout
+      - run: go install --tags extended https://github.com/gohugoio/hugo
+      - run: python
