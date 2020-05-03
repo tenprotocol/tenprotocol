@@ -16,7 +16,7 @@ jobs:
       - run:
           name: "Pull Submodules"
           command: |
-            git submodule update --recursive --remote
+            git submodule update --recursive --remote --init
       - run:
           name: Install xml2rfc
           command: |
