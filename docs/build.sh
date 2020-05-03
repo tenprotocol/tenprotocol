@@ -28,7 +28,7 @@ if [ -n "$*" ]; then
 	msg="$*"
 fi
 
-git commit -m "$msg"
+git commit -m "$msg [skip ci]"
 
 # Push source and build repos.
 git push origin master
