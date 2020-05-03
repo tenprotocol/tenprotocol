@@ -6,7 +6,7 @@ publishDir = "../public"
 
 [languages]
   [languages.en]
-    copyright = "© 20202 SwitchBit, Inc."
+    copyright = "© 2020 SwitchBit, Inc."
 
 [params]
   # dir name of your blog content (default is `content/posts`)

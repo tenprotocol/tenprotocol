@@ -8,8 +8,8 @@ protocols for that such as those from Google/Apple and TCN Protocol.
 
 ## The Specification
 
-The specification is available in [draft-yates-threat-exposure-notification-protocol-00.txt](draft-yates-threat-exposure-notification-protocol-00.txt) [[TXT]]
-or [draft-yates-threat-exposure-notification-protocol-00.html](draft-yates-threat-exposure-notification-protocol-00.html) [[HTML]].
+The specification is available in [draft-yates-threat-exposure-notification-protocol-00.txt](draft-yates-threat-exposure-notification-protocol-00.txt) [TXT]
+or [draft-yates-threat-exposure-notification-protocol-00.html](draft-yates-threat-exposure-notification-protocol-00.html) [HTML].
 
 ## Contributing
 
