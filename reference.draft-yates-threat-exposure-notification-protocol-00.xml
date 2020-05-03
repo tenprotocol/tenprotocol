@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE reference SYSTEM "rfc2629.dtd">
+<reference anchor="draft-yates-threat-exposure-notification-protocol-00">
+    <front>
+        <title>Threat Exposure Notification Protocol</title>
+        <author initials="S." surname="Yates" fullname="Seth Yates">
+            <organization>Switchbit, Inc.</organization>
+        </author>
+        <author initials="Y." surname="Salomon" fullname="Yacov Salomon">
+            <organization>Switchbit, Inc.</organization>
+        </author>
+        <date year="2020" month="May" day="1" />
+    </front>
+    <seriesInfo name="Internet-Draft" value="draft-yates-threat-exposure-notification-protocol-00"/>
+    <format type="TXT" target="http://www.ietf.org/internet-drafts/txt/draft-yates-threat-exposure-notification-protocol-00.txt"/>
+    <format type="HTML" target="http://www.ietf.org/internet-drafts/html/draft-yates-threat-exposure-notification-protocol-00.html"/>
+</reference>

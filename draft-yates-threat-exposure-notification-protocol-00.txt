@@ -1,0 +1,1624 @@
+
+
+
+
+Internet Engineering Task Force                                 S. Yates
+Internet-Draft                                                Y. Salomon
+Intended status: Experimental                            Switchbit, Inc.
+Expires: November 2, 2020                                    May 1, 2020
+
+
+                 Threat Exposure Notification Protocol
+          draft-yates-threat-exposure-notification-protocol-00
+
+Abstract
+
+   This specification defines a protocol for an HTTP- and JSON-based
+   Threat Exposure Notification by outlining how clients upload
+   diagnosis keys, query exposure, revoke diagnosis keys and fetch
+   diagnosis keys from a server.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at https://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on November 2, 2020.
+
+Copyright Notice
+
+   Copyright (c) 2020 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents
+   (https://trustee.ietf.org/license-info) in effect on the date of
+   publication of this document.  Please review these documents
+   carefully, as they describe your rights and restrictions with respect
+   to this document.
+
+
+
+
+
+
+
+Yates & Salomon         Expires November 2, 2020                [Page 1]
+
+Internet-Draft                    TENP                          May 2020
+
+
+Table of Contents
+
+   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   3
+     1.1.  Notational Conventions  . . . . . . . . . . . . . . . . .   4
+     1.2.  Threat Exposure Notification  . . . . . . . . . . . . . .   4
+     1.3.  Tracking Exposures (Non-Normative)  . . . . . . . . . . .   5
+     1.4.  Diagnosis (Non-Normative) . . . . . . . . . . . . . . . .   5
+     1.5.  Terminology . . . . . . . . . . . . . . . . . . . . . . .   5
+   2.  Protocol Flow . . . . . . . . . . . . . . . . . . . . . . . .   6
+   3.  Threat Exposure Notification Server Metadata  . . . . . . . .   6
+     3.1.  Threat Exposure Notification Server Configuration
+           Document  . . . . . . . . . . . . . . . . . . . . . . . .   6
+     3.2.  Obtaining Threat Exposure Notification Server
+           Configuration Document  . . . . . . . . . . . . . . . . .   7
+       3.2.1.  Threat Exposure Notification Server Configuration
+               Request . . . . . . . . . . . . . . . . . . . . . . .   8
+       3.2.2.  Threat Exposure Notification Server Configuration
+               Response  . . . . . . . . . . . . . . . . . . . . . .   8
+       3.2.3.  Threat Exposure Notification Server Configuration
+               Validation  . . . . . . . . . . . . . . . . . . . . .   8
+   4.  Threat Descriptors  . . . . . . . . . . . . . . . . . . . . .   8
+     4.1.  Threat Descriptor Properties  . . . . . . . . . . . . . .   8
+   5.  Assertions  . . . . . . . . . . . . . . . . . . . . . . . . .   9
+   6.  Uploading Diagnosis Keys  . . . . . . . . . . . . . . . . . .   9
+     6.1.  Upload Request  . . . . . . . . . . . . . . . . . . . . .   9
+     6.2.  Upload Validation . . . . . . . . . . . . . . . . . . . .  10
+     6.3.  Upload Response . . . . . . . . . . . . . . . . . . . . .  10
+     6.4.  Upload Error Response . . . . . . . . . . . . . . . . . .  11
+   7.  Querying Exposure . . . . . . . . . . . . . . . . . . . . . .  11
+     7.1.  Query Request . . . . . . . . . . . . . . . . . . . . . .  11
+     7.2.  Query Validation  . . . . . . . . . . . . . . . . . . . .  12
+     7.3.  Query Response  . . . . . . . . . . . . . . . . . . . . .  12
+     7.4.  Query Error Response  . . . . . . . . . . . . . . . . . .  13
+   8.  Fetching Diagnosis Keys . . . . . . . . . . . . . . . . . . .  13
+     8.1.  Fetch Request . . . . . . . . . . . . . . . . . . . . . .  13
+     8.2.  Fetch Validation  . . . . . . . . . . . . . . . . . . . .  14
+     8.3.  Fetch Response  . . . . . . . . . . . . . . . . . . . . .  14
+     8.4.  Fetch Error . . . . . . . . . . . . . . . . . . . . . . .  15
+   9.  Revoking Diagnosis Keys . . . . . . . . . . . . . . . . . . .  15
+     9.1.  Revoke Request  . . . . . . . . . . . . . . . . . . . . .  15
+     9.2.  Revoke Validation . . . . . . . . . . . . . . . . . . . .  16
+     9.3.  Revoke Response . . . . . . . . . . . . . . . . . . . . .  16
+     9.4.  Revoke Error  . . . . . . . . . . . . . . . . . . . . . .  16
+   10. Security Considerations . . . . . . . . . . . . . . . . . . .  16
+     10.1.  Authentication and Authorization . . . . . . . . . . . .  16
+     10.2.  Privacy Considerations . . . . . . . . . . . . . . . . .  16
+     10.3.  TLS Requirements . . . . . . . . . . . . . . . . . . . .  16
+   11. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  17
+
+
+
+Yates & Salomon         Expires November 2, 2020                [Page 2]
+
+Internet-Draft                    TENP                          May 2020
+
+
+     11.1.  Threat Exposure Notification Server Metadata Registry  .  18
+       11.1.1.  Registration Template  . . . . . . . . . . . . . . .  18
+       11.1.2.  Initial Registry Contents  . . . . . . . . . . . . .  19
+     11.2.  Well-Known URI Registry  . . . . . . . . . . . . . . . .  20
+       11.2.1.  Registry Contents  . . . . . . . . . . . . . . . . .  20
+   12. References  . . . . . . . . . . . . . . . . . . . . . . . . .  20
+     12.1.  Normative References . . . . . . . . . . . . . . . . . .  20
+     12.2.  Informative References . . . . . . . . . . . . . . . . .  22
+   Appendix A.  Configuration Examples (Non-normative) . . . . . . .  22
+     A.1.  Example Configuration Request . . . . . . . . . . . . . .  22
+     A.2.  Example Configuration Response  . . . . . . . . . . . . .  22
+   Appendix B.  Upload Examples (Non-normative)  . . . . . . . . . .  23
+     B.1.  Example Upload Request  . . . . . . . . . . . . . . . . .  23
+     B.2.  Example Upload Successful Response  . . . . . . . . . . .  24
+     B.3.  Example Upload Empty Response . . . . . . . . . . . . . .  24
+     B.4.  Example Upload Error Response . . . . . . . . . . . . . .  24
+   Appendix C.  Query Examples (Non-normative) . . . . . . . . . . .  25
+     C.1.  Example Query Request . . . . . . . . . . . . . . . . . .  25
+     C.2.  Example Query Response  . . . . . . . . . . . . . . . . .  26
+     C.3.  Example Query Error Response  . . . . . . . . . . . . . .  26
+   Appendix D.  Fetch Examples (Non-normative) . . . . . . . . . . .  26
+     D.1.  Example Fetch Request . . . . . . . . . . . . . . . . . .  26
+     D.2.  Example Fetch Response  . . . . . . . . . . . . . . . . .  27
+     D.3.  Example Fetch Error Response  . . . . . . . . . . . . . .  27
+   Appendix E.  Revoke Examples (Non-normative)  . . . . . . . . . .  28
+     E.1.  Example Revoke Request  . . . . . . . . . . . . . . . . .  28
+     E.2.  Example Revoke Successful Response  . . . . . . . . . . .  28
+     E.3.  Example Revoke Empty Response . . . . . . . . . . . . . .  29
+     E.4.  Example Revoke Error Response . . . . . . . . . . . . . .  29
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  29
+
+1.  Introduction
+
+   Contact Tracing is a technique used by public health authorities to
+   measure and contain the spread of infectious diseases ([who]).  It
+   requires gathering information from infected individuals about the
+   people they've previously been in contact with.  These individuals
+   can then be notified by public health authorities to take appropriate
+   safety measures, such as undertaking self-quarantine and getting
+   tested.
+
+   Technology can play an important role in contact tracing efforts.
+   Mobile devices can be used in an automated and scalable way to help
+   determine who has been exposed to a person that later is deemed
+   infectious and sending a notification with instructions on next
+   steps.  Health authorities can then use this information to help
+   control the spread of infectious diseases.
+
+
+
+
+Yates & Salomon         Expires November 2, 2020                [Page 3]
+
+Internet-Draft                    TENP                          May 2020
+
+
+   The Threat Exposure Notification Protocol (TENP) is a simple HTTP-
+   and JSON-based protocol for client-server communication of
+   information to determine if a user has been exposed to a threat.  It
+   enables clients to upload and query such information from a server in
+   an interoperable and REST-like manner.
+
+1.1.  Notational Conventions
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+   document are to be interpreted as described in [RFC2119] when, and
+   only when, they appear in all capitals, as shown here.
+
+   Throughout this document, figures may contain spaces and extra line
+   wrapping to improve readability and accommodate space limitations.
+   Similarly, some URIs contained within examples have been shortened
+   for space and readability reasons (as indicated by "...").
+
+1.2.  Threat Exposure Notification
+
+                           Unexposed
+                               +
+                               |
+                               v
+                            Exposed
+                             +  +
+                             |  |
+                     +-------+  +----------+
+                     |                     |
+                     v                     v
+                 Infected <----------+ Uninfected
+                  + + +
+                  | | |
+       +----------+ | +---------------+
+       |            |                 |
+       v            v                 v
+   Deceased <--+ Diagnosed +----> Recovered
+
+   Figure 1: Exposure Flow
+
+   Threat Exposure Notification Service includes App, Client, Server,
+   other enabling technologies and authorities.
+
+   Threat Exposure Notification App runs on a device operated by a user
+   and leverages the protocol for communication between the Threat
+   Exposure Notification Client it implements and the Threat Exposure
+   Notification Server
+
+
+
+
+Yates & Salomon         Expires November 2, 2020                [Page 4]
+
+Internet-Draft                    TENP                          May 2020
+
+
+   User uses or accesses the Threat Exposure Notification Service via an
+   app installed on their device
+
+1.3.  Tracking Exposures (Non-Normative)
+
+   This protocol does not specify a method by which clients trace
+   potential exposures.  Several established approaches exist varying in
+   the underlying data and technology interface used.  The two most
+   common data sources used are Bluetooth proximity data, and geo
+   location plus timestamp.
+
+   Privacy and security are a major concern and all established
+   approaches ensure Personal Identifiable Information (PII) is
+   protected by leveraging a combination of measures such as only
+   storing such information locally on the client, encrypting
+   information everywhere, and using cryptographically random keys where
+   possible.
+
+1.4.  Diagnosis (Non-Normative)
+
+   This protocol does not specify a method for testing or diagnosis of a
+   threat nor does it specify a process of authorization to upload
+   diagnosis keys.  Several approaches have been suggested elsewhere
+   ranging from self declared to tightly controlled authorization
+   managed by trusted authorities (for example [pact]).
+
+1.5.  Terminology
+
+   This specification defines the following terms:
+
+   Threat Exposure Notification Client
+      A client that implements this protocol.
+
+   Threat Exposure Notification Server
+      A server that implements this protocol.
+
+   Infected
+      A property of a person denoting that they are affected by a threat
+      (although possibly not diagnosed).
+
+   Diagnosis
+      A property of a person denoting their status with respect to a
+      registered threat based on the outcome of a registered procedure.
+
+   Exposure
+      The act of coming in contact with an infected user.
+
+   Threat
+
+
+
+Yates & Salomon         Expires November 2, 2020                [Page 5]
+
+Internet-Draft                    TENP                          May 2020
+
+
+      A harmful vector, contagion, infectious disease, or other concern
+      for authorities.
+
+   Key
+      Keys belong to a device or app, that belong to a user.
+
+2.  Protocol Flow
+
+   +----------+                   +----------+
+   |          |                   |          |
+   |          |                   |          |
+   |          |--(A)- METADATA -->|          |
+   |          |--(B)- UPLOAD ---->|          |
+   |  Client  |--(C)- QUERY ----->|  Server  |
+   |          |--(D)- FETCH ----->|          |
+   |          |--(E)- REVOKE ---->|          |
+   |          |                   |          |
+   |          |                   |          |
+   +----------+                   +----------+
+
+                     Figure 2: Abstract Protocol Flow
+
+   o  (A) A client obtains the Threat Exposure Notification Server
+      Configuration Document from server(s).
+
+   o  (B) A client uploads diagnosed keys to server(s).
+
+   o  (C) A client queries exposure from server(s).
+
+   o  (D) A client fetches diagnosed keys from server(s).
+
+   o  (E) A client revokes access to diagnosed keys from server(s).
+
+3.  Threat Exposure Notification Server Metadata
+
+3.1.  Threat Exposure Notification Server Configuration Document
+
+   A server MUST host a Threat Exposure Notification Server
+   Configuration Document describing its configuration.  The following
+   server metadata values are used by this specification and are
+   registered in the IANA "Threat Exposure Notification Servers
+   Metadata" registry established inSection 11.1:
+
+   supports_query
+      REQUIRED.  Boolean value indicating whether the server supports
+      the Query operation.
+
+   query_endpoint
+
+
+
+Yates & Salomon         Expires November 2, 2020                [Page 6]
+
+Internet-Draft                    TENP                          May 2020
+
+
+      RECOMMENDED.  URL of the server's Query endpoint.
+
+   supports_upload
+      REQUIRED.  Boolean value indicating whether the server supports
+      the Upload operation.
+
+   upload_endpoint
+      RECOMMENDED.  URL of the server's Fetch endpoint.
+
+   supports_fetch
+      REQUIRED.  Boolean value indicating whether the server supports
+      the Fetch operation.
+
+   fetch_endpoint
+      RECOMMENDED.  URL of the server's Query endpoint.
+
+   supports_revoke
+      REQUIRED.  Boolean value indicating whether the server supports
+      the Revoke operation.
+
+   revoke_endpoint
+      RECOMMENDED.  URL of the server's Revoke endpoint.
+
+   threats_supported
+      REQUIRED.  An array of strings of the threats the server supports.
+      Section 4
+
+   keys_supported
+      REQUIRED.  An array of strings of the keys the server supports.
+
+   assertions_supported
+      RECOMMENDED.  An array of strings of the Assertions the server
+      supports.
+
+   Clients that do not recognize Metadata values SHALL ignore them and
+   not generate an error.
+
+3.2.  Obtaining Threat Exposure Notification Server Configuration
+      Document
+
+   Servers MUST make a JSON document [RFC8259] available at the path
+   "/.well-known/threat-exposure-configuration".  The syntax and
+   semantics of ".well-known" are defined in[RFC8615].
+
+   "threat-exposure-configuration" MUST point to a JSON document
+   [RFC8259] compliant with this specification and MUST be returned
+   using the "application/json" content type.
+
+
+
+
+Yates & Salomon         Expires November 2, 2020                [Page 7]
+
+Internet-Draft                    TENP                          May 2020
+
+
+   The well-known URI path suffix used MUST be registered in the IANA
+   "Well-Known URIs" registry[IANA.well-known].
+
+3.2.1.  Threat Exposure Notification Server Configuration Request
+
+   A Threat Exposure Notification Server Configuration Document MUST be
+   queried using an HTTP GET request at the previously specified path.
+
+3.2.2.  Threat Exposure Notification Server Configuration Response
+
+   The response is a JSON object [RFC8259] containing a set of claims
+   about the server's configuration, including all necessary endpoints
+   and supported information.  A successful response MUST use the 200 OK
+   HTTP status code and return a JSON object [RFC8259] using the
+   "application/json" content type that contains a set of claims as its
+   members that are a subset of the Metadata values defined inSection 3.
+
+   Other claims MAY also be returned and clients MUST ignore any claims
+   not recognized.
+
+   Clients SHOULD follow redirected requests.
+
+   Claims that return multiple values are represented as JSON arrays.
+
+   Claims with zero elements MUST be omitted from the response.
+
+   An error response uses the applicable HTTP status code value.
+
+3.2.3.  Threat Exposure Notification Server Configuration Validation
+
+   If any of the validation procedures defined in this specification
+   fail, any operations requiring the information that failed to
+   correctly validate MUST be aborted and the information that failed to
+   validate MUST NOT be used.
+
+4.  Threat Descriptors
+
+   This section describes a JSON document [RFC8259] format for
+   describing threats.  The format is based on the JRD document format
+   specified in[RFC6415].
+
+4.1.  Threat Descriptor Properties
+
+   A Threat Descriptor has the following properties:
+
+   https://tenprotocol.org/threat/name
+
+      REQUIRED.  The name of the threat.
+
+
+
+Yates & Salomon         Expires November 2, 2020                [Page 8]
+
+Internet-Draft                    TENP                          May 2020
+
+
+   https://tenprotocol.org/threat/description
+
+      REQUIRED.  A short description of the threat.
+
+   https://tenprotocol.org/threat/symptoms
+
+      RECOMMENDED.  A comma-separated list of string labels that
+      describe symptoms of the threat.
+
+5.  Assertions
+
+   Assertions can be attached to Requests to provide additional
+   information about the request.  The key of an Assertion is a URI.
+   Clients MUST NOT attempt to fetch the fetch the resource specified by
+   the URI.  New Assertions can be created by specifying new URI's.  The
+   specifier MUST control the URI space.
+
+6.  Uploading Diagnosis Keys
+
+   The client MAY upload to the server the diagnosis keys associated to
+   a diagnosis of a threat.
+
+   The specification for how a client establishes connections to servers
+   is covered in Section 3.2.
+
+   Information about the diagnosis, client, individual or scope can be
+   attached to the upload using AssertionsSection 5.
+
+6.1.  Upload Request
+
+   The client SHOULD retrieve the request URI from the Threat Exposure
+   Notification Server Configuration Document as defined inSection 3.2.
+
+   The request object is a JSON object [RFC8259] with the following
+   properties:
+
+   keys
+      REQUIRED.  A dictionary where the key is a URI of a key type and
+      the value is an array of strings representing the diagnosis keys
+      for that key type.
+
+   diagnosis
+      REQUIRED.  An object providing information about the diagnosis of
+      a threat.  It has the following properties:
+
+      threat
+         REQUIRED.  A URI of a threat that has been diagnosed, as
+         specified inSection 4.
+
+
+
+Yates & Salomon         Expires November 2, 2020                [Page 9]
+
+Internet-Draft                    TENP                          May 2020
+
+
+      diagnosed
+         REQUIRED.  The time when the diagnosis was made formatted as
+         specified in [RFC3339] with no time zone offset.
+
+   assertions
+      OPTIONAL.  An object providing additional assertions related to
+      the upload, diagnosis, individual or scope.  The key is an
+      Assertion defined as perSection 5.  The client MUST ignore any
+      assertions it does not recognize.
+
+6.2.  Upload Validation
+
+   The server SHOULD validate the request, including ensuring e.g., that
+   the "keys" is supported, "threat" is supported and "diagnosed " is a
+   properly formatted time [RFC3339] occurring in the past.
+
+   The following Problem Detail Types [RFC7807] are defined for
+   validation:
+
+   https://tenprotocol.org/errors/keys-required
+      The "keys" property is missing or is not an object or the value of
+      one of the keys is not an array.
+
+   https://tenprotocol.org/errors/key-not-supported
+      One of the keys specified in the "keys" property is not supported
+      by the server.
+
+   https://tenprotocol.org/errors/diagnosis-required
+      The "diagnosis" property is missing or is not an object.
+
+   https://tenprotocol.org/errors/threat-required
+      The "threat" property is missing or is not a string.
+
+   https://tenprotocol.org/errors/threat-not-supported
+      The threat specified in the "threat" property is not supported by
+      the server.
+
+   https://tenprotocol.org/errors/diagnosed-required
+      The "diagnosed" property is missing or is not a string.
+
+   https://tenprotocol.org/errors/diagnosed-invalid
+      The "diagnosed" property is invalid.
+
+6.3.  Upload Response
+
+   If the server has validated the request and accepted the upload, the
+   server will return either a "200 OK" or "204 No Content" response
+   code.  Clients MUST support either response as a successful upload.
+
+
+
+Yates & Salomon         Expires November 2, 2020               [Page 10]
+
+Internet-Draft                    TENP                          May 2020
+
+
+6.4.  Upload Error Response
+
+   If the request was not validated properly, the server MUST return a
+   "400 Bad Request " error response with a Problem Details Object
+   [RFC7807] containing at least the "type", "status" and "detail" as
+   specified in[RFC7807].
+
+7.  Querying Exposure
+
+   A client MAY query a server to determine exposure to a threat.
+
+   The specification for how a client establishes connections to servers
+   is covered in Section 3.2.
+
+   Information about the diagnosis, client, individual or scope can be
+   attached to the upload using AssertionsSection 5.
+
+7.1.  Query Request
+
+   The client SHOULD retrieve the request URI from the Threat Exposure
+   Notification Server Configuration Document as defined inSection 3.2.
+
+   The request object is a JSON object [RFC8259] with the following
+   properties:
+
+   keys
+      REQUIRED.  A dictionary where the key is an URI of a key type and
+      the value is an array of strings representing the keys for that
+      key type.
+
+   before
+      OPTIONAL.  A date to search for exposures before, formatted as
+      specified in [RFC3339] with no time zone offset.
+
+   after
+      OPTIONAL.  A date to search for exposures after, formatted as
+      specified in [RFC3339] with no time zone offset.  If omitted, the
+      server SHOULD provide a reasonable default based on the specified
+      threats.
+
+   threats
+      REQUIRED.  Array of strings specifying which threats to check for
+      exposure toSection 4.
+
+   assertions
+      OPTIONAL.  An object providing additional assertions related to
+      the upload, diagnosis, individual or scope.  The key is an
+
+
+
+
+Yates & Salomon         Expires November 2, 2020               [Page 11]
+
+Internet-Draft                    TENP                          May 2020
+
+
+      Assertion defined as perSection 5.  The client MUST ignore any
+      assertions it does not recognize.
+
+7.2.  Query Validation
+
+   The server SHOULD validate the request, including ensuring e.g., that
+   the "key" is supported, "threats" are supported, and so on.
+
+   The following Problem Detail Types [RFC7807] are defined for
+   validation:
+
+   https://tenprotocol.org/errors/keys-required
+      The "keys" property is missing or is not an object or the value of
+      one of the keys is not an array.
+
+   https://tenprotocol.org/errors/key-not-supported
+      One of the keys specified in the "keys" property is not supported
+      by the server.
+
+   https://tenprotocol.org/errors/threats-required
+      The "threats" property is missing or is not an array of strings.
+
+   https://tenprotocol.org/errors/threat-not-supported
+      The threat specified in the "threat" property is not supported by
+      the server.
+
+   https://tenprotocol.org/errors/before-invalid
+      The "before" property is invalid.
+
+   https://tenprotocol.org/errors/after-invalid
+      The "after" property is invalid.
+
+7.3.  Query Response
+
+   If the server has validated the request and accepted the query, the
+   server will return a "200 OK" response with a "Content-Type" header
+   equal to "application/json".
+
+   The request object is a JSON object [RFC8259] with the following
+   properties:
+
+   exposed
+      REQUIRED.  A dictionary of exposures to the threats.  The key of
+      the dictionary is the threat URI as defined in Section 4 and the
+      value is a boolean denoting whether an exposure to the condition
+      has been flagged.
+
+   exposures
+
+
+
+Yates & Salomon         Expires November 2, 2020               [Page 12]
+
+Internet-Draft                    TENP                          May 2020
+
+
+      OPTIONAL.  An array of days when exposures happened formatted as
+      per [RFC3339] without a time component.
+
+   message
+      A human-readable message to be displayed to the user.
+
+   links
+      A list of WebLinks [RFC8288] for more information.
+
+7.4.  Query Error Response
+
+   If the request was not validated properly, the server MUST return a
+   "400 Bad Request " error response with a Problem Details Object
+   [RFC7807] containing at least the "type", "status" and "detail" as
+   specified in[RFC7807].
+
+8.  Fetching Diagnosis Keys
+
+   A client MAY ask to remove diagnosis keys it previously uploaded to a
+   server.
+
+   The specification for how a client establishes connections to servers
+   is covered in Section 3.2.
+
+   Information about the diagnosis, client, individual or scope can be
+   attached to the upload using AssertionsSection 5.
+
+8.1.  Fetch Request
+
+   The client SHOULD retrieve the request URI from the Threat Exposure
+   Notification Server Configuration Document as defined inSection 3.2.
+
+   The request object is a JSON object [RFC8259] with the following
+   properties:
+
+   keys
+      REQUIRED.  An array of URI's for the requested key types.
+
+   before
+      OPTIONAL.  A date to search for exposures before, formatted as
+      specified in [RFC3339] with no time zone offset.
+
+   after
+      OPTIONAL.  A date to search for exposures after, formatted as
+      specified in [RFC3339] with no time zone offset.  If omitted, the
+      server SHOULD provide a reasonable default based on the specified
+      threats.
+
+
+
+
+Yates & Salomon         Expires November 2, 2020               [Page 13]
+
+Internet-Draft                    TENP                          May 2020
+
+
+   threats
+      REQUIRED.  Array of strings specifying which threats to check for
+      exposure toSection 4.
+
+   assertions
+      OPTIONAL.  An object providing additional assertions related to
+      the upload, diagnosis, individual or scope.  The key is an
+      Assertion defined as perSection 5.  The client MUST ignore any
+      assertions it does not recognize.
+
+8.2.  Fetch Validation
+
+   The server SHOULD validate the request, including ensuring e.g., that
+   the "keys" are supported, "threats" are supported, and so on.
+
+   The following Problem Detail Types [RFC7807] are defined for
+   validation:
+
+   https://tenprotocol.org/errors/keys-required
+      The "keys" property is missing or is not an array.
+
+   https://tenprotocol.org/errors/key-not-supported
+      One of the keys specified in the "keys" property is not supported
+      by the server.
+
+   https://tenprotocol.org/errors/threats-required
+      The "threats" property is missing or is not an array of strings.
+
+   https://tenprotocol.org/errors/threat-not-supported
+      The threat specified in the "threat" property is not supported by
+      the server.
+
+   https://tenprotocol.org/errors/before-invalid
+      The "before" property is invalid.
+
+   https://tenprotocol.org/errors/after-invalid
+      The "after" property is invalid.
+
+8.3.  Fetch Response
+
+   If the server has validated the request and accepted the fetch, the
+   server will return a "200 OK" response with a "Content-Type" header
+   equal to "application/json".
+
+   The client and server SHOULD support Chunked Transfer Encoding
+   [RFC7230] as the resulting response entity may be large.
+
+
+
+
+
+Yates & Salomon         Expires November 2, 2020               [Page 14]
+
+Internet-Draft                    TENP                          May 2020
+
+
+   The request object is a JSON object [RFC8259] with the following
+   properties:
+
+   keys
+      REQUIRED.  A dictionary where the key is a URI of a key type and
+      the value is an array of strings representing the diagnosis keys
+      for that key type.
+
+8.4.  Fetch Error
+
+   If the request was not validated properly, the server MUST return a
+   "400 Bad Request " error response with a Problem Details Object
+   [RFC7807] containing at least the "type", "status" and "detail" as
+   specified in[RFC7807].
+
+9.  Revoking Diagnosis Keys
+
+   A client MAY ask to remove diagnosis keys it previously uploaded to a
+   server.
+
+   The specification for how a client establishes connections to servers
+   is covered in Section 3.2.
+
+   Information about the diagnosis, client, individual or scope can be
+   attached to the upload using assertionsSection 5.
+
+9.1.  Revoke Request
+
+   The client SHOULD retrieve the request URI from the Threat Exposure
+   Notification Server Configuration Document as defined inSection 3.2.
+
+   The request object is a JSON object [RFC8259] with the following
+   properties:
+
+   keys
+      REQUIRED.  A dictionary where the key is a URI of a key type and
+      the value is an array of strings representing the diagnosis keys
+      for that key type.
+
+   assertions
+      OPTIONAL.  An object providing additional assertions related to
+      the upload, diagnosis, individual or scope.  The key is an
+      Assertion defined as perSection 5.  The client MUST ignore any
+      assertions it does not recognize.
+
+
+
+
+
+
+
+Yates & Salomon         Expires November 2, 2020               [Page 15]
+
+Internet-Draft                    TENP                          May 2020
+
+
+9.2.  Revoke Validation
+
+   The server SHOULD validate the request, including ensuring e.g., that
+   the "keys" is supported.
+
+   The following Problem Detail Types [RFC7807] are defined for
+   validation:
+
+   https://tenprotocol.org/errors/keys-required
+      The "keys" property is missing or is not an object or the value of
+      one of the keys is not an array.
+
+   https://tenprotocol.org/errors/key-not-supported
+      One of the keys specified in the "keys" property is not supported
+      by the server.
+
+9.3.  Revoke Response
+
+   If the server has validated the request and accepted the upload, the
+   server will return either a "200 OK" or "204 No Content" response
+   code.  Clients MUST support either response as a successful upload.
+
+9.4.  Revoke Error
+
+   If the request was not validated properly, the server MUST return a
+   "400 Bad Request " error response with a Problem Details Object
+   [RFC7807] containing at least the "type", "status" and "detail" as
+   specified in[RFC7807].
+
+10.  Security Considerations
+
+10.1.  Authentication and Authorization
+
+   This specification does not specify a method for authorizing calls to
+   the server.  Calls to the endpoints may even be unauthenticated,
+   depending on the server configuration.
+
+10.2.  Privacy Considerations
+
+   While the Assertions mechanism allows the requests to be augmented,
+   it is up to the client and server to ensure that any assertions
+   provided to not expose any personally identifiable information (PII).
+
+10.3.  TLS Requirements
+
+   Implementations MUST support TLS.  Which version(s) ought to be
+   implemented will vary over time and depend on the widespread
+   deployment and known security vulnerabilities at the time of
+
+
+
+Yates & Salomon         Expires November 2, 2020               [Page 16]
+
+Internet-Draft                    TENP                          May 2020
+
+
+   implementation.  The authorization server MUST support TLS version
+   1.2 [RFC5246] and MAY support additional TLS mechanisms meeting its
+   security requirements.  When using TLS, the client MUST perform a
+   TLS/SSL server certificate check, per[RFC6125].  Implementation
+   security considerations can be found in "Recommendations for Secure
+   Use of Transport Layer Security (TLS) and Datagram Transport Layer
+   Security (DTLS)"[RFC7525].
+
+   To protect against information disclosure and tampering,
+   confidentiality protection MUST be applied using TLS with a
+   ciphersuite that provides confidentiality and integrity protection.
+
+11.  IANA Considerations
+
+   The following registration procedure is used for the registry
+   established by this specification.
+
+   Values are registered on a Specification Required [RFC8126] basis
+   after a two-week review period on the ctwg-ext-review@tenprotocol.org
+   mailing list, on the advice of one or more Designated Experts.
+   However, to allow for the allocation of values prior to publication,
+   the Designated Experts may approve registration once they are
+   satisfied that such a specification will be published.
+
+   Registration requests sent to the mailing list for review should use
+   an appropriate subject (e.g., "Request to register Threat Exposure
+   Notification Server Metadata: example").
+
+   Within the review period, the Designated Experts will either approve
+   or deny the registration request, communicating this decision to the
+   review list and IANA.  Denials should include an explanation and, if
+   applicable, suggestions as to how to make the request successful.
+   Registration requests that are undetermined for a period longer than
+   21 days can be brought to the IESG's attention (using the
+   iesg@ietf.org mailing list) for resolution.
+
+   Criteria that should be applied by the Designated Experts include
+   determining whether the proposed registration duplicates existing
+   functionality, determining whether it is likely to be of general
+   applicability or whether it is useful only for a single application,
+   and whether the registration makes sense.
+
+   IANA must only accept registry updates from the Designated Experts
+   and should direct all requests for registration to the review mailing
+   list.
+
+   It is suggested that multiple Designated Experts be appointed who are
+   able to represent the perspectives of different applications using
+
+
+
+Yates & Salomon         Expires November 2, 2020               [Page 17]
+
+Internet-Draft                    TENP                          May 2020
+
+
+   this specification, in order to enable broadly-informed review of
+   registration decisions.  In cases where a registration decision could
+   be perceived as creating a conflict of interest for a particular
+   Designated Expert, that Designated Expert should defer to the
+   judgment of the other Designated Experts.
+
+11.1.  Threat Exposure Notification Server Metadata Registry
+
+   This specification establishes the IANA "Threat Exposure Notification
+   Server Metadata" registry for Threat Exposure Notification Server
+   metadata names.  The registry records the Threat Exposure
+   Notification Server metadata member and a reference to the
+   specification that defines it.
+
+   The Designated Experts must either:
+
+   (a) require that metadata names and values being registered use only
+   printable ASCII characters excluding double quote ('"') and backslash
+   ('\') (the Unicode characters with code points U+0021, U+0023 through
+   U+005B, and U+005D through U+007E), or
+
+   (b) if new metadata members or values are defined that use other code
+   points, require that their definitions specify the exact sequences of
+   Unicode code points used to represent them.  Furthermore, proposed
+   registrations that use Unicode code points that can only be
+   represented in JSON strings as escaped characters must not be
+   accepted.
+
+11.1.1.  Registration Template
+
+   Metadata Name:
+      The name requested (e.g., "query_endpoint").  This name is case-
+      sensitive.  Names may not match other registered names in a case-
+      insensitive manner (one that would cause a match if the Unicode
+      toLowerCase() operation were applied to both strings) unless the
+      Designated Experts state that there is a compelling reason to
+      allow an exception.
+
+   Metadata Description:
+      Brief description of the metadata (e.g., "Query Endpoint URL").
+
+   Metadata Type:
+      Description of the metadata type (e.g., string, boolean, number)
+      and whether multiple values are expected (e.g., array of strings,
+      array of numbers).
+
+   Change Controller:
+
+
+
+
+Yates & Salomon         Expires November 2, 2020               [Page 18]
+
+Internet-Draft                    TENP                          May 2020
+
+
+      For Standards Track RFCs, list the "IESG".  For others, give the
+      name of the responsible party.  Other details (e.g., postal
+      address, email address, home page URI) may also be included.
+
+   Specification Document(s):
+      Reference to the document or documents that specify the parameter,
+      preferably including URIs that can be used to retrieve copies of
+      the documents.  An indication of the relevant sections may also be
+      included but is not required.
+
+11.1.2.  Initial Registry Contents
+
+   o  Metadata Name: supports_query
+
+   o  Metadata Type: boolean
+
+   o  Metadata Description: Value indicating whether the server supports
+      the Query operation.
+
+   o  Change Controller: ctwg-ext-review@tenprotocol.org
+
+   o  Specification Document(s): Section 3 of this specification.
+
+   o  Metadata Name: query_endpoint
+
+   o  Metadata Type: string
+
+   o  Metadata Description: URL of the server's Query endpoint.
+
+   o  Change Controller: ctwg-ext-review@tenprotocol.org
+
+   o  Specification Document(s): Section 3 of this specification.
+
+   o  Metadata Name: supports_upload
+
+   o  Metadata Type: boolean
+
+   o  Metadata Description: Value indicating whether the server supports
+      the Upload operation.
+
+   o  Change Controller: ctwg-ext-review@tenprotocol.org
+
+   o  Specification Document(s): Section 3 of this specification.
+
+   o  Metadata Name: upload_endpoint
+
+   o  Metadata Type: string
+
+
+
+
+Yates & Salomon         Expires November 2, 2020               [Page 19]
+
+Internet-Draft                    TENP                          May 2020
+
+
+   o  Metadata Description: URL of the server"s Upload endpoint.
+
+   o  Change Controller: ctwg-ext-review@tenprotocol.org
+
+   o  Specification Document(s): Section 3 of this specification.
+
+   o  Metadata Name: keys_supported
+
+   o  Metadata Type: array of string
+
+   o  Metadata Description: Array of strings of URI's that designated
+      which keys are supported.
+
+   o  Change Controller: ctwg-ext-review@tenprotocol.org
+
+   o  Specification Document(s): Section 3 of this specification.
+
+   o  Metadata Name: threats_supported
+
+   o  Metadata Type: array of string
+
+   o  Metadata Description: Array of strings of Threat
+      DescriptorsSection 4.
+
+   o  Change Controller: ctwg-ext-review@tenprotocol.org
+
+   o  Specification Document(s): Section 3 of this specification.
+
+11.2.  Well-Known URI Registry
+
+   This specification registers the well-known URI defined in
+   Section 3.2 in the IANA Well-Known URI registry defined in[RFC8615].
+
+11.2.1.  Registry Contents
+
+   o  URI suffix: "threat-exposure-configuration"
+   o  Change controller: IESG
+   o  Specification document: Section 3.2 of this specification.
+   o  Related information: (none)
+
+12.  References
+
+12.1.  Normative References
+
+   [IANA.well-known]
+              IANA, "Well-Known URIs",
+              <http://www.iana.org/assignments/well-known-uris>.
+
+
+
+
+Yates & Salomon         Expires November 2, 2020               [Page 20]
+
+Internet-Draft                    TENP                          May 2020
+
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997,
+              <https://www.rfc-editor.org/info/rfc2119>.
+
+   [RFC3339]  Klyne, G. and C. Newman, "Date and Time on the Internet:
+              Timestamps", RFC 3339, DOI 10.17487/RFC3339, July 2002,
+              <https://www.rfc-editor.org/info/rfc3339>.
+
+   [RFC5246]  Dierks, T. and E. Rescorla, "The Transport Layer Security
+              (TLS) Protocol Version 1.2", RFC 5246,
+              DOI 10.17487/RFC5246, August 2008,
+              <https://www.rfc-editor.org/info/rfc5246>.
+
+   [RFC6125]  Saint-Andre, P. and J. Hodges, "Representation and
+              Verification of Domain-Based Application Service Identity
+              within Internet Public Key Infrastructure Using X.509
+              (PKIX) Certificates in the Context of Transport Layer
+              Security (TLS)", RFC 6125, DOI 10.17487/RFC6125, March
+              2011, <https://www.rfc-editor.org/info/rfc6125>.
+
+   [RFC6415]  Hammer-Lahav, E., Ed. and B. Cook, "Web Host Metadata",
+              RFC 6415, DOI 10.17487/RFC6415, October 2011,
+              <https://www.rfc-editor.org/info/rfc6415>.
+
+   [RFC7230]  Fielding, R., Ed. and J. Reschke, Ed., "Hypertext Transfer
+              Protocol (HTTP/1.1): Message Syntax and Routing",
+              RFC 7230, DOI 10.17487/RFC7230, June 2014,
+              <https://www.rfc-editor.org/info/rfc7230>.
+
+   [RFC7525]  Sheffer, Y., Holz, R., and P. Saint-Andre,
+              "Recommendations for Secure Use of Transport Layer
+              Security (TLS) and Datagram Transport Layer Security
+              (DTLS)", BCP 195, RFC 7525, DOI 10.17487/RFC7525, May
+              2015, <https://www.rfc-editor.org/info/rfc7525>.
+
+   [RFC7807]  Nottingham, M. and E. Wilde, "Problem Details for HTTP
+              APIs", RFC 7807, DOI 10.17487/RFC7807, March 2016,
+              <https://www.rfc-editor.org/info/rfc7807>.
+
+   [RFC8126]  Cotton, M., Leiba, B., and T. Narten, "Guidelines for
+              Writing an IANA Considerations Section in RFCs", BCP 26,
+              RFC 8126, DOI 10.17487/RFC8126, June 2017,
+              <https://www.rfc-editor.org/info/rfc8126>.
+
+
+
+
+
+
+
+Yates & Salomon         Expires November 2, 2020               [Page 21]
+
+Internet-Draft                    TENP                          May 2020
+
+
+   [RFC8259]  Bray, T., Ed., "The JavaScript Object Notation (JSON) Data
+              Interchange Format", STD 90, RFC 8259,
+              DOI 10.17487/RFC8259, December 2017,
+              <https://www.rfc-editor.org/info/rfc8259>.
+
+   [RFC8288]  Nottingham, M., "Web Linking", RFC 8288,
+              DOI 10.17487/RFC8288, October 2017,
+              <https://www.rfc-editor.org/info/rfc8288>.
+
+   [RFC8615]  Nottingham, M., "Well-Known Uniform Resource Identifiers
+              (URIs)", RFC 8615, DOI 10.17487/RFC8615, May 2019,
+              <https://www.rfc-editor.org/info/rfc8615>.
+
+12.2.  Informative References
+
+   [pact]     Rivest, R., Ed., Callas, J., Canetti, R., Esvelt, K.,
+              Gillmor, D., Kalai, Y., Lysyanskaya, A., Norige, A.,
+              Raskar, R., Shamir, A., Shen, E., Soibelman, I., Specter,
+              M., Teague, V., Trachtenberg, A., Varia, M., Viera, M.,
+              Weitzner, D., Wilkinson, J., and M. Zissman, "The PACT
+              protocol specification", <https://pact.mit.edu/wp-
+              content/uploads/2020/04/The-PACT-protocol-specification-
+              ver-0.1.pdf>.
+
+   [who]      World Health Organization (WHO) and Center for Disease
+              Control and Prevention (CDC), "Emergency Guideline -
+              Implementation and management of contact tracing for Ebola
+              virus disease", September 2015,
+              <https://apps.who.int/iris/bitstream/handle/10665/185258/
+              WHO_EVD_Guidance_Contact_15.1_eng.pdf>.
+
+Appendix A.  Configuration Examples (Non-normative)
+
+A.1.  Example Configuration Request
+
+   The client would make the following request to the server
+   "https://example.com" to obtain its Configuration document:
+
+   GET /.well-known/threat-exposure-configuration HTTP/1.1
+   Accept: application/json
+   Host: example.com
+
+A.2.  Example Configuration Response
+
+   The following is a non-normative example response:
+
+
+
+
+
+
+Yates & Salomon         Expires November 2, 2020               [Page 22]
+
+Internet-Draft                    TENP                          May 2020
+
+
+   HTTP/1.1 200 OK
+   Content-Type: application/json
+
+   {
+     "supports_query": true,
+     "query_endpoint": "https://server.example.com/query",
+     "supports_upload": true,
+     "upload_endpoint": "https://server.example.com/upload",
+     "keys_supported": ["https://tenprotocol.org/keys/btle"],
+     "threats_supported": ["https://tenprotocol.org/threats/covid19"],
+     "assertions_supported": ["https://tenprotocol.org/assertions/
+       geo/country/1.0", "https://tenprotocol.org/assertions/geo/
+       state/1.0"]
+   }
+
+Appendix B.  Upload Examples (Non-normative)
+
+B.1.  Example Upload Request
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Yates & Salomon         Expires November 2, 2020               [Page 23]
+
+Internet-Draft                    TENP                          May 2020
+
+
+   POST /threat-exposure/upload HTTP/1.1
+   Host: example.com
+   Content-Type: application/json
+   Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
+
+   {
+       "keys": {
+           "https://tenprotocol.org/keys/btle": [
+               "1478E46F897749C691A28351F0B054F1",
+               "20A7412C65A046DCB5538D7DA45A6B5D",
+               "24BFE7A43563495BA36C79A96617A602",
+               "371108A73B964915A62D81E49A783F85",
+               "4075DB637A914896B5459EF3E377AF0D",
+               "5F51F91099B84C9685CD268941A3DEEC",
+               "67684C56F9A6407A99DB57E6B871EC1D",
+               "AA0817D30C64407CB4F5DE1425336922",
+               "CFC046DEF50244D58CA58A0AD7FED287",
+               "D555096A727C49FEADD03488154E6152",
+               "E48A37FB87924885AD6879857DC297B2"
+           ]
+       },
+       "diagnosis": {
+           "threat": "https://tenprotocol.org/threats/diseases/covid19",
+           "diagnosed": "2020-05-01T01:23:45"
+       },
+       "assertions": {
+           "https://tenprotocol.org/assertions/geo/country/1.0": ["US"],
+           "https://tenprotocol.org/assertions/geo/state/1.0": ["CA"]
+       }
+   }
+
+B.2.  Example Upload Successful Response
+
+   HTTP/1.1 200 OK
+   Content-Type: application/json
+
+   {}
+
+B.3.  Example Upload Empty Response
+
+   HTTP/1.1 204 No Content
+
+B.4.  Example Upload Error Response
+
+
+
+
+
+
+
+
+Yates & Salomon         Expires November 2, 2020               [Page 24]
+
+Internet-Draft                    TENP                          May 2020
+
+
+   HTTP/1.1 400 Bad Request
+   Content-Type: application/problem+json
+   Content-Language: en
+
+   {
+       "type": "https://tenprotocol.org/errors/key-not-supported",
+       "status": "400",
+       "detail": "The specified key is not supported."
+   }
+
+Appendix C.  Query Examples (Non-normative)
+
+C.1.  Example Query Request
+
+   POST /threat-exposure/query HTTP/1.1
+   Host: example.com
+   Content-Type: application/json
+   Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
+
+   {
+       "keys": {
+           "https://tenprotocol.org/keys/btle": [
+               "1478E46F897749C691A28351F0B054F1",
+               "20A7412C65A046DCB5538D7DA45A6B5D",
+               "24BFE7A43563495BA36C79A96617A602",
+               "371108A73B964915A62D81E49A783F85",
+               "4075DB637A914896B5459EF3E377AF0D",
+               "5F51F91099B84C9685CD268941A3DEEC",
+               "67684C56F9A6407A99DB57E6B871EC1D",
+               "AA0817D30C64407CB4F5DE1425336922",
+               "CFC046DEF50244D58CA58A0AD7FED287",
+               "D555096A727C49FEADD03488154E6152",
+               "E48A37FB87924885AD6879857DC297B2"
+           ]
+       },
+       "after": "2020-04-01T00:00:00",
+       "threats": [
+           "https://tenprotocol.org/threats/diseases/covid19"
+       ],
+       "assertions": {
+           "https://tenprotocol.org/assertions/geo/country/1.0": ["US"],
+           "https://tenprotocol.org/assertions/geo/state/1.0": ["CA"]
+       }
+   }
+
+
+
+
+
+
+
+Yates & Salomon         Expires November 2, 2020               [Page 25]
+
+Internet-Draft                    TENP                          May 2020
+
+
+C.2.  Example Query Response
+
+   HTTP/1.1 200 OK
+   Content-Type: application/json
+   Content-Language: en
+
+   {
+       "exposed": {
+           "https://tenprotocol.org/threats/diseases/covid19": true
+       },
+       "exposures": ["2020-04-20"],
+       "message": "You were exposed to COVID-19 on April 20th 2020.
+          Please contact your local health authority.",
+       "links": [
+           {
+               "href": "http://somehealth.org/covid19.html",
+               "rel": "details"
+           },
+           {
+               "href": "http://somehealth.org/privacy-policy.html",
+               "rel": "privacy"
+           },
+       ]
+   }
+
+C.3.  Example Query Error Response
+
+   HTTP/1.1 400 Bad Request
+   Content-Type: application/problem+json
+   Content-Language: en
+
+   {
+       "type": "https://tenprotocol.org/errors/key-not-supported",
+       "status": "400",
+       "detail": "The specified key is not supported."
+   }
+
+Appendix D.  Fetch Examples (Non-normative)
+
+D.1.  Example Fetch Request
+
+
+
+
+
+
+
+
+
+
+
+Yates & Salomon         Expires November 2, 2020               [Page 26]
+
+Internet-Draft                    TENP                          May 2020
+
+
+   POST /threat-exposure/fetch HTTP/1.1
+   Host: example.com
+   Content-Type: application/json
+   Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
+
+   {
+       "keys": [
+           "https://tenprotocol.org/keys/btle"
+       ],
+       "after": "2020-04-01T00:00:00",
+       "threats": [
+           "https://tenprotocol.org/threats/diseases/covid19"
+       ],
+       "assertions": {
+           "https://tenprotocol.org/assertions/geo/country/1.0": ["US"],
+           "https://tenprotocol.org/assertions/geo/state/1.0": ["CA"]
+       }
+   }
+
+D.2.  Example Fetch Response
+
+   HTTP/1.1 200 OK
+   Content-Type: application/json
+   Content-Language: en
+
+   {
+       "keys": {
+           "https://tenprotocol.org/keys/btle": [
+               "1478E46F897749C691A28351F0B054F1",
+               "20A7412C65A046DCB5538D7DA45A6B5D",
+               "24BFE7A43563495BA36C79A96617A602",
+               "371108A73B964915A62D81E49A783F85",
+               "4075DB637A914896B5459EF3E377AF0D",
+               "5F51F91099B84C9685CD268941A3DEEC",
+               "67684C56F9A6407A99DB57E6B871EC1D",
+               "AA0817D30C64407CB4F5DE1425336922",
+               "CFC046DEF50244D58CA58A0AD7FED287",
+               "D555096A727C49FEADD03488154E6152",
+               "E48A37FB87924885AD6879857DC297B2"
+           ]
+       }
+   }
+
+D.3.  Example Fetch Error Response
+
+
+
+
+
+
+
+Yates & Salomon         Expires November 2, 2020               [Page 27]
+
+Internet-Draft                    TENP                          May 2020
+
+
+   HTTP/1.1 400 Bad Request
+   Content-Type: application/problem+json
+   Content-Language: en
+
+   {
+       "type": "https://tenprotocol.org/errors/key-not-supported",
+       "status": "400",
+       "detail": "The specified key is not supported."
+   }
+
+Appendix E.  Revoke Examples (Non-normative)
+
+E.1.  Example Revoke Request
+
+   DELETE /threat-exposure/revoke HTTP/1.1
+   Host: example.com
+   Content-Type: application/json
+   Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
+
+   {
+       "keys": {
+           "https://tenprotocol.org/keys/btle": [
+               "1478E46F897749C691A28351F0B054F1",
+               "20A7412C65A046DCB5538D7DA45A6B5D",
+               "24BFE7A43563495BA36C79A96617A602",
+               "371108A73B964915A62D81E49A783F85",
+               "4075DB637A914896B5459EF3E377AF0D",
+               "5F51F91099B84C9685CD268941A3DEEC",
+               "67684C56F9A6407A99DB57E6B871EC1D",
+               "AA0817D30C64407CB4F5DE1425336922",
+               "CFC046DEF50244D58CA58A0AD7FED287",
+               "D555096A727C49FEADD03488154E6152",
+               "E48A37FB87924885AD6879857DC297B2"
+           ]
+       },
+       "assertions": {
+           "https://tenprotocol.org/assertions/geo/country/1.0": ["US"],
+           "https://tenprotocol.org/assertions/geo/state/1.0": ["CA"]
+       }
+   }
+
+E.2.  Example Revoke Successful Response
+
+   HTTP/1.1 200 OK
+   Content-Type: application/json
+
+   {}
+
+
+
+
+Yates & Salomon         Expires November 2, 2020               [Page 28]
+
+Internet-Draft                    TENP                          May 2020
+
+
+E.3.  Example Revoke Empty Response
+
+   HTTP/1.1 204 No Content
+
+E.4.  Example Revoke Error Response
+
+   HTTP/1.1 400 Bad Request
+   Content-Type: application/problem+json
+   Content-Language: en
+
+   {
+       "type": "https://tenprotocol.org/errors/key-not-supported",
+       "status": "400",
+       "detail": "The specified key is not supported."
+   }
+
+Authors' Addresses
+
+   Seth Yates
+   Switchbit, Inc.
+
+   Email: seth@switchbit.com
+
+
+   Yacov Salomon
+   Switchbit, Inc.
+
+   Email: yacov@switchbit.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Yates & Salomon         Expires November 2, 2020               [Page 29]

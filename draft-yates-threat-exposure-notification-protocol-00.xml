@@ -1,0 +1,1689 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<?xml-stylesheet type="text/xsl" href="http://xml2rfc.tools.ietf.org/authoring/rfc2629.xslt" ?>
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd">
+<rfc category="exp" docName="draft-yates-threat-exposure-notification-protocol-00"
+     submissionType="independent" seriesNo="draft-yates-threat-exposure-notification-protocol-00" ipr="trust200902">
+    <?rfc strict="yes" ?>
+    <?rfc toc="yes"?>
+    <?rfc tocdepth="4"?>
+    <?rfc symrefs="yes"?>
+    <?rfc sortrefs="yes" ?>
+    <?rfc compact="yes" ?>
+    <?rfc subcompact="no" ?>
+
+    <front>
+        <title abbrev="TENP">Threat Exposure Notification Protocol</title>
+
+        <author initials="S." surname="Yates" fullname="Seth Yates">
+            <organization>Switchbit, Inc.</organization>
+            <address>
+                <email>seth@switchbit.com</email>
+            </address>
+        </author>
+
+        <author initials="Y." surname="Salomon" fullname="Yacov Salomon">
+            <organization>Switchbit, Inc.</organization>
+            <address>
+                <email>yacov@switchbit.com</email>
+            </address>
+        </author>
+
+        <date year="2020" month="May" day="1"/>
+        <area>General</area>
+        <workgroup>Internet Engineering Task Force</workgroup>
+        <keyword>threat exposure notification</keyword>
+
+        <abstract>
+            <t>
+                This specification defines a protocol for an HTTP- and JSON-based
+                Threat Exposure Notification by outlining how clients upload diagnosis keys, query exposure, revoke
+                diagnosis keys and fetch diagnosis keys from a server.
+            </t>
+        </abstract>
+    </front>
+
+    <middle>
+        <section anchor="Intro" title="Introduction">
+            <t>
+                Contact Tracing is a technique used by public health authorities to measure and contain the spread
+                of infectious diseases (<xref target="who"/>). It requires gathering information from infected
+                individuals about the people they've previously been in contact with. These individuals can then
+                be notified by public health authorities to take appropriate safety measures, such as
+                undertaking self-quarantine and getting tested.
+            </t>
+            <t>
+                Technology can play an important role in contact tracing efforts. Mobile devices can be used in an
+                automated and scalable way to help determine who has been exposed to a person that later
+                is deemed infectious and sending a notification with instructions on next steps. Health authorities can
+                then use this information to help control the spread of infectious diseases.
+            </t>
+            <t>
+                The Threat Exposure Notification Protocol (TENP) is a simple HTTP- and JSON-based protocol
+                for client-server communication of information to determine if a user has been exposed to a threat.
+                It enables clients to upload and query such information from a server in an
+                interoperable and REST-like manner.
+            </t>
+
+            <section title="Notational Conventions">
+                <t>
+                    The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+                    "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+                    document are to be interpreted as described in
+                    <xref target="RFC2119"/>
+                    when, and only when,
+                    they appear in all capitals, as shown here.
+                </t>
+                <t>
+                    Throughout this document, figures may contain spaces and extra line
+                    wrapping to improve readability and accommodate space limitations.
+                    Similarly, some URIs contained within examples have been shortened
+                    for space and readability reasons (as indicated by "...").
+                </t>
+            </section>
+
+            <section title="Threat Exposure Notification">
+                <t>
+                    <figure>
+                        <artwork><![CDATA[
+                        Unexposed
+                            +
+                            |
+                            v
+                         Exposed
+                          +  +
+                          |  |
+                  +-------+  +----------+
+                  |                     |
+                  v                     v
+              Infected <----------+ Uninfected
+               + + +
+               | | |
+    +----------+ | +---------------+
+    |            |                 |
+    v            v                 v
+Deceased <--+ Diagnosed +----> Recovered
+]]></artwork>
+                        <postamble>Figure 1: Exposure Flow</postamble>
+                    </figure>
+                </t>
+                <t>Threat Exposure Notification Service includes App, Client, Server, other enabling technologies and
+                    authorities.
+                </t>
+                <t>Threat Exposure Notification App runs on a device operated by a user and leverages the protocol for
+                    communication between the Threat Exposure Notification Client it implements and the Threat Exposure
+                    Notification Server
+                </t>
+                <t>User uses or accesses the Threat Exposure Notification Service via an app installed on their device
+                </t>
+            </section>
+
+            <section anchor="Tracking" title="Tracking Exposures (Non-Normative)">
+                <t>
+                    This protocol does not specify a method by which clients trace potential exposures. Several
+                    established approaches exist varying in the underlying data and technology interface used. The two
+                    most common data sources used are Bluetooth proximity data, and geo location plus timestamp.
+                </t>
+                <t>
+                    Privacy and security are a major concern and all established approaches ensure Personal Identifiable
+                    Information (PII) is protected by leveraging a combination of measures such as only storing such
+                    information locally on the client, encrypting information everywhere, and using
+                    cryptographically random keys where possible.
+                </t>
+            </section>
+
+            <section anchor="Diagnosis" title="Diagnosis (Non-Normative)">
+                <t>
+                    This protocol does not specify a method for testing or diagnosis of a threat nor does it specify
+                    a process of authorization to upload diagnosis keys. Several approaches have been suggested
+                    elsewhere ranging from self declared to tightly controlled authorization managed by trusted
+                    authorities (for example <xref target="pact"/>).
+                </t>
+            </section>
+
+            <section anchor="Terminology" title="Terminology">
+                <t>
+                    This specification defines the following terms:
+                    <list style="hanging">
+                        <t hangText="Threat Exposure Notification Client">
+                            <vspace/>
+                            A client that implements this protocol.
+                        </t>
+                        <t hangText="Threat Exposure Notification Server">
+                            <vspace/>
+                            A server that implements this protocol.
+                        </t>
+                        <t hangText="Infected">
+                            <vspace/>
+                            A property of a person denoting that they are affected by a threat (although possibly not
+                            diagnosed).
+                        </t>
+                        <t hangText="Diagnosis">
+                            <vspace/>
+                            A property of a person denoting their status with respect to a registered threat
+                            based on the outcome of a registered procedure.
+                        </t>
+                        <t hangText="Exposure">
+                            <vspace/>
+                            The act of coming in contact with an infected user.
+                        </t>
+                        <t hangText="Threat">
+                            <vspace/>
+                            A harmful vector, contagion, infectious disease, or other concern for authorities.
+                        </t>
+                        <t hangText="Key">
+                            <vspace/>
+                            Keys belong to a device or app, that belong to a user.
+                        </t>
+                    </list>
+                </t>
+            </section>
+        </section>
+
+        <section anchor="Flow" title="Protocol Flow">
+            <figure align="center">
+                <artwork><![CDATA[
++----------+                   +----------+
+|          |                   |          |
+|          |                   |          |
+|          |--(A)- METADATA -->|          |
+|          |--(B)- UPLOAD ---->|          |
+|  Client  |--(C)- QUERY ----->|  Server  |
+|          |--(D)- FETCH ----->|          |
+|          |--(E)- REVOKE ---->|          |
+|          |                   |          |
+|          |                   |          |
++----------+                   +----------+
+                ]]></artwork>
+                <postamble>Figure 2: Abstract Protocol Flow</postamble>
+            </figure>
+            <t>
+                <list style="symbols">
+                    <t>
+                        (A) A client obtains the Threat Exposure Notification Server Configuration Document from
+                        server(s).
+                    </t>
+                    <t>
+                        (B) A client uploads diagnosed keys to server(s).
+                    </t>
+                    <t>
+                        (C) A client queries exposure from server(s).
+                    </t>
+                    <t>
+                        (D) A client fetches diagnosed keys from server(s).
+                    </t>
+                    <t>
+                        (E) A client revokes access to diagnosed keys from server(s).
+                    </t>
+                </list>
+            </t>
+        </section>
+
+        <section anchor="Metadata" title="Threat Exposure Notification Server Metadata">
+            <section anchor="MetadataDoc" title="Threat Exposure Notification Server Configuration Document">
+                <t>
+                    A server MUST host a Threat Exposure Notification Server Configuration Document describing its
+                    configuration. The following server metadata values are used by this specification and are
+                    registered in the IANA "Threat Exposure Notification Servers Metadata" registry established
+                    in<xref target="MetadataReg"/>:
+
+                    <list style="hanging">
+                        <t hangText="supports_query">
+                            <vspace/>
+                            REQUIRED.
+                            Boolean value indicating whether the server supports the Query operation.
+                        </t>
+
+                        <t hangText="query_endpoint">
+                            <vspace/>
+                            RECOMMENDED.
+                            URL of the server's Query endpoint.
+                        </t>
+
+                        <t hangText="supports_upload">
+                            <vspace/>
+                            REQUIRED.
+                            Boolean value indicating whether the server supports the Upload operation.
+                        </t>
+
+                        <t hangText="upload_endpoint">
+                            <vspace/>
+                            RECOMMENDED.
+                            URL of the server's Fetch endpoint.
+                        </t>
+
+                        <t hangText="supports_fetch">
+                            <vspace/>
+                            REQUIRED.
+                            Boolean value indicating whether the server supports the Fetch operation.
+                        </t>
+
+                        <t hangText="fetch_endpoint">
+                            <vspace/>
+                            RECOMMENDED.
+                            URL of the server's Query endpoint.
+                        </t>
+
+                        <t hangText="supports_revoke">
+                            <vspace/>
+                            REQUIRED.
+                            Boolean value indicating whether the server supports the Revoke operation.
+                        </t>
+
+                        <t hangText="revoke_endpoint">
+                            <vspace/>
+                            RECOMMENDED.
+                            URL of the server's Revoke endpoint.
+                        </t>
+
+                        <t hangText="threats_supported">
+                            <vspace/>
+                            REQUIRED.
+                            An array of strings of the threats the server supports.
+                            <xref target="Descriptors"/>
+                        </t>
+
+                        <t hangText="keys_supported">
+                            <vspace/>
+                            REQUIRED.
+                            An array of strings of the keys the server supports.
+                        </t>
+
+                        <t hangText="assertions_supported">
+                            <vspace/>
+                            RECOMMENDED.
+                            An array of strings of the Assertions the server supports.
+                        </t>
+                    </list>
+                </t>
+                <t>
+                    Clients that do not recognize Metadata values SHALL ignore them and not generate an error.
+                </t>
+            </section>
+            <section anchor="ObtainingMetadata"
+                     title="Obtaining Threat Exposure Notification Server Configuration Document">
+                <t>
+                    Servers MUST make a JSON document
+                    <xref target="RFC8259"/>
+                    available at the path
+                    <spanx style="verb">/.well-known/threat-exposure-configuration</spanx>. The syntax and semantics of
+                    <spanx style="verb">.well-known</spanx>
+                    are defined in<xref target="RFC8615"/>.
+                </t>
+                <t>
+                    <spanx style="verb">threat-exposure-configuration</spanx>
+                    MUST point to a JSON document
+                    <xref target="RFC8259"/>
+                    compliant with this specification and MUST be
+                    returned using the <spanx style="verb">application/json</spanx> content type.
+                </t>
+                <t>
+                    The well-known URI path suffix used MUST be registered in the IANA
+                    "Well-Known URIs" registry<xref target="IANA.well-known"/>.
+                </t>
+
+                <section title="Threat Exposure Notification Server Configuration Request">
+                    <t>
+                        A Threat Exposure Notification Server Configuration Document MUST be queried using an HTTP GET
+                        request at
+                        the previously specified path.
+                    </t>
+                </section>
+
+                <section title="Threat Exposure Notification Server Configuration Response">
+                    <t>
+                        The response is a JSON object
+                        <xref target="RFC8259"/>
+                        containing a set of claims about the
+                        server's configuration, including all necessary endpoints and supported information. A
+                        successful response MUST use the 200 OK HTTP status code and return a JSON object
+                        <xref target="RFC8259"/>
+                        using the <spanx style="verb">application/json</spanx> content type that contains a set of
+                        claims
+                        as its members that are a subset of the Metadata values defined
+                        in<xref target="Metadata"/>.
+                    </t>
+                    <t>Other claims MAY also be returned and clients MUST ignore any claims not recognized.</t>
+                    <t>Clients SHOULD follow redirected requests.</t>
+                    <t>Claims that return multiple values are represented as JSON arrays.</t>
+                    <t>Claims with zero elements MUST be omitted from the response.</t>
+                    <t>An error response uses the applicable HTTP status code value.</t>
+                </section>
+
+                <section title="Threat Exposure Notification Server Configuration Validation">
+                    <t>If any of the validation procedures defined in this specification fail, any operations requiring
+                        the
+                        information that failed to correctly validate MUST be aborted and the information that failed to
+                        validate MUST NOT be used.
+                    </t>
+                </section>
+            </section>
+        </section>
+
+        <section anchor="Descriptors" title="Threat Descriptors">
+            <t>
+                This section describes a JSON document
+                <xref target="RFC8259"/>
+                format for describing threats. The
+                format is based on the JRD document format specified in<xref target="RFC6415"/>.
+            </t>
+            <section anchor="ThreatProperties" title="Threat Descriptor Properties">
+                <t>
+                    A Threat Descriptor has the following properties:
+                    <list style="hanging">
+                        <t hangText="https://tenprotocol.org/threat/name">
+                            <vspace blankLines="1"/>
+                            REQUIRED. The name of the threat.
+                        </t>
+                        <t hangText="https://tenprotocol.org/threat/description">
+                            <vspace blankLines="1"/>
+                            REQUIRED. A short description of the threat.
+                        </t>
+                        <t hangText="https://tenprotocol.org/threat/symptoms">
+                            <vspace blankLines="1"/>
+                            RECOMMENDED. A comma-separated list of string labels that describe symptoms of the threat.
+                        </t>
+                    </list>
+                </t>
+            </section>
+        </section>
+
+        <section anchor="Assertions" title="Assertions">
+            <t>
+                Assertions can be attached to Requests to provide additional information about the request.
+                The key of an Assertion is a URI. Clients MUST NOT attempt to fetch the fetch the resource specified
+                by the URI. New Assertions can be created by specifying new URI's. The specifier MUST control the URI
+                space.
+            </t>
+        </section>
+
+        <section anchor="Upload" title="Uploading Diagnosis Keys">
+            <t>
+                The client MAY upload to the server the diagnosis keys associated to a diagnosis of a threat.
+            </t>
+            <t>
+                The specification for how a client establishes connections to servers is covered in
+                <xref target="ObtainingMetadata"/>.
+            </t>
+            <t>
+                Information about the diagnosis, client, individual or scope can be attached to the upload using
+                Assertions<xref target="Assertions"/>.
+            </t>
+            <section anchor="UploadRequest" title="Upload Request">
+                <t>
+                    The client SHOULD retrieve the request URI from the Threat Exposure Notification Server
+                    Configuration Document as
+                    defined in<xref target="ObtainingMetadata"/>.
+                </t>
+                <t>
+                    The request object is a JSON object
+                    <xref target="RFC8259"/>
+                    with the following properties:
+                    <list style="hanging">
+                        <t hangText="keys">
+                            <vspace/>
+                            REQUIRED. A dictionary where the key is a URI of a key type and the value is an array
+                            of strings representing the diagnosis keys for that key type.
+                        </t>
+                        <t hangText="diagnosis">
+                            <vspace/>
+                            REQUIRED. An object providing information about the diagnosis of a threat. It has the
+                            following
+                            properties:
+                            <list style="hanging">
+                                <t hangText="threat">
+                                    <vspace/>
+                                    REQUIRED. A URI of a threat that has been diagnosed, as specified in<xref
+                                        target="Descriptors"/>.
+                                </t>
+                                <t hangText="diagnosed">
+                                    <vspace/>
+                                    REQUIRED. The time when the diagnosis was made formatted as specified in
+                                    <xref target="RFC3339"/>
+                                    with no time zone offset.
+                                </t>
+                            </list>
+                        </t>
+                        <t hangText="assertions">
+                            <vspace/>
+                            OPTIONAL. An object providing additional assertions related to the upload, diagnosis,
+                            individual or scope.
+                            The key is an Assertion defined as per<xref target="Assertions"/>.
+                            The client MUST ignore any assertions it does not recognize.
+                        </t>
+                    </list>
+                </t>
+            </section>
+            <section anchor="UploadValidation" title="Upload Validation">
+                <t>
+                    The server SHOULD validate the request, including ensuring e.g., that the
+                    <spanx style="verb">keys</spanx>
+                    is supported, <spanx style="verb">threat</spanx> is supported and <spanx style="verb">diagnosed
+                </spanx> is
+                    a properly formatted time
+                    <xref target="RFC3339"/>
+                    occurring in the past.
+                </t>
+                <t>
+                    The following Problem Detail Types
+                    <xref target="RFC7807"/>
+                    are defined for validation:
+                    <list style="hanging">
+                        <t hangText="https://tenprotocol.org/errors/keys-required">
+                            <vspace/>
+                            The <spanx style="verb">keys</spanx> property is missing or is not an object or the value of
+                            one of the keys is not an array.
+                        </t>
+                        <t hangText="https://tenprotocol.org/errors/key-not-supported">
+                            <vspace/>
+                            One of the keys specified in the
+                            <spanx style="verb">keys</spanx>
+                            property is not supported by the server.
+                        </t>
+                        <t hangText="https://tenprotocol.org/errors/diagnosis-required">
+                            <vspace/>
+                            The <spanx style="verb">diagnosis</spanx> property is missing or is not an object.
+                        </t>
+                        <t hangText="https://tenprotocol.org/errors/threat-required">
+                            <vspace/>
+                            The <spanx style="verb">threat</spanx> property is missing or is not a string.
+                        </t>
+                        <t hangText="https://tenprotocol.org/errors/threat-not-supported">
+                            <vspace/>
+                            The threat specified in the
+                            <spanx style="verb">threat</spanx>
+                            property is not supported by the server.
+                        </t>
+                        <t hangText="https://tenprotocol.org/errors/diagnosed-required">
+                            <vspace/>
+                            The <spanx style="verb">diagnosed</spanx> property is missing or is not a string.
+                        </t>
+                        <t hangText="https://tenprotocol.org/errors/diagnosed-invalid">
+                            <vspace/>
+                            The <spanx style="verb">diagnosed</spanx> property is invalid.
+                        </t>
+                    </list>
+                </t>
+            </section>
+            <section anchor="UploadResponse" title="Upload Response">
+                <t>
+                    If the server has validated the request and accepted the upload, the server will return either
+                    a <spanx style="verb">200 OK</spanx> or <spanx style="verb">204 No Content</spanx> response code.
+                    Clients MUST support either response as a successful upload.
+                </t>
+            </section>
+            <section anchor="UploadError" title="Upload Error Response">
+                <t>
+                    If the request was not validated properly, the server MUST return a <spanx style="verb">400 Bad
+                    Request
+                </spanx> error response with a Problem Details Object
+                    <xref target="RFC7807"/>
+                    containing
+                    at least the <spanx style="verb">type</spanx>,
+                    <spanx style="verb">status</spanx>
+                    and <spanx style="verb">detail</spanx> as specified
+                    in<xref target="RFC7807"/>.
+                </t>
+            </section>
+        </section>
+
+        <section anchor="Query" title="Querying Exposure">
+            <t>
+                A client MAY query a server to determine exposure to a threat.
+            </t>
+            <t>
+                The specification for how a client establishes connections to servers is covered in
+                <xref target="ObtainingMetadata"/>.
+            </t>
+            <t>
+                Information about the diagnosis, client, individual or scope can be attached to the upload using
+                Assertions<xref target="Assertions"/>.
+            </t>
+            <section anchor="QueryRequest" title="Query Request">
+                <t>
+                    The client SHOULD retrieve the request URI from the Threat Exposure Notification Server
+                    Configuration Document as
+                    defined in<xref target="ObtainingMetadata"/>.
+                </t>
+                <t>
+                    The request object is a JSON object
+                    <xref target="RFC8259"/>
+                    with the following properties:
+                    <list style="hanging">
+                        <t hangText="keys">
+                            <vspace/>
+                            REQUIRED. A dictionary where the key is an URI of a key type and the value is an array
+                            of strings representing the keys for that key type.
+                        </t>
+                        <t hangText="before">
+                            <vspace/>
+                            OPTIONAL. A date to search for exposures before, formatted as specified
+                            in
+                            <xref target="RFC3339"/>
+                            with no time zone offset.
+                        </t>
+                        <t hangText="after">
+                            <vspace/>
+                            OPTIONAL. A date to search for exposures after, formatted as specified
+                            in
+                            <xref target="RFC3339"/>
+                            with no time zone offset. If omitted, the server SHOULD provide
+                            a reasonable default based on the specified threats.
+                        </t>
+                        <t hangText="threats">
+                            <vspace/>
+                            REQUIRED. Array of strings specifying which threats to check for exposure
+                            to<xref target="Descriptors"/>.
+                        </t>
+                        <t hangText="assertions">
+                            <vspace/>
+                            OPTIONAL. An object providing additional assertions related to the upload, diagnosis,
+                            individual or scope.
+                            The key is an Assertion defined as per<xref target="Assertions"/>.
+                            The client MUST ignore any assertions it does not recognize.
+                        </t>
+                    </list>
+                </t>
+            </section>
+            <section anchor="QueryValidation" title="Query Validation">
+                <t>
+                    The server SHOULD validate the request, including ensuring e.g., that
+                    the
+                    <spanx style="verb">key</spanx>
+                    is supported, <spanx style="verb">threats</spanx> are supported, and so on.
+                </t>
+                <t>
+                    The following Problem Detail Types
+                    <xref target="RFC7807"/>
+                    are defined for validation:
+                    <list style="hanging">
+                        <t hangText="https://tenprotocol.org/errors/keys-required">
+                            <vspace/>
+                            The <spanx style="verb">keys</spanx> property is missing or is not an object or the value of
+                            one of the keys is not an array.
+                        </t>
+                        <t hangText="https://tenprotocol.org/errors/key-not-supported">
+                            <vspace/>
+                            One of the keys specified in the
+                            <spanx style="verb">keys</spanx>
+                            property is not supported by the server.
+                        </t>
+                        <t hangText="https://tenprotocol.org/errors/threats-required">
+                            <vspace/>
+                            The <spanx style="verb">threats</spanx> property is missing or is not an array of strings.
+                        </t>
+                        <t hangText="https://tenprotocol.org/errors/threat-not-supported">
+                            <vspace/>
+                            The threat specified in the
+                            <spanx style="verb">threat</spanx>
+                            property is not supported by the server.
+                        </t>
+                        <t hangText="https://tenprotocol.org/errors/before-invalid">
+                            <vspace/>
+                            The <spanx style="verb">before</spanx> property is invalid.
+                        </t>
+                        <t hangText="https://tenprotocol.org/errors/after-invalid">
+                            <vspace/>
+                            The <spanx style="verb">after</spanx> property is invalid.
+                        </t>
+                    </list>
+                </t>
+            </section>
+            <section anchor="QueryResponse" title="Query Response">
+                <t>
+                    If the server has validated the request and accepted the query, the server will return
+                    a <spanx style="verb">200 OK</spanx> response with a <spanx style="verb">Content-Type</spanx> header
+                    equal to <spanx style="verb">application/json</spanx>.
+                </t>
+                <t>
+                    The request object is a JSON object
+                    <xref target="RFC8259"/>
+                    with the following properties:
+                    <list style="hanging">
+                        <t hangText="exposed">
+                            <vspace/>
+                            REQUIRED. A dictionary of exposures to the threats. The key of the dictionary is the
+                            threat URI as defined in
+                            <xref target="Descriptors"/>
+                            and
+                            the value is a boolean denoting whether an exposure to the condition has been flagged.
+                        </t>
+                        <t hangText="exposures">
+                            <vspace/>
+                            OPTIONAL. An array of days when exposures happened formatted as per
+                            <xref target="RFC3339"/>
+                            without a time component.
+                        </t>
+                        <t hangText="message">
+                            <vspace/>
+                            A human-readable message to be displayed to the user.
+                        </t>
+                        <t hangText="links">
+                            <vspace/>
+                            A list of WebLinks
+                            <xref target="RFC8288"/>
+                            for more information.
+                        </t>
+                    </list>
+                </t>
+            </section>
+            <section anchor="QueryError" title="Query Error Response">
+                <t>
+                    If the request was not validated properly, the server MUST return a <spanx style="verb">400 Bad
+                    Request
+                </spanx> error response with a Problem Details Object
+                    <xref target="RFC7807"/>
+                    containing
+                    at least the <spanx style="verb">type</spanx>,
+                    <spanx style="verb">status</spanx>
+                    and <spanx style="verb">detail</spanx> as specified
+                    in<xref target="RFC7807"/>.
+                </t>
+            </section>
+        </section>
+
+        <section anchor="Fetch" title="Fetching Diagnosis Keys">
+            <t>
+                A client MAY ask to remove diagnosis keys it previously uploaded to a server.
+            </t>
+            <t>
+                The specification for how a client establishes connections to servers is covered in
+                <xref target="ObtainingMetadata"/>.
+            </t>
+            <t>
+                Information about the diagnosis, client, individual or scope can be attached to the upload using
+                Assertions<xref target="Assertions"/>.
+            </t>
+            <section anchor="FetchRequest" title="Fetch Request">
+                <t>
+                    The client SHOULD retrieve the request URI from the Threat Exposure Notification Server
+                    Configuration Document as
+                    defined in<xref target="ObtainingMetadata"/>.
+                </t>
+                <t>
+                    The request object is a JSON object
+                    <xref target="RFC8259"/>
+                    with the following properties:
+                    <list style="hanging">
+                        <t hangText="keys">
+                            <vspace/>
+                            REQUIRED. An array of URI's for the requested key types.
+                        </t>
+                        <t hangText="before">
+                            <vspace/>
+                            OPTIONAL. A date to search for exposures before, formatted as specified
+                            in
+                            <xref target="RFC3339"/>
+                            with no time zone offset.
+                        </t>
+                        <t hangText="after">
+                            <vspace/>
+                            OPTIONAL. A date to search for exposures after, formatted as specified
+                            in
+                            <xref target="RFC3339"/>
+                            with no time zone offset. If omitted, the server SHOULD provide
+                            a reasonable default based on the specified threats.
+                        </t>
+                        <t hangText="threats">
+                            <vspace/>
+                            REQUIRED. Array of strings specifying which threats to check for exposure
+                            to<xref target="Descriptors"/>.
+                        </t>
+                        <t hangText="assertions">
+                            <vspace/>
+                            OPTIONAL. An object providing additional assertions related to the upload, diagnosis,
+                            individual or scope.
+                            The key is an Assertion defined as per<xref target="Assertions"/>.
+                            The client MUST ignore any assertions it does not recognize.
+                        </t>
+                    </list>
+                </t>
+            </section>
+            <section anchor="FetchValidation" title="Fetch Validation">
+                <t>
+                    The server SHOULD validate the request, including ensuring e.g., that
+                    the
+                    <spanx style="verb">keys</spanx>
+                    are supported, <spanx style="verb">threats</spanx> are supported, and so on.
+                </t>
+                <t>
+                    The following Problem Detail Types
+                    <xref target="RFC7807"/>
+                    are defined for validation:
+                    <list style="hanging">
+                        <t hangText="https://tenprotocol.org/errors/keys-required">
+                            <vspace/>
+                            The <spanx style="verb">keys</spanx> property is missing or is not an array.
+                        </t>
+                        <t hangText="https://tenprotocol.org/errors/key-not-supported">
+                            <vspace/>
+                            One of the keys specified in the
+                            <spanx style="verb">keys</spanx>
+                            property is not supported by the server.
+                        </t>
+                        <t hangText="https://tenprotocol.org/errors/threats-required">
+                            <vspace/>
+                            The <spanx style="verb">threats</spanx> property is missing or is not an array of strings.
+                        </t>
+                        <t hangText="https://tenprotocol.org/errors/threat-not-supported">
+                            <vspace/>
+                            The threat specified in the
+                            <spanx style="verb">threat</spanx>
+                            property is not supported by the server.
+                        </t>
+                        <t hangText="https://tenprotocol.org/errors/before-invalid">
+                            <vspace/>
+                            The <spanx style="verb">before</spanx> property is invalid.
+                        </t>
+                        <t hangText="https://tenprotocol.org/errors/after-invalid">
+                            <vspace/>
+                            The <spanx style="verb">after</spanx> property is invalid.
+                        </t>
+                    </list>
+                </t>
+            </section>
+            <section anchor="FetchResponse" title="Fetch Response">
+                <t>
+                    If the server has validated the request and accepted the fetch, the server will return
+                    a <spanx style="verb">200 OK</spanx> response with a <spanx style="verb">Content-Type</spanx> header
+                    equal to <spanx style="verb">application/json</spanx>.
+                </t>
+                <t>
+                    The client and server SHOULD support Chunked Transfer Encoding
+                    <xref target="RFC7230"/>
+                    as the resulting
+                    response entity may be large.
+                </t>
+                <t>
+                    The request object is a JSON object
+                    <xref target="RFC8259"/>
+                    with the following properties:
+                    <list style="hanging">
+                        <t hangText="keys">
+                            <vspace/>
+                            REQUIRED. A dictionary where the key is a URI of a key type and the value is an array
+                            of strings representing the diagnosis keys for that key type.
+                        </t>
+                    </list>
+                </t>
+            </section>
+            <section anchor="FetchError" title="Fetch Error">
+                <t>
+                    If the request was not validated properly, the server MUST return a <spanx style="verb">400 Bad
+                    Request
+                </spanx> error response with a Problem Details Object
+                    <xref target="RFC7807"/>
+                    containing
+                    at least the <spanx style="verb">type</spanx>,
+                    <spanx style="verb">status</spanx>
+                    and <spanx style="verb">detail</spanx> as specified
+                    in<xref target="RFC7807"/>.
+                </t>
+            </section>
+        </section>
+
+        <section anchor="Revoke" title="Revoking Diagnosis Keys">
+            <t>
+                A client MAY ask to remove diagnosis keys it previously uploaded to a server.
+            </t>
+            <t>
+                The specification for how a client establishes connections to servers is covered in
+                <xref target="ObtainingMetadata"/>.
+            </t>
+            <t>
+                Information about the diagnosis, client, individual or scope can be attached to the upload using
+                assertions<xref target="Assertions"/>.
+            </t>
+            <section anchor="RevokeRequest" title="Revoke Request">
+                <t>
+                    The client SHOULD retrieve the request URI from the Threat Exposure Notification Server
+                    Configuration Document as
+                    defined in<xref target="ObtainingMetadata"/>.
+                </t>
+                <t>
+                    The request object is a JSON object
+                    <xref target="RFC8259"/>
+                    with the following properties:
+                    <list style="hanging">
+                        <t hangText="keys">
+                            <vspace/>
+                            REQUIRED. A dictionary where the key is a URI of a key type and the value is an array
+                            of strings representing the diagnosis keys for that key type.
+                        </t>
+                        <t hangText="assertions">
+                            <vspace/>
+                            OPTIONAL. An object providing additional assertions related to the upload, diagnosis,
+                            individual or scope.
+                            The key is an Assertion defined as per<xref target="Assertions"/>.
+                            The client MUST ignore any assertions it does not recognize.
+                        </t>
+                    </list>
+                </t>
+            </section>
+            <section anchor="RevokeValidation" title="Revoke Validation">
+                <t>
+                    The server SHOULD validate the request, including ensuring e.g., that the
+                    <spanx style="verb">keys</spanx>
+                    is supported.
+                </t>
+                <t>
+                    The following Problem Detail Types
+                    <xref target="RFC7807"/>
+                    are defined for validation:
+                    <list style="hanging">
+                        <t hangText="https://tenprotocol.org/errors/keys-required">
+                            <vspace/>
+                            The <spanx style="verb">keys</spanx> property is missing or is not an object or the value of
+                            one of the keys is not an array.
+                        </t>
+                        <t hangText="https://tenprotocol.org/errors/key-not-supported">
+                            <vspace/>
+                            One of the keys specified in the
+                            <spanx style="verb">keys</spanx>
+                            property is not supported by the server.
+                        </t>
+                    </list>
+                </t>
+            </section>
+            <section anchor="RevokeResponse" title="Revoke Response">
+                <t>
+                    If the server has validated the request and accepted the upload, the server will return either
+                    a <spanx style="verb">200 OK</spanx> or <spanx style="verb">204 No Content</spanx> response code.
+                    Clients MUST support either response as a successful upload.
+                </t>
+            </section>
+            <section anchor="RevokeError" title="Revoke Error">
+                <t>
+                    If the request was not validated properly, the server MUST return a <spanx style="verb">400 Bad
+                    Request
+                </spanx> error response with a Problem Details Object
+                    <xref target="RFC7807"/>
+                    containing
+                    at least the <spanx style="verb">type</spanx>,
+                    <spanx style="verb">status</spanx>
+                    and <spanx style="verb">detail</spanx> as specified
+                    in<xref target="RFC7807"/>.
+                </t>
+            </section>
+        </section>
+
+        <section anchor="Security" title="Security Considerations">
+            <section anchor="Auth" title="Authentication and Authorization">
+                <t>
+                    This specification does not specify a method for authorizing calls to the server. Calls to the
+                    endpoints may even be unauthenticated, depending on the server configuration.
+                </t>
+            </section>
+            <section anchor="Privacy" title="Privacy Considerations">
+                <t>
+                    While the Assertions mechanism allows the requests to be augmented, it is up to the client and
+                    server
+                    to ensure that any assertions provided to not expose any personally identifiable information (PII).
+                </t>
+            </section>
+            <section anchor="TLS" title="TLS Requirements">
+                <t>
+                    Implementations MUST support TLS. Which version(s) ought to be
+                    implemented will vary over time and depend on the widespread
+                    deployment and known security vulnerabilities at the time of
+                    implementation. The authorization server MUST support TLS version
+                    1.2
+                    <xref target="RFC5246"/>
+                    and MAY support additional TLS mechanisms meeting its
+                    security requirements. When using TLS, the client MUST perform a
+                    TLS/SSL server certificate check, per<xref target="RFC6125"/>.
+                    Implementation security considerations can be found in
+                    "Recommendations for Secure Use of Transport Layer Security (TLS) and
+                    Datagram Transport Layer Security (DTLS)"<xref target="RFC7525"/>.
+                </t>
+                <t>
+                    To protect against information disclosure and tampering,
+                    confidentiality protection MUST be applied using TLS with a
+                    ciphersuite that provides confidentiality and integrity protection.
+                </t>
+            </section>
+        </section>
+
+        <section anchor="IANA" title="IANA Considerations">
+            <t>
+                The following registration procedure is used for the
+                registry established by this specification.
+            </t>
+            <t>
+                Values are registered on a Specification Required
+                <xref target="RFC8126"/>
+                basis after a two-week review period on the ctwg-ext-review@tenprotocol.org
+                mailing list, on the advice of one or more Designated Experts.
+                However, to allow for the allocation of values prior to publication,
+                the Designated Experts may approve registration once they are satisfied
+                that such a specification will be published.
+            </t>
+            <t>
+                Registration requests sent to the mailing list for review should use
+                an appropriate subject
+                (e.g., "Request to register Threat Exposure Notification Server Metadata: example").
+            </t>
+            <t>
+                Within the review period, the Designated Experts will either approve or
+                deny the registration request, communicating this decision to the review list and IANA.
+                Denials should include an explanation and, if applicable, suggestions as to how to make
+                the request successful.
+                Registration requests that are undetermined for
+                a period longer than 21 days can be brought to the IESG's attention
+                (using the iesg@ietf.org mailing list) for resolution.
+            </t>
+            <t>
+                Criteria that should be applied by the Designated Experts include
+                determining whether the proposed registration duplicates existing functionality,
+                determining whether it is likely to be of general applicability
+                or whether it is useful only for a single application,
+                and whether the registration makes sense.
+            </t>
+            <t>
+                IANA must only accept registry updates from the Designated Experts and should direct
+                all requests for registration to the review mailing list.
+            </t>
+            <t>
+                It is suggested that multiple Designated Experts be appointed who are able to
+                represent the perspectives of different applications using this specification,
+                in order to enable broadly-informed review of registration decisions.
+                In cases where a registration decision could be perceived as
+                creating a conflict of interest for a particular Designated Expert,
+                that Designated Expert should defer to the judgment of the other Designated Experts.
+            </t>
+            <section anchor="MetadataReg" title="Threat Exposure Notification Server Metadata Registry">
+                <t>
+                    This specification establishes the
+                    IANA "Threat Exposure Notification Server Metadata" registry
+                    for Threat Exposure Notification Server metadata names.
+                    The registry records the Threat Exposure Notification Server metadata member
+                    and a reference to the specification that defines it.
+                </t>
+                <t>
+                    The Designated Experts must either:
+                </t>
+                <t>
+                    (a) require that metadata names and values being registered use only
+                    printable ASCII characters excluding double quote ('"') and backslash ('\')
+                    (the Unicode characters with code points U+0021, U+0023 through U+005B, and
+                    U+005D through U+007E), or
+                </t>
+                <t>
+                    (b) if new metadata members or values are defined that
+                    use other code points, require that their definitions specify the exact
+                    sequences of Unicode code points used to represent them.
+                    Furthermore, proposed registrations that use Unicode code points that can only
+                    be represented in JSON strings as escaped characters must not be accepted.
+                </t>
+                <section anchor="MetadataTemplate" title="Registration Template">
+                    <t>
+                        <list style="hanging">
+                            <t hangText="Metadata Name:">
+                                <vspace/>
+                                The name requested (e.g., "query_endpoint").
+                                This name is case-sensitive.
+                                Names may not match other registered names in a case-insensitive manner
+                                (one that would cause a match if the Unicode toLowerCase() operation were applied to
+                                both strings)
+                                unless the Designated Experts state that there is a compelling reason
+                                to allow an exception.
+                            </t>
+                            <t hangText="Metadata Description:">
+                                <vspace/>
+                                Brief description of the metadata (e.g., "Query Endpoint URL").
+                            </t>
+                            <t hangText="Metadata Type:">
+                                <vspace/>
+                                Description of the metadata type (e.g., string, boolean, number) and whether multiple
+                                values are
+                                expected (e.g., array of strings, array of numbers).
+                            </t>
+                            <t hangText="Change Controller:">
+                                <vspace/>
+                                For Standards Track RFCs, list the "IESG".
+                                For others, give the name of the responsible party.
+                                Other details (e.g., postal address, email address, home page URI) may also be included.
+                            </t>
+                            <t hangText="Specification Document(s):">
+                                <vspace/>
+                                Reference to the document or documents that specify the parameter,
+                                preferably including URIs that
+                                can be used to retrieve copies of the documents.
+                                An indication of the relevant
+                                sections may also be included but is not required.
+                            </t>
+                        </list>
+                    </t>
+                </section>
+                <section anchor="MetadataContents" title="Initial Registry Contents">
+                    <t>
+                        <list style="symbols">
+                            <t>
+                                Metadata Name: supports_query
+                            </t>
+                            <t>
+                                Metadata Type: boolean
+                            </t>
+                            <t>
+                                Metadata Description:
+                                Value indicating whether the server supports the Query operation.
+                            </t>
+                            <t>
+                                Change Controller: ctwg-ext-review@tenprotocol.org
+                            </t>
+                            <t>
+                                Specification Document(s):
+                                <xref target="Metadata"/>
+                                of this specification.
+                            </t>
+                        </list>
+                    </t>
+                    <t>
+                        <list style="symbols">
+                            <t>
+                                Metadata Name: query_endpoint
+                            </t>
+                            <t>
+                                Metadata Type: string
+                            </t>
+                            <t>
+                                Metadata Description:
+                                URL of the server's Query endpoint.
+                            </t>
+                            <t>
+                                Change Controller: ctwg-ext-review@tenprotocol.org
+                            </t>
+                            <t>
+                                Specification Document(s):
+                                <xref target="Metadata"/>
+                                of this specification.
+                            </t>
+                        </list>
+                    </t>
+                    <t>
+                        <list style="symbols">
+                            <t>
+                                Metadata Name: supports_upload
+                            </t>
+                            <t>
+                                Metadata Type: boolean
+                            </t>
+                            <t>
+                                Metadata Description:
+                                Value indicating whether the server supports the Upload operation.
+                            </t>
+                            <t>
+                                Change Controller: ctwg-ext-review@tenprotocol.org
+                            </t>
+                            <t>
+                                Specification Document(s):
+                                <xref target="Metadata"/>
+                                of this specification.
+                            </t>
+                        </list>
+                    </t>
+                    <t>
+                        <list style="symbols">
+                            <t>
+                                Metadata Name: upload_endpoint
+                            </t>
+                            <t>
+                                Metadata Type: string
+                            </t>
+                            <t>
+                                Metadata Description:
+                                URL of the server"s Upload endpoint.
+                            </t>
+                            <t>
+                                Change Controller: ctwg-ext-review@tenprotocol.org
+                            </t>
+                            <t>
+                                Specification Document(s):
+                                <xref target="Metadata"/>
+                                of this specification.
+                            </t>
+                        </list>
+                    </t>
+                    <t>
+                        <list style="symbols">
+                            <t>
+                                Metadata Name: keys_supported
+                            </t>
+                            <t>
+                                Metadata Type: array of string
+                            </t>
+                            <t>
+                                Metadata Description:
+                                Array of strings of URI's that designated which keys are supported.
+                            </t>
+                            <t>
+                                Change Controller: ctwg-ext-review@tenprotocol.org
+                            </t>
+                            <t>
+                                Specification Document(s):
+                                <xref target="Metadata"/>
+                                of this specification.
+                            </t>
+                        </list>
+                    </t>
+                    <t>
+                        <list style="symbols">
+                            <t>
+                                Metadata Name: threats_supported
+                            </t>
+                            <t>
+                                Metadata Type: array of string
+                            </t>
+                            <t>
+                                Metadata Description:
+                                Array of strings of Threat Descriptors<xref target="Descriptors"/>.
+                            </t>
+                            <t>
+                                Change Controller: ctwg-ext-review@tenprotocol.org
+                            </t>
+                            <t>
+                                Specification Document(s):
+                                <xref target="Metadata"/>
+                                of this specification.
+                            </t>
+                        </list>
+                    </t>
+
+                    <?rfc subcompact="no"?>
+                </section>
+            </section>
+            <section anchor="WellknownRegistry" title="Well-Known URI Registry">
+                <t>
+                    This specification registers the well-known URI defined in
+                    <xref target="ObtainingMetadata"/>
+                    in the IANA Well-Known URI registry defined in<xref target="RFC8615"/>.
+                </t>
+
+                <section anchor="WellknownContents" title="Registry Contents">
+                    <?rfc subcompact="yes"?>
+                    <t>
+                        <list style="symbols">
+                            <t>URI suffix:
+                                <spanx style="verb">threat-exposure-configuration</spanx>
+                            </t>
+                            <t>Change controller: IESG</t>
+                            <t>Specification document:
+                                <xref target="ObtainingMetadata"/>
+                                of this specification.
+                            </t>
+                            <t>Related information: (none)</t>
+                        </list>
+                    </t>
+                    <?rfc subcompact="no"?>
+                </section>
+            </section>
+        </section>
+    </middle>
+
+    <back>
+        <references title="Normative References">
+            <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml" ?>
+            <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.3339.xml" ?>
+            <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.5246.xml" ?>
+            <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.6125.xml" ?>
+            <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.6415.xml" ?>
+            <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.7230.xml" ?>
+            <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.7525.xml" ?>
+            <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.7807.xml" ?>
+            <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.8126.xml" ?>
+            <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.8259.xml" ?>
+            <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.8288.xml" ?>
+            <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.8615.xml" ?>
+            <reference anchor="IANA.well-known" target="http://www.iana.org/assignments/well-known-uris">
+                <front>
+                    <title>Well-Known URIs</title>
+                    <author>
+                        <organization>IANA</organization>
+                    </author>
+                    <date/>
+                </front>
+            </reference>
+        </references>
+
+        <references title="Informative References">
+            <reference anchor="who"
+                       target="https://apps.who.int/iris/bitstream/handle/10665/185258/WHO_EVD_Guidance_Contact_15.1_eng.pdf">
+                <front>
+                    <title>
+                        Emergency Guideline - Implementation and management of contact tracing for Ebola
+                        virus disease
+                    </title>
+                    <author>
+                        <organization>World Health Organization (WHO)</organization>
+                    </author>
+                    <author>
+                        <organization>Center for Disease Control and Prevention (CDC)</organization>
+                    </author>
+                    <date month="September" year="2015"/>
+                </front>
+            </reference>
+            <reference anchor="pact" target="https://pact.mit.edu/wp-content/uploads/2020/04/The-PACT-protocol-specification-ver-0.1.pdf">
+                <front>
+                    <title>
+                        The PACT protocol specification
+                    </title>
+                    <author fullname="Ron L. Rivest" surname="Rivest" initials="R.L." role="editor">
+                        <organization>MIT</organization>
+                    </author>
+
+                    <author fullname="Jon Callas" initials="J." surname="Callas">
+                        <organization>ACLU</organization>
+                    </author>
+                    <author fullname="Ran Canetti" initials="R." surname="Canetti">
+                        <organization>Boston University</organization>
+                    </author>
+                    <author fullname="Kevin Esvelt" initials="K." surname="Esvelt">
+                        <organization>Massachusetts Institute of Technology</organization>
+                    </author>
+                    <author fullname="Daniel Kahn Gillmor" initials="D.K." surname="Gillmor">
+                        <organization>American Civil Liberties Union</organization>
+                    </author>
+                    <author fullname="Yael Tauman Kalai" initials="Y.T." surname="Kalai">
+                        <organization>Massachusetts Institute of Technology</organization>
+                    </author>
+                    <author fullname="Anna Lysyanskaya" initials="A." surname="Lysyanskaya">
+                        <organization>Brown University</organization>
+                    </author>
+                    <author fullname="Adam Norige" initials="A." surname="Norige">
+                        <organization>MIT Lincoln Laboratory</organization>
+                    </author>
+                    <author fullname="Ramesh Raskar" initials="R." surname="Raskar">
+                        <organization>Massachusetts Institute of Technology</organization>
+                    </author>
+                    <author fullname="Adi Shamir" initials="A." surname="Shamir">
+                        <organization>Weizmann Institute</organization>
+                    </author>
+                    <author fullname="Emily Shen" initials="E." surname="Shen">
+                        <organization>MIT Lincoln Laboratory</organization>
+                    </author>
+                    <author fullname="Israel Soibelman" initials="I." surname="Soibelman">
+                        <organization>MIT Lincoln Laboratory</organization>
+                    </author>
+                    <author fullname="Michael Specter" initials="M." surname="Specter">
+                        <organization>Massachusetts Institute of Technology</organization>
+                    </author>
+                    <author fullname="Vanessa Teague" initials="V." surname="Teague">
+                        <organization>Thinking Cybersecurity</organization>
+                    </author>
+                    <author fullname="Ari Trachtenberg" initials="A." surname="Trachtenberg">
+                        <organization>Boston University</organization>
+                    </author>
+                    <author fullname="Mayank Varia" initials="M." surname="Varia">
+                        <organization>Boston University</organization>
+                    </author>
+                    <author fullname="Marc Viera" initials="M." surname="Viera">
+                        <organization>MIT Lincoln Laboratory</organization>
+                    </author>
+                    <author fullname="Daniel Weitzner" initials="D." surname="Weitzner">
+                        <organization>Massachusetts Institute of Technology</organization>
+                    </author>
+                    <author fullname="John Wilkinson" initials="J." surname="Wilkinson">
+                        <organization>MIT Lincoln Laboratory</organization>
+                    </author>
+                    <author fullname="Marc Zissman" initials="M." surname="Zissman">
+                        <organization>MIT Lincoln Laboratory</organization>
+                    </author>
+                    <date/>
+                </front>
+            </reference>
+        </references>
+
+        <section title="Configuration Examples (Non-normative)">
+            <section title="Example Configuration Request">
+                <t>
+                    The client would make the following request to the server
+                    <spanx style="verb">https://example.com</spanx>
+                    to obtain its Configuration document:
+
+                    <figure>
+                        <artwork><![CDATA[
+GET /.well-known/threat-exposure-configuration HTTP/1.1
+Accept: application/json
+Host: example.com
+                        ]]></artwork>
+                    </figure>
+                </t>
+            </section>
+            <section title="Example Configuration Response">
+                <t>
+                    The following is a non-normative example response:
+                    <figure>
+                        <artwork><![CDATA[
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "supports_query": true,
+  "query_endpoint": "https://server.example.com/query",
+  "supports_upload": true,
+  "upload_endpoint": "https://server.example.com/upload",
+  "keys_supported": ["https://tenprotocol.org/keys/btle"],
+  "threats_supported": ["https://tenprotocol.org/threats/covid19"],
+  "assertions_supported": ["https://tenprotocol.org/assertions/
+    geo/country/1.0", "https://tenprotocol.org/assertions/geo/
+    state/1.0"]
+}
+                        ]]></artwork>
+                    </figure>
+                </t>
+            </section>
+        </section>
+        <section title="Upload Examples (Non-normative)">
+            <section title="Example Upload Request">
+                <t>
+                    <figure>
+                        <artwork><![CDATA[
+POST /threat-exposure/upload HTTP/1.1
+Host: example.com
+Content-Type: application/json
+Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
+
+{
+    "keys": {
+        "https://tenprotocol.org/keys/btle": [
+            "1478E46F897749C691A28351F0B054F1",
+            "20A7412C65A046DCB5538D7DA45A6B5D",
+            "24BFE7A43563495BA36C79A96617A602",
+            "371108A73B964915A62D81E49A783F85",
+            "4075DB637A914896B5459EF3E377AF0D",
+            "5F51F91099B84C9685CD268941A3DEEC",
+            "67684C56F9A6407A99DB57E6B871EC1D",
+            "AA0817D30C64407CB4F5DE1425336922",
+            "CFC046DEF50244D58CA58A0AD7FED287",
+            "D555096A727C49FEADD03488154E6152",
+            "E48A37FB87924885AD6879857DC297B2"
+        ]
+    },
+    "diagnosis": {
+        "threat": "https://tenprotocol.org/threats/diseases/covid19",
+        "diagnosed": "2020-05-01T01:23:45"
+    },
+    "assertions": {
+        "https://tenprotocol.org/assertions/geo/country/1.0": ["US"],
+        "https://tenprotocol.org/assertions/geo/state/1.0": ["CA"]
+    }
+}
+                        ]]></artwork>
+                    </figure>
+                </t>
+            </section>
+            <section title="Example Upload Successful Response">
+                <t>
+                    <figure>
+                        <artwork><![CDATA[
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{}
+                        ]]></artwork>
+                    </figure>
+                </t>
+            </section>
+            <section title="Example Upload Empty Response">
+                <t>
+                    <figure>
+                        <artwork><![CDATA[
+HTTP/1.1 204 No Content
+                        ]]></artwork>
+                    </figure>
+                </t>
+            </section>
+            <section title="Example Upload Error Response">
+                <t>
+                    <figure>
+                        <artwork><![CDATA[
+HTTP/1.1 400 Bad Request
+Content-Type: application/problem+json
+Content-Language: en
+
+{
+    "type": "https://tenprotocol.org/errors/key-not-supported",
+    "status": "400",
+    "detail": "The specified key is not supported."
+}
+                        ]]></artwork>
+                    </figure>
+                </t>
+            </section>
+        </section>
+        <section title="Query Examples (Non-normative)">
+            <section title="Example Query Request">
+                <t>
+                    <figure>
+                        <artwork><![CDATA[
+POST /threat-exposure/query HTTP/1.1
+Host: example.com
+Content-Type: application/json
+Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
+
+{
+    "keys": {
+        "https://tenprotocol.org/keys/btle": [
+            "1478E46F897749C691A28351F0B054F1",
+            "20A7412C65A046DCB5538D7DA45A6B5D",
+            "24BFE7A43563495BA36C79A96617A602",
+            "371108A73B964915A62D81E49A783F85",
+            "4075DB637A914896B5459EF3E377AF0D",
+            "5F51F91099B84C9685CD268941A3DEEC",
+            "67684C56F9A6407A99DB57E6B871EC1D",
+            "AA0817D30C64407CB4F5DE1425336922",
+            "CFC046DEF50244D58CA58A0AD7FED287",
+            "D555096A727C49FEADD03488154E6152",
+            "E48A37FB87924885AD6879857DC297B2"
+        ]
+    },
+    "after": "2020-04-01T00:00:00",
+    "threats": [
+        "https://tenprotocol.org/threats/diseases/covid19"
+    ],
+    "assertions": {
+        "https://tenprotocol.org/assertions/geo/country/1.0": ["US"],
+        "https://tenprotocol.org/assertions/geo/state/1.0": ["CA"]
+    }
+}
+                        ]]></artwork>
+                    </figure>
+                </t>
+            </section>
+            <section title="Example Query Response">
+                <t>
+                    <figure>
+                        <artwork><![CDATA[
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Language: en
+
+{
+    "exposed": {
+        "https://tenprotocol.org/threats/diseases/covid19": true
+    },
+    "exposures": ["2020-04-20"],
+    "message": "You were exposed to COVID-19 on April 20th 2020.
+       Please contact your local health authority.",
+    "links": [
+        {
+            "href": "http://somehealth.org/covid19.html",
+            "rel": "details"
+        },
+        {
+            "href": "http://somehealth.org/privacy-policy.html",
+            "rel": "privacy"
+        },
+    ]
+}
+                        ]]></artwork>
+                    </figure>
+                </t>
+            </section>
+            <section title="Example Query Error Response">
+                <t>
+                    <figure>
+                        <artwork><![CDATA[
+HTTP/1.1 400 Bad Request
+Content-Type: application/problem+json
+Content-Language: en
+
+{
+    "type": "https://tenprotocol.org/errors/key-not-supported",
+    "status": "400",
+    "detail": "The specified key is not supported."
+}
+                        ]]></artwork>
+                    </figure>
+                </t>
+            </section>
+        </section>
+        <section title="Fetch Examples (Non-normative)">
+            <section title="Example Fetch Request">
+                <t>
+                    <figure>
+                        <artwork><![CDATA[
+POST /threat-exposure/fetch HTTP/1.1
+Host: example.com
+Content-Type: application/json
+Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
+
+{
+    "keys": [
+        "https://tenprotocol.org/keys/btle"
+    ],
+    "after": "2020-04-01T00:00:00",
+    "threats": [
+        "https://tenprotocol.org/threats/diseases/covid19"
+    ],
+    "assertions": {
+        "https://tenprotocol.org/assertions/geo/country/1.0": ["US"],
+        "https://tenprotocol.org/assertions/geo/state/1.0": ["CA"]
+    }
+}
+                        ]]></artwork>
+                    </figure>
+                </t>
+            </section>
+            <section title="Example Fetch Response">
+                <t>
+                    <figure>
+                        <artwork><![CDATA[
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Language: en
+
+{
+    "keys": {
+        "https://tenprotocol.org/keys/btle": [
+            "1478E46F897749C691A28351F0B054F1",
+            "20A7412C65A046DCB5538D7DA45A6B5D",
+            "24BFE7A43563495BA36C79A96617A602",
+            "371108A73B964915A62D81E49A783F85",
+            "4075DB637A914896B5459EF3E377AF0D",
+            "5F51F91099B84C9685CD268941A3DEEC",
+            "67684C56F9A6407A99DB57E6B871EC1D",
+            "AA0817D30C64407CB4F5DE1425336922",
+            "CFC046DEF50244D58CA58A0AD7FED287",
+            "D555096A727C49FEADD03488154E6152",
+            "E48A37FB87924885AD6879857DC297B2"
+        ]
+    }
+}
+                        ]]></artwork>
+                    </figure>
+                </t>
+            </section>
+            <section title="Example Fetch Error Response">
+                <t>
+                    <figure>
+                        <artwork><![CDATA[
+HTTP/1.1 400 Bad Request
+Content-Type: application/problem+json
+Content-Language: en
+
+{
+    "type": "https://tenprotocol.org/errors/key-not-supported",
+    "status": "400",
+    "detail": "The specified key is not supported."
+}
+                        ]]></artwork>
+                    </figure>
+                </t>
+            </section>
+        </section>
+        <section title="Revoke Examples (Non-normative)">
+            <section title="Example Revoke Request">
+                <t>
+                    <figure>
+                        <artwork><![CDATA[
+DELETE /threat-exposure/revoke HTTP/1.1
+Host: example.com
+Content-Type: application/json
+Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
+
+{
+    "keys": {
+        "https://tenprotocol.org/keys/btle": [
+            "1478E46F897749C691A28351F0B054F1",
+            "20A7412C65A046DCB5538D7DA45A6B5D",
+            "24BFE7A43563495BA36C79A96617A602",
+            "371108A73B964915A62D81E49A783F85",
+            "4075DB637A914896B5459EF3E377AF0D",
+            "5F51F91099B84C9685CD268941A3DEEC",
+            "67684C56F9A6407A99DB57E6B871EC1D",
+            "AA0817D30C64407CB4F5DE1425336922",
+            "CFC046DEF50244D58CA58A0AD7FED287",
+            "D555096A727C49FEADD03488154E6152",
+            "E48A37FB87924885AD6879857DC297B2"
+        ]
+    },
+    "assertions": {
+        "https://tenprotocol.org/assertions/geo/country/1.0": ["US"],
+        "https://tenprotocol.org/assertions/geo/state/1.0": ["CA"]
+    }
+}
+                        ]]></artwork>
+                    </figure>
+                </t>
+            </section>
+            <section title="Example Revoke Successful Response">
+                <t>
+                    <figure>
+                        <artwork><![CDATA[
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{}
+                        ]]></artwork>
+                    </figure>
+                </t>
+            </section>
+            <section title="Example Revoke Empty Response">
+                <t>
+                    <figure>
+                        <artwork><![CDATA[
+HTTP/1.1 204 No Content
+                        ]]></artwork>
+                    </figure>
+                </t>
+            </section>
+            <section title="Example Revoke Error Response">
+                <t>
+                    <figure>
+                        <artwork><![CDATA[
+HTTP/1.1 400 Bad Request
+Content-Type: application/problem+json
+Content-Language: en
+
+{
+    "type": "https://tenprotocol.org/errors/key-not-supported",
+    "status": "400",
+    "detail": "The specified key is not supported."
+}
+                        ]]></artwork>
+                    </figure>
+                </t>
+            </section>
+        </section>
+    </back>
+</rfc>
