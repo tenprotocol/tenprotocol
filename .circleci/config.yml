@@ -7,8 +7,27 @@ jobs:
       # - image: circleci/python:3.8.2
 
     working_directory: /go/src/github.com/tenprotocol/tenprotocol
+
     steps:
       - checkout
-      - run: go get github.com/gohugoio/hugo
-      - run: go install --tags extended github.com/gohugoio/hugo
-      - run: python
+      - restore_cache:
+          keys:
+            - go-mod-v1-{{ checksum "go.sum" }}
+      - run:
+          name: Install xml2rfc
+          command: |
+            curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+            python get-pip.py
+            pip install xml2rfc
+      - run:
+          name: Install Hugo
+          command: |
+            go mod download
+            go install --tags extended github.com/gohugoio/hugo
+      - run:
+          name: Build RFC
+          command: make
+      - save_cache:
+          key: go-mod-v1-{{ checksum "go.sum" }}
+          paths:
+            - "/go/pkg/mod"
