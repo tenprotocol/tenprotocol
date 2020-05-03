@@ -1,6 +1,6 @@
 ---
 layout: home
-title: Threat Exposure Notification Protocol
+title: Home
 ---
 
 ## Overview
