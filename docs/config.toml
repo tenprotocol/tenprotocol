@@ -9,6 +9,9 @@ publishDir = "../public"
     copyright = "© 2020 SwitchBit, Inc."
 
 [params]
+  [logo]
+    logoText = "10P"
+
   # dir name of your blog content (default is `content/posts`)
   # contentTypeName = "posts"
 
