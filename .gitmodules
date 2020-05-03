@@ -2,3 +2,6 @@
 	path = public
 	url = https://github.com/tenprotocol/tenprotocol.github.io.git
 	branch = master
+[submodule "docs/themes/terminal"]
+	path = docs/themes/terminal
+	url = https://github.com/panr/hugo-theme-terminal.git
