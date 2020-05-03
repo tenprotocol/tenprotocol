@@ -14,6 +14,10 @@ jobs:
           keys:
             - go-mod-v1-{{ checksum "go.sum" }}
       - run:
+          name: "Pull Submodules"
+          command: |
+            git submodule update --recursive --remote
+      - run:
           name: Install xml2rfc
           command: |
             curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
@@ -33,7 +37,7 @@ jobs:
           name: Build website
           command: |
             cd docs
-            hugo
+            ./build.sh
       - save_cache:
           key: go-mod-v1-{{ checksum "go.sum" }}
           paths:
