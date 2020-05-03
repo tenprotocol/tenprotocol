@@ -11,6 +11,8 @@ hugo -t terminal
 # Go To Public folder
 cd ../public
 
+git checkout master
+
 # Make the RFC output directory
 mkdir -p rfc/html rfc/txt rfc/reference
 
