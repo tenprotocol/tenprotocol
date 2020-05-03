@@ -26,7 +26,14 @@ jobs:
             go install --tags extended github.com/gohugoio/hugo
       - run:
           name: Build RFC
-          command: make
+          command: |
+            make clean
+            make
+      - run:
+          name: Build website
+          command: |
+            cd docs
+            hugo
       - save_cache:
           key: go-mod-v1-{{ checksum "go.sum" }}
           paths:
