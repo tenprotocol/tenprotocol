@@ -9,5 +9,6 @@ jobs:
     working_directory: /go/src/github.com/tenprotocol/tenprotocol
     steps:
       - checkout
+      - run: go get github.com/gohugoio/hugo
       - run: go install --tags extended github.com/gohugoio/hugo
       - run: python
