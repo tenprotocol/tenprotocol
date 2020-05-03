@@ -370,15 +370,15 @@ Deceased <--+ Diagnosed +----> Recovered
                 <t>
                     A Threat Descriptor has the following properties:
                     <list style="hanging">
-                        <t hangText="https://tenprotocol.org/threat/name">
+                        <t hangText="https://tenprotocol.org/props/threat/name">
                             <vspace blankLines="1"/>
                             REQUIRED. The name of the threat.
                         </t>
-                        <t hangText="https://tenprotocol.org/threat/description">
+                        <t hangText="https://tenprotocol.org/props/threat/description">
                             <vspace blankLines="1"/>
                             REQUIRED. A short description of the threat.
                         </t>
-                        <t hangText="https://tenprotocol.org/threat/symptoms">
+                        <t hangText="https://tenprotocol.org/props/threat/symptoms">
                             <vspace blankLines="1"/>
                             RECOMMENDED. A comma-separated list of string labels that describe symptoms of the threat.
                         </t>
@@ -951,7 +951,7 @@ Deceased <--+ Diagnosed +----> Recovered
             <t>
                 Values are registered on a Specification Required
                 <xref target="RFC8126"/>
-                basis after a two-week review period on the ctwg-ext-review@tenprotocol.org
+                basis after a two-week review period on the tenp-ext-review@tenprotocol.org
                 mailing list, on the advice of one or more Designated Experts.
                 However, to allow for the allocation of values prior to publication,
                 the Designated Experts may approve registration once they are satisfied
@@ -1068,7 +1068,7 @@ Deceased <--+ Diagnosed +----> Recovered
                                 Value indicating whether the server supports the Query operation.
                             </t>
                             <t>
-                                Change Controller: ctwg-ext-review@tenprotocol.org
+                                Change Controller: tenp-ext-review@tenprotocol.org
                             </t>
                             <t>
                                 Specification Document(s):
@@ -1090,7 +1090,7 @@ Deceased <--+ Diagnosed +----> Recovered
                                 URL of the server's Query endpoint.
                             </t>
                             <t>
-                                Change Controller: ctwg-ext-review@tenprotocol.org
+                                Change Controller: tenp-ext-review@tenprotocol.org
                             </t>
                             <t>
                                 Specification Document(s):
@@ -1112,7 +1112,7 @@ Deceased <--+ Diagnosed +----> Recovered
                                 Value indicating whether the server supports the Upload operation.
                             </t>
                             <t>
-                                Change Controller: ctwg-ext-review@tenprotocol.org
+                                Change Controller: tenp-ext-review@tenprotocol.org
                             </t>
                             <t>
                                 Specification Document(s):
@@ -1134,7 +1134,7 @@ Deceased <--+ Diagnosed +----> Recovered
                                 URL of the server"s Upload endpoint.
                             </t>
                             <t>
-                                Change Controller: ctwg-ext-review@tenprotocol.org
+                                Change Controller: tenp-ext-review@tenprotocol.org
                             </t>
                             <t>
                                 Specification Document(s):
@@ -1156,7 +1156,7 @@ Deceased <--+ Diagnosed +----> Recovered
                                 Array of strings of URI's that designated which keys are supported.
                             </t>
                             <t>
-                                Change Controller: ctwg-ext-review@tenprotocol.org
+                                Change Controller: tenp-ext-review@tenprotocol.org
                             </t>
                             <t>
                                 Specification Document(s):
@@ -1178,7 +1178,7 @@ Deceased <--+ Diagnosed +----> Recovered
                                 Array of strings of Threat Descriptors<xref target="Descriptors"/>.
                             </t>
                             <t>
-                                Change Controller: ctwg-ext-review@tenprotocol.org
+                                Change Controller: tenp-ext-review@tenprotocol.org
                             </t>
                             <t>
                                 Specification Document(s):

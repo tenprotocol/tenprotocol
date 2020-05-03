@@ -439,7 +439,7 @@ Internet-Draft                    TENP                          May 2020
 
    A Threat Descriptor has the following properties:
 
-   https://tenprotocol.org/threat/name
+   https://tenprotocol.org/props/threat/name
 
       REQUIRED.  The name of the threat.
 
@@ -450,11 +450,11 @@ Yates & Salomon         Expires November 2, 2020                [Page 8]
 Internet-Draft                    TENP                          May 2020
 
 
-   https://tenprotocol.org/threat/description
+   https://tenprotocol.org/props/threat/description
 
       REQUIRED.  A short description of the threat.
 
-   https://tenprotocol.org/threat/symptoms
+   https://tenprotocol.org/props/threat/symptoms
 
       RECOMMENDED.  A comma-separated list of string labels that
       describe symptoms of the threat.
@@ -916,7 +916,7 @@ Internet-Draft                    TENP                          May 2020
    established by this specification.
 
    Values are registered on a Specification Required [RFC8126] basis
-   after a two-week review period on the ctwg-ext-review@tenprotocol.org
+   after a two-week review period on the tenp-ext-review@tenprotocol.org
    mailing list, on the advice of one or more Designated Experts.
    However, to allow for the allocation of values prior to publication,
    the Designated Experts may approve registration once they are
@@ -1029,7 +1029,7 @@ Internet-Draft                    TENP                          May 2020
    o  Metadata Description: Value indicating whether the server supports
       the Query operation.
 
-   o  Change Controller: ctwg-ext-review@tenprotocol.org
+   o  Change Controller: tenp-ext-review@tenprotocol.org
 
    o  Specification Document(s): Section 3 of this specification.
 
@@ -1039,7 +1039,7 @@ Internet-Draft                    TENP                          May 2020
 
    o  Metadata Description: URL of the server's Query endpoint.
 
-   o  Change Controller: ctwg-ext-review@tenprotocol.org
+   o  Change Controller: tenp-ext-review@tenprotocol.org
 
    o  Specification Document(s): Section 3 of this specification.
 
@@ -1050,7 +1050,7 @@ Internet-Draft                    TENP                          May 2020
    o  Metadata Description: Value indicating whether the server supports
       the Upload operation.
 
-   o  Change Controller: ctwg-ext-review@tenprotocol.org
+   o  Change Controller: tenp-ext-review@tenprotocol.org
 
    o  Specification Document(s): Section 3 of this specification.
 
@@ -1068,7 +1068,7 @@ Internet-Draft                    TENP                          May 2020
 
    o  Metadata Description: URL of the server"s Upload endpoint.
 
-   o  Change Controller: ctwg-ext-review@tenprotocol.org
+   o  Change Controller: tenp-ext-review@tenprotocol.org
 
    o  Specification Document(s): Section 3 of this specification.
 
@@ -1079,7 +1079,7 @@ Internet-Draft                    TENP                          May 2020
    o  Metadata Description: Array of strings of URI's that designated
       which keys are supported.
 
-   o  Change Controller: ctwg-ext-review@tenprotocol.org
+   o  Change Controller: tenp-ext-review@tenprotocol.org
 
    o  Specification Document(s): Section 3 of this specification.
 
@@ -1090,7 +1090,7 @@ Internet-Draft                    TENP                          May 2020
    o  Metadata Description: Array of strings of Threat
       DescriptorsSection 4.
 
-   o  Change Controller: ctwg-ext-review@tenprotocol.org
+   o  Change Controller: tenp-ext-review@tenprotocol.org
 
    o  Specification Document(s): Section 3 of this specification.
 

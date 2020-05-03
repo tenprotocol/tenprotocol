@@ -829,13 +829,13 @@ Deceased &lt;--+ Diagnosed +----&gt; Recovered
 <p id="rfc.section.4.1.p.1">A Threat Descriptor has the following properties: </p>
 
 <dl>
-<dt>https://tenprotocol.org/threat/name</dt>
+<dt>https://tenprotocol.org/props/threat/name</dt>
 <dd style="margin-left: 8">
 <br><br> REQUIRED. The name of the threat.  </dd>
-<dt>https://tenprotocol.org/threat/description</dt>
+<dt>https://tenprotocol.org/props/threat/description</dt>
 <dd style="margin-left: 8">
 <br><br> REQUIRED. A short description of the threat.  </dd>
-<dt>https://tenprotocol.org/threat/symptoms</dt>
+<dt>https://tenprotocol.org/props/threat/symptoms</dt>
 <dd style="margin-left: 8">
 <br><br> RECOMMENDED. A comma-separated list of string labels that describe symptoms of the threat.  </dd>
 </dl>
@@ -1146,7 +1146,7 @@ Deceased &lt;--+ Diagnosed +----&gt; Recovered
 <a href="#rfc.section.11">11.</a> <a href="#IANA" id="IANA">IANA Considerations</a>
 </h1>
 <p id="rfc.section.11.p.1">The following registration procedure is used for the registry established by this specification.  </p>
-<p id="rfc.section.11.p.2">Values are registered on a Specification Required <a href="#RFC8126" class="xref">[RFC8126]</a> basis after a two-week review period on the ctwg-ext-review@tenprotocol.org mailing list, on the advice of one or more Designated Experts.  However, to allow for the allocation of values prior to publication, the Designated Experts may approve registration once they are satisfied that such a specification will be published.  </p>
+<p id="rfc.section.11.p.2">Values are registered on a Specification Required <a href="#RFC8126" class="xref">[RFC8126]</a> basis after a two-week review period on the tenp-ext-review@tenprotocol.org mailing list, on the advice of one or more Designated Experts.  However, to allow for the allocation of values prior to publication, the Designated Experts may approve registration once they are satisfied that such a specification will be published.  </p>
 <p id="rfc.section.11.p.3">Registration requests sent to the mailing list for review should use an appropriate subject (e.g., "Request to register Threat Exposure Notification Server Metadata: example").  </p>
 <p id="rfc.section.11.p.4">Within the review period, the Designated Experts will either approve or deny the registration request, communicating this decision to the review list and IANA.  Denials should include an explanation and, if applicable, suggestions as to how to make the request successful.  Registration requests that are undetermined for a period longer than 21 days can be brought to the IESG's attention (using the iesg@ietf.org mailing list) for resolution.  </p>
 <p id="rfc.section.11.p.5">Criteria that should be applied by the Designated Experts include determining whether the proposed registration duplicates existing functionality, determining whether it is likely to be of general applicability or whether it is useful only for a single application, and whether the registration makes sense.  </p>
@@ -1192,7 +1192,7 @@ Deceased &lt;--+ Diagnosed +----&gt; Recovered
 <li>Metadata Name: supports_query </li>
 <li>Metadata Type: boolean </li>
 <li>Metadata Description: Value indicating whether the server supports the Query operation.  </li>
-<li>Change Controller: ctwg-ext-review@tenprotocol.org </li>
+<li>Change Controller: tenp-ext-review@tenprotocol.org </li>
 <li>Specification Document(s): <a href="#Metadata" class="xref">Section 3</a> of this specification.  </li>
 </ul>
 
@@ -1203,7 +1203,7 @@ Deceased &lt;--+ Diagnosed +----&gt; Recovered
 <li>Metadata Name: query_endpoint </li>
 <li>Metadata Type: string </li>
 <li>Metadata Description: URL of the server's Query endpoint.  </li>
-<li>Change Controller: ctwg-ext-review@tenprotocol.org </li>
+<li>Change Controller: tenp-ext-review@tenprotocol.org </li>
 <li>Specification Document(s): <a href="#Metadata" class="xref">Section 3</a> of this specification.  </li>
 </ul>
 
@@ -1214,7 +1214,7 @@ Deceased &lt;--+ Diagnosed +----&gt; Recovered
 <li>Metadata Name: supports_upload </li>
 <li>Metadata Type: boolean </li>
 <li>Metadata Description: Value indicating whether the server supports the Upload operation.  </li>
-<li>Change Controller: ctwg-ext-review@tenprotocol.org </li>
+<li>Change Controller: tenp-ext-review@tenprotocol.org </li>
 <li>Specification Document(s): <a href="#Metadata" class="xref">Section 3</a> of this specification.  </li>
 </ul>
 
@@ -1225,7 +1225,7 @@ Deceased &lt;--+ Diagnosed +----&gt; Recovered
 <li>Metadata Name: upload_endpoint </li>
 <li>Metadata Type: string </li>
 <li>Metadata Description: URL of the server"s Upload endpoint.  </li>
-<li>Change Controller: ctwg-ext-review@tenprotocol.org </li>
+<li>Change Controller: tenp-ext-review@tenprotocol.org </li>
 <li>Specification Document(s): <a href="#Metadata" class="xref">Section 3</a> of this specification.  </li>
 </ul>
 
@@ -1236,7 +1236,7 @@ Deceased &lt;--+ Diagnosed +----&gt; Recovered
 <li>Metadata Name: keys_supported </li>
 <li>Metadata Type: array of string </li>
 <li>Metadata Description: Array of strings of URI's that designated which keys are supported.  </li>
-<li>Change Controller: ctwg-ext-review@tenprotocol.org </li>
+<li>Change Controller: tenp-ext-review@tenprotocol.org </li>
 <li>Specification Document(s): <a href="#Metadata" class="xref">Section 3</a> of this specification.  </li>
 </ul>
 
@@ -1247,7 +1247,7 @@ Deceased &lt;--+ Diagnosed +----&gt; Recovered
 <li>Metadata Name: threats_supported </li>
 <li>Metadata Type: array of string </li>
 <li>Metadata Description: Array of strings of Threat Descriptors<a href="#Descriptors" class="xref">Section 4</a>.  </li>
-<li>Change Controller: ctwg-ext-review@tenprotocol.org </li>
+<li>Change Controller: tenp-ext-review@tenprotocol.org </li>
 <li>Specification Document(s): <a href="#Metadata" class="xref">Section 3</a> of this specification.  </li>
 </ul>
 
