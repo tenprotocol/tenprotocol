@@ -660,8 +660,7 @@ Deceased <--+ Diagnosed +----> Recovered
                         <t hangText="links">
                             <vspace/>
                             A list of WebLinks
-                            <xref target="RFC8288"/>
-                            for more information.
+                            for more information (<xref target="RFC7033" /> <xref target="RFC8288"/>).
                         </t>
                     </list>
                 </t>
@@ -1226,6 +1225,7 @@ Deceased <--+ Diagnosed +----> Recovered
             <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.5246.xml" ?>
             <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.6125.xml" ?>
             <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.6415.xml" ?>
+            <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.7033.xml" ?>
             <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.7230.xml" ?>
             <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.7525.xml" ?>
             <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.7807.xml" ?>

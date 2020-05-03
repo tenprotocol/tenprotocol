@@ -687,7 +687,7 @@ Internet-Draft                    TENP                          May 2020
       A human-readable message to be displayed to the user.
 
    links
-      A list of WebLinks [RFC8288] for more information.
+      A list of WebLinks for more information ([RFC7033] [RFC8288]).
 
 7.4.  Query Error Response
 
@@ -1155,6 +1155,10 @@ Internet-Draft                    TENP                          May 2020
               RFC 6415, DOI 10.17487/RFC6415, October 2011,
               <https://www.rfc-editor.org/info/rfc6415>.
 
+   [RFC7033]  Jones, P., Salgueiro, G., Jones, M., and J. Smarr,
+              "WebFinger", RFC 7033, DOI 10.17487/RFC7033, September
+              2013, <https://www.rfc-editor.org/info/rfc7033>.
+
    [RFC7230]  Fielding, R., Ed. and J. Reschke, Ed., "Hypertext Transfer
               Protocol (HTTP/1.1): Message Syntax and Routing",
               RFC 7230, DOI 10.17487/RFC7230, June 2014,
@@ -1166,10 +1170,6 @@ Internet-Draft                    TENP                          May 2020
               (DTLS)", BCP 195, RFC 7525, DOI 10.17487/RFC7525, May
               2015, <https://www.rfc-editor.org/info/rfc7525>.
 
-   [RFC7807]  Nottingham, M. and E. Wilde, "Problem Details for HTTP
-              APIs", RFC 7807, DOI 10.17487/RFC7807, March 2016,
-              <https://www.rfc-editor.org/info/rfc7807>.
-
 
 
 
@@ -1177,6 +1177,10 @@ Yates & Salomon         Expires November 2, 2020               [Page 21]
 
 Internet-Draft                    TENP                          May 2020
 
+
+   [RFC7807]  Nottingham, M. and E. Wilde, "Problem Details for HTTP
+              APIs", RFC 7807, DOI 10.17487/RFC7807, March 2016,
+              <https://www.rfc-editor.org/info/rfc7807>.
 
    [RFC8126]  Cotton, M., Leiba, B., and T. Narten, "Guidelines for
               Writing an IANA Considerations Section in RFCs", BCP 26,
@@ -1221,10 +1225,6 @@ A.1.  Example Configuration Request
    The client would make the following request to the server
    "https://example.com" to obtain its Configuration document:
 
-   GET /.well-known/threat-exposure-configuration HTTP/1.1
-   Accept: application/json
-   Host: example.com
-
 
 
 
@@ -1233,6 +1233,10 @@ Yates & Salomon         Expires November 2, 2020               [Page 22]
 
 Internet-Draft                    TENP                          May 2020
 
+
+   GET /.well-known/threat-exposure-configuration HTTP/1.1
+   Accept: application/json
+   Host: example.com
 
 A.2.  Example Configuration Response
 
@@ -1256,10 +1260,6 @@ A.2.  Example Configuration Response
 Appendix B.  Upload Examples (Non-normative)
 
 B.1.  Example Upload Request
-
-
-
-
 
 
 
