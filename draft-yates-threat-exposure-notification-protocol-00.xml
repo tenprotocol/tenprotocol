@@ -548,7 +548,7 @@ Deceased <--+ Diagnosed +----> Recovered
                 <t>
                     The client SHOULD retrieve the request URI from the Threat Exposure Notification Server
                     Configuration Document as
-                    defined in<xref target="ObtainingMetadata"/>.
+                    defined in <xref target="ObtainingMetadata"/>.
                 </t>
                 <t>
                     The request object is a JSON object
