@@ -58,10 +58,16 @@
                 then use this information to help control the spread of infectious diseases.
             </t>
             <t>
+                For any such technology to work requires sufficient adoption in the population. Concerns about user data
+                privacy and sovereignty may hamper adoption rates. It is therefore imperative that any such solution
+                must include a robust framework for respecting user rights, complying with privacy regulations and
+                protecting sensitive data.
+            </t>
+            <t>
                 The Threat Exposure Notification Protocol (TENP) is a simple HTTP- and JSON-based protocol
                 for client-server communication of information to determine if a user has been exposed to a threat.
                 It enables clients to upload and query such information from a server in an
-                interoperable and REST-like manner.
+                interoperable, secure, and REST-like manner with support for data privacy.
             </t>
 
             <section title="Notational Conventions">
@@ -136,7 +142,7 @@ Deceased <--+ Diagnosed +----> Recovered
                     This protocol does not specify a method for testing or diagnosis of a threat nor does it specify
                     a process of authorization to upload diagnosis keys. Several approaches have been suggested
                     elsewhere ranging from self declared to tightly controlled authorization managed by trusted
-                    authorities (for example <xref target="pact"/>).
+                    authorities (for example<xref target="pact"/>).
                 </t>
             </section>
 
@@ -224,7 +230,7 @@ Deceased <--+ Diagnosed +----> Recovered
                     A server MUST host a Threat Exposure Notification Server Configuration Document describing its
                     configuration. The following server metadata values are used by this specification and are
                     registered in the IANA "Threat Exposure Notification Servers Metadata" registry established
-                    in <xref target="MetadataReg"/>:
+                    in<xref target="MetadataReg"/>:
 
                     <list style="hanging">
                         <t hangText="supports_query">
@@ -307,7 +313,7 @@ Deceased <--+ Diagnosed +----> Recovered
                     available at the path
                     <spanx style="verb">/.well-known/threat-exposure-configuration</spanx>. The syntax and semantics of
                     <spanx style="verb">.well-known</spanx>
-                    are defined in <xref target="RFC8615"/>.
+                    are defined in<xref target="RFC8615"/>.
                 </t>
                 <t>
                     <spanx style="verb">threat-exposure-configuration</spanx>
@@ -318,7 +324,7 @@ Deceased <--+ Diagnosed +----> Recovered
                 </t>
                 <t>
                     The well-known URI path suffix used MUST be registered in the IANA
-                    "Well-Known URIs" registry <xref target="IANA.well-known"/>.
+                    "Well-Known URIs" registry<xref target="IANA.well-known"/>.
                 </t>
 
                 <section title="Threat Exposure Notification Server Configuration Request">
@@ -340,7 +346,7 @@ Deceased <--+ Diagnosed +----> Recovered
                         using the <spanx style="verb">application/json</spanx> content type that contains a set of
                         claims
                         as its members that are a subset of the Metadata values defined
-                        in <xref target="Metadata"/>.
+                        in<xref target="Metadata"/>.
                     </t>
                     <t>Other claims MAY also be returned and clients MUST ignore any claims not recognized.</t>
                     <t>Clients SHOULD follow redirected requests.</t>
@@ -364,7 +370,7 @@ Deceased <--+ Diagnosed +----> Recovered
                 This section describes a JSON document
                 <xref target="RFC8259"/>
                 format for describing threats. The
-                format is based on the JRD document format specified in <xref target="RFC6415"/>.
+                format is based on the JRD document format specified in<xref target="RFC6415"/>.
             </t>
             <section anchor="ThreatProperties" title="Threat Descriptor Properties">
                 <t>
@@ -406,13 +412,13 @@ Deceased <--+ Diagnosed +----> Recovered
             </t>
             <t>
                 Information about the diagnosis, client, individual or scope can be attached to the upload using
-                Assertions <xref target="Assertions"/>.
+                Assertions<xref target="Assertions"/>.
             </t>
             <section anchor="UploadRequest" title="Upload Request">
                 <t>
                     The client SHOULD retrieve the request URI from the Threat Exposure Notification Server
                     Configuration Document as
-                    defined in <xref target="ObtainingMetadata"/>.
+                    defined in<xref target="ObtainingMetadata"/>.
                 </t>
                 <t>
                     The request object is a JSON object
@@ -432,7 +438,7 @@ Deceased <--+ Diagnosed +----> Recovered
                             <list style="hanging">
                                 <t hangText="threat">
                                     <vspace/>
-                                    REQUIRED. A URI of a threat that has been diagnosed, as specified in <xref
+                                    REQUIRED. A URI of a threat that has been diagnosed, as specified in<xref
                                         target="Descriptors"/>.
                                 </t>
                                 <t hangText="diagnosed">
@@ -447,7 +453,7 @@ Deceased <--+ Diagnosed +----> Recovered
                             <vspace/>
                             OPTIONAL. An object providing additional assertions related to the upload, diagnosis,
                             individual or scope.
-                            The key is an Assertion defined as per <xref target="Assertions"/>.
+                            The key is an Assertion defined as per<xref target="Assertions"/>.
                             The client MUST ignore any assertions it does not recognize.
                         </t>
                     </list>
@@ -521,7 +527,7 @@ Deceased <--+ Diagnosed +----> Recovered
                     at least the <spanx style="verb">type</spanx>,
                     <spanx style="verb">status</spanx>
                     and <spanx style="verb">detail</spanx> as specified
-                    in <xref target="RFC7807"/>.
+                    in<xref target="RFC7807"/>.
                 </t>
             </section>
         </section>
@@ -536,13 +542,13 @@ Deceased <--+ Diagnosed +----> Recovered
             </t>
             <t>
                 Information about the diagnosis, client, individual or scope can be attached to the upload using
-                Assertions <xref target="Assertions"/>.
+                Assertions<xref target="Assertions"/>.
             </t>
             <section anchor="QueryRequest" title="Query Request">
                 <t>
                     The client SHOULD retrieve the request URI from the Threat Exposure Notification Server
                     Configuration Document as
-                    defined in <xref target="ObtainingMetadata"/>.
+                    defined in<xref target="ObtainingMetadata"/>.
                 </t>
                 <t>
                     The request object is a JSON object
@@ -572,13 +578,13 @@ Deceased <--+ Diagnosed +----> Recovered
                         <t hangText="threats">
                             <vspace/>
                             REQUIRED. Array of strings specifying which threats to check for exposure
-                            to <xref target="Descriptors"/>.
+                            to<xref target="Descriptors"/>.
                         </t>
                         <t hangText="assertions">
                             <vspace/>
                             OPTIONAL. An object providing additional assertions related to the upload, diagnosis,
                             individual or scope.
-                            The key is an Assertion defined as per <xref target="Assertions"/>.
+                            The key is an Assertion defined as per<xref target="Assertions"/>.
                             The client MUST ignore any assertions it does not recognize.
                         </t>
                     </list>
@@ -660,7 +666,9 @@ Deceased <--+ Diagnosed +----> Recovered
                         <t hangText="links">
                             <vspace/>
                             A list of WebLinks
-                            for more information (<xref target="RFC7033" /> <xref target="RFC8288"/>).
+                            for more information (
+                            <xref target="RFC7033"/>
+                            <xref target="RFC8288"/>).
                         </t>
                     </list>
                 </t>
@@ -675,7 +683,7 @@ Deceased <--+ Diagnosed +----> Recovered
                     at least the <spanx style="verb">type</spanx>,
                     <spanx style="verb">status</spanx>
                     and <spanx style="verb">detail</spanx> as specified
-                    in <xref target="RFC7807"/>.
+                    in<xref target="RFC7807"/>.
                 </t>
             </section>
         </section>
@@ -690,13 +698,13 @@ Deceased <--+ Diagnosed +----> Recovered
             </t>
             <t>
                 Information about the diagnosis, client, individual or scope can be attached to the upload using
-                Assertions <xref target="Assertions"/>.
+                Assertions<xref target="Assertions"/>.
             </t>
             <section anchor="FetchRequest" title="Fetch Request">
                 <t>
                     The client SHOULD retrieve the request URI from the Threat Exposure Notification Server
                     Configuration Document as
-                    defined in <xref target="ObtainingMetadata"/>.
+                    defined in<xref target="ObtainingMetadata"/>.
                 </t>
                 <t>
                     The request object is a JSON object
@@ -725,13 +733,13 @@ Deceased <--+ Diagnosed +----> Recovered
                         <t hangText="threats">
                             <vspace/>
                             REQUIRED. Array of strings specifying which threats to check for exposure
-                            to <xref target="Descriptors"/>.
+                            to<xref target="Descriptors"/>.
                         </t>
                         <t hangText="assertions">
                             <vspace/>
                             OPTIONAL. An object providing additional assertions related to the upload, diagnosis,
                             individual or scope.
-                            The key is an Assertion defined as per <xref target="Assertions"/>.
+                            The key is an Assertion defined as per<xref target="Assertions"/>.
                             The client MUST ignore any assertions it does not recognize.
                         </t>
                     </list>
@@ -815,7 +823,7 @@ Deceased <--+ Diagnosed +----> Recovered
                     at least the <spanx style="verb">type</spanx>,
                     <spanx style="verb">status</spanx>
                     and <spanx style="verb">detail</spanx> as specified
-                    in <xref target="RFC7807"/>.
+                    in<xref target="RFC7807"/>.
                 </t>
             </section>
         </section>
@@ -830,13 +838,13 @@ Deceased <--+ Diagnosed +----> Recovered
             </t>
             <t>
                 Information about the diagnosis, client, individual or scope can be attached to the upload using
-                assertions <xref target="Assertions"/>.
+                assertions<xref target="Assertions"/>.
             </t>
             <section anchor="RevokeRequest" title="Revoke Request">
                 <t>
                     The client SHOULD retrieve the request URI from the Threat Exposure Notification Server
                     Configuration Document as
-                    defined in <xref target="ObtainingMetadata"/>.
+                    defined in<xref target="ObtainingMetadata"/>.
                 </t>
                 <t>
                     The request object is a JSON object
@@ -852,7 +860,7 @@ Deceased <--+ Diagnosed +----> Recovered
                             <vspace/>
                             OPTIONAL. An object providing additional assertions related to the upload, diagnosis,
                             individual or scope.
-                            The key is an Assertion defined as per <xref target="Assertions"/>.
+                            The key is an Assertion defined as per<xref target="Assertions"/>.
                             The client MUST ignore any assertions it does not recognize.
                         </t>
                     </list>
@@ -900,7 +908,7 @@ Deceased <--+ Diagnosed +----> Recovered
                     at least the <spanx style="verb">type</spanx>,
                     <spanx style="verb">status</spanx>
                     and <spanx style="verb">detail</spanx> as specified
-                    in <xref target="RFC7807"/>.
+                    in<xref target="RFC7807"/>.
                 </t>
             </section>
         </section>
@@ -929,10 +937,10 @@ Deceased <--+ Diagnosed +----> Recovered
                     <xref target="RFC5246"/>
                     and MAY support additional TLS mechanisms meeting its
                     security requirements. When using TLS, the client MUST perform a
-                    TLS/SSL server certificate check, per <xref target="RFC6125"/>.
+                    TLS/SSL server certificate check, per<xref target="RFC6125"/>.
                     Implementation security considerations can be found in
                     "Recommendations for Secure Use of Transport Layer Security (TLS) and
-                    Datagram Transport Layer Security (DTLS)" <xref target="RFC7525"/>.
+                    Datagram Transport Layer Security (DTLS)"<xref target="RFC7525"/>.
                 </t>
                 <t>
                     To protect against information disclosure and tampering,
@@ -1174,7 +1182,7 @@ Deceased <--+ Diagnosed +----> Recovered
                             </t>
                             <t>
                                 Metadata Description:
-                                Array of strings of Threat Descriptors <xref target="Descriptors"/>.
+                                Array of strings of Threat Descriptors<xref target="Descriptors"/>.
                             </t>
                             <t>
                                 Change Controller: tenp-ext-review@tenprotocol.org
@@ -1194,7 +1202,7 @@ Deceased <--+ Diagnosed +----> Recovered
                 <t>
                     This specification registers the well-known URI defined in
                     <xref target="ObtainingMetadata"/>
-                    in the IANA Well-Known URI registry defined in <xref target="RFC8615"/>.
+                    in the IANA Well-Known URI registry defined in<xref target="RFC8615"/>.
                 </t>
 
                 <section anchor="WellknownContents" title="Registry Contents">
@@ -1261,7 +1269,8 @@ Deceased <--+ Diagnosed +----> Recovered
                     <date month="September" year="2015"/>
                 </front>
             </reference>
-            <reference anchor="pact" target="https://pact.mit.edu/wp-content/uploads/2020/04/The-PACT-protocol-specification-ver-0.1.pdf">
+            <reference anchor="pact"
+                       target="https://pact.mit.edu/wp-content/uploads/2020/04/The-PACT-protocol-specification-ver-0.1.pdf">
                 <front>
                     <title>
                         The PACT protocol specification
