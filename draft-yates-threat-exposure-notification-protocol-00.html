@@ -447,7 +447,7 @@
 <link href="#rfc.authors" rel="Chapter">
 
 
-  <meta name="generator" content="xml2rfc version 2.43.0 - https://tools.ietf.org/tools/xml2rfc" />
+  <meta name="generator" content="xml2rfc version 2.44.0 - https://tools.ietf.org/tools/xml2rfc" />
   <link rel="schema.dct" href="http://purl.org/dc/terms/" />
 
   <meta name="dct.creator" content="Yates, S. and Y. Salomon" />
@@ -654,7 +654,8 @@
 </h1>
 <p id="rfc.section.1.p.1">Contact Tracing is a technique used by public health authorities to measure and contain the spread of infectious diseases (<a href="#who" class="xref">[who]</a>). It requires gathering information from infected individuals about the people they've previously been in contact with. These individuals can then be notified by public health authorities to take appropriate safety measures, such as undertaking self-quarantine and getting tested.  </p>
 <p id="rfc.section.1.p.2">Technology can play an important role in contact tracing efforts. Mobile devices can be used in an automated and scalable way to help determine who has been exposed to a person that later is deemed infectious and sending a notification with instructions on next steps. Health authorities can then use this information to help control the spread of infectious diseases.  </p>
-<p id="rfc.section.1.p.3">The Threat Exposure Notification Protocol (TENP) is a simple HTTP- and JSON-based protocol for client-server communication of information to determine if a user has been exposed to a threat.  It enables clients to upload and query such information from a server in an interoperable and REST-like manner.  </p>
+<p id="rfc.section.1.p.3">For any such technology to work requires sufficient adoption in the population. Concerns about user data privacy and sovereignty may hamper adoption rates. It is therefore imperative that any such solution must include a robust framework for respecting user rights, complying with privacy regulations and protecting sensitive data.  </p>
+<p id="rfc.section.1.p.4">The Threat Exposure Notification Protocol (TENP) is a simple HTTP- and JSON-based protocol for client-server communication of information to determine if a user has been exposed to a threat.  It enables clients to upload and query such information from a server in an interoperable, secure, and REST-like manner with support for data privacy.  </p>
 <h1 id="rfc.section.1.1">
 <a href="#rfc.section.1.1">1.1.</a> Notational Conventions</h1>
 <p id="rfc.section.1.1.p.1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in <a href="#RFC2119" class="xref">[RFC2119]</a> when, and only when, they appear in all capitals, as shown here.  </p>
@@ -995,7 +996,7 @@ Deceased &lt;--+ Diagnosed +----&gt; Recovered
 <br> A human-readable message to be displayed to the user.  </dd>
 <dt>links</dt>
 <dd style="margin-left: 8">
-<br> A list of WebLinks for more information (<a href="#RFC7033" class="xref">[RFC7033]</a> <a href="#RFC8288" class="xref">[RFC8288]</a>).  </dd>
+<br> A list of WebLinks for more information ( <a href="#RFC7033" class="xref">[RFC7033]</a> <a href="#RFC8288" class="xref">[RFC8288]</a>).  </dd>
 </dl>
 
 <p> </p>

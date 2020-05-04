@@ -58,10 +58,16 @@
                 then use this information to help control the spread of infectious diseases.
             </t>
             <t>
+                For any such technology to work requires sufficient adoption in the population. Concerns about user data
+                privacy and sovereignty may hamper adoption rates. It is therefore imperative that any such solution
+                must include a robust framework for respecting user rights, complying with privacy regulations and
+                protecting sensitive data.
+            </t>
+            <t>
                 The Threat Exposure Notification Protocol (TENP) is a simple HTTP- and JSON-based protocol
                 for client-server communication of information to determine if a user has been exposed to a threat.
                 It enables clients to upload and query such information from a server in an
-                interoperable and REST-like manner.
+                interoperable, secure, and REST-like manner with support for data privacy.
             </t>
 
             <section title="Notational Conventions">
@@ -660,7 +666,9 @@ Deceased <--+ Diagnosed +----> Recovered
                         <t hangText="links">
                             <vspace/>
                             A list of WebLinks
-                            for more information (<xref target="RFC7033" /> <xref target="RFC8288"/>).
+                            for more information (
+                            <xref target="RFC7033"/>
+                            <xref target="RFC8288"/>).
                         </t>
                     </list>
                 </t>
@@ -1261,7 +1269,8 @@ Deceased <--+ Diagnosed +----> Recovered
                     <date month="September" year="2015"/>
                 </front>
             </reference>
-            <reference anchor="pact" target="https://pact.mit.edu/wp-content/uploads/2020/04/The-PACT-protocol-specification-ver-0.1.pdf">
+            <reference anchor="pact"
+                       target="https://pact.mit.edu/wp-content/uploads/2020/04/The-PACT-protocol-specification-ver-0.1.pdf">
                 <front>
                     <title>
                         The PACT protocol specification
