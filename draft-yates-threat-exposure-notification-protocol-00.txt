@@ -520,7 +520,7 @@ Internet-Draft                    TENP                          May 2020
 
       threat
          REQUIRED.  A URI of a threat that has been diagnosed, as
-         specified inSection 4.
+         specified in Section 4.
 
       diagnosed
          REQUIRED.  The time when the diagnosis was made formatted as
@@ -629,7 +629,7 @@ Internet-Draft                    TENP                          May 2020
 
    threats
       REQUIRED.  Array of strings specifying which threats to check for
-      exposure toSection 4.
+      exposure to Section 4.
 
    assertions
       OPTIONAL.  An object providing additional assertions related to
@@ -704,7 +704,7 @@ Internet-Draft                    TENP                          May 2020
    If the request was not validated properly, the server MUST return a
    "400 Bad Request " error response with a Problem Details Object
    [RFC7807] containing at least the "type", "status" and "detail" as
-   specified in[RFC7807].
+   specified in [RFC7807].
 
 8.  Fetching Diagnosis Keys
 
@@ -748,7 +748,7 @@ Internet-Draft                    TENP                          May 2020
 
    threats
       REQUIRED.  Array of strings specifying which threats to check for
-      exposure toSection 4.
+      exposure to Section 4.
 
    assertions
       OPTIONAL.  An object providing additional assertions related to
@@ -1098,8 +1098,8 @@ Internet-Draft                    TENP                          May 2020
 
    o  Metadata Type: array of string
 
-   o  Metadata Description: Array of strings of Threat
-      DescriptorsSection 4.
+   o  Metadata Description: Array of strings of Threat Descriptors
+      Section 4.
 
    o  Change Controller: tenp-ext-review@tenprotocol.org
 

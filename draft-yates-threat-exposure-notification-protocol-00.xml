@@ -438,7 +438,7 @@ Deceased <--+ Diagnosed +----> Recovered
                             <list style="hanging">
                                 <t hangText="threat">
                                     <vspace/>
-                                    REQUIRED. A URI of a threat that has been diagnosed, as specified in<xref
+                                    REQUIRED. A URI of a threat that has been diagnosed, as specified in <xref
                                         target="Descriptors"/>.
                                 </t>
                                 <t hangText="diagnosed">
@@ -578,7 +578,7 @@ Deceased <--+ Diagnosed +----> Recovered
                         <t hangText="threats">
                             <vspace/>
                             REQUIRED. Array of strings specifying which threats to check for exposure
-                            to<xref target="Descriptors"/>.
+                            to <xref target="Descriptors"/>.
                         </t>
                         <t hangText="assertions">
                             <vspace/>
@@ -683,7 +683,7 @@ Deceased <--+ Diagnosed +----> Recovered
                     at least the <spanx style="verb">type</spanx>,
                     <spanx style="verb">status</spanx>
                     and <spanx style="verb">detail</spanx> as specified
-                    in<xref target="RFC7807"/>.
+                    in <xref target="RFC7807"/>.
                 </t>
             </section>
         </section>
@@ -733,7 +733,7 @@ Deceased <--+ Diagnosed +----> Recovered
                         <t hangText="threats">
                             <vspace/>
                             REQUIRED. Array of strings specifying which threats to check for exposure
-                            to<xref target="Descriptors"/>.
+                            to <xref target="Descriptors"/>.
                         </t>
                         <t hangText="assertions">
                             <vspace/>
@@ -1182,7 +1182,7 @@ Deceased <--+ Diagnosed +----> Recovered
                             </t>
                             <t>
                                 Metadata Description:
-                                Array of strings of Threat Descriptors<xref target="Descriptors"/>.
+                                Array of strings of Threat Descriptors <xref target="Descriptors"/>.
                             </t>
                             <t>
                                 Change Controller: tenp-ext-review@tenprotocol.org
