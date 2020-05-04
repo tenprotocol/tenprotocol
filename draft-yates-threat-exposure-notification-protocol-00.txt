@@ -258,7 +258,7 @@ Internet-Draft                    TENP                          May 2020
    threat nor does it specify a process of authorization to upload
    diagnosis keys.  Several approaches have been suggested elsewhere
    ranging from self declared to tightly controlled authorization
-   managed by trusted authorities (for example[pact]).
+   managed by trusted authorities (for example [pact]).
 
 1.5.  Terminology
 
@@ -339,7 +339,7 @@ Internet-Draft                    TENP                          May 2020
 
 
    registered in the IANA "Threat Exposure Notification Servers
-   Metadata" registry established inSection 11.1:
+   Metadata" registry established in Section 11.1:
 
    supports_query
       REQUIRED.  Boolean value indicating whether the server supports
@@ -399,14 +399,14 @@ Internet-Draft                    TENP                          May 2020
 
    Servers MUST make a JSON document [RFC8259] available at the path
    "/.well-known/threat-exposure-configuration".  The syntax and
-   semantics of ".well-known" are defined in[RFC8615].
+   semantics of ".well-known" are defined in [RFC8615].
 
    "threat-exposure-configuration" MUST point to a JSON document
    [RFC8259] compliant with this specification and MUST be returned
    using the "application/json" content type.
 
    The well-known URI path suffix used MUST be registered in the IANA
-   "Well-Known URIs" registry[IANA.well-known].
+   "Well-Known URIs" registry [IANA.well-known].
 
 3.2.1.  Threat Exposure Notification Server Configuration Request
 
@@ -420,7 +420,8 @@ Internet-Draft                    TENP                          May 2020
    and supported information.  A successful response MUST use the 200 OK
    HTTP status code and return a JSON object [RFC8259] using the
    "application/json" content type that contains a set of claims as its
-   members that are a subset of the Metadata values defined inSection 3.
+   members that are a subset of the Metadata values defined in
+   Section 3.
 
    Other claims MAY also be returned and clients MUST ignore any claims
    not recognized.
@@ -444,7 +445,6 @@ Internet-Draft                    TENP                          May 2020
 
 
 
-
 Yates & Salomon         Expires November 2, 2020                [Page 8]
 
 Internet-Draft                    TENP                          May 2020
@@ -454,7 +454,7 @@ Internet-Draft                    TENP                          May 2020
 
    This section describes a JSON document [RFC8259] format for
    describing threats.  The format is based on the JRD document format
-   specified in[RFC6415].
+   specified in [RFC6415].
 
 4.1.  Threat Descriptor Properties
 
@@ -490,12 +490,12 @@ Internet-Draft                    TENP                          May 2020
    is covered in Section 3.2.
 
    Information about the diagnosis, client, individual or scope can be
-   attached to the upload using AssertionsSection 5.
+   attached to the upload using Assertions Section 5.
 
 6.1.  Upload Request
 
    The client SHOULD retrieve the request URI from the Threat Exposure
-   Notification Server Configuration Document as defined inSection 3.2.
+   Notification Server Configuration Document as defined in Section 3.2.
 
 
 
@@ -529,7 +529,7 @@ Internet-Draft                    TENP                          May 2020
    assertions
       OPTIONAL.  An object providing additional assertions related to
       the upload, diagnosis, individual or scope.  The key is an
-      Assertion defined as perSection 5.  The client MUST ignore any
+      Assertion defined as per Section 5.  The client MUST ignore any
       assertions it does not recognize.
 
 6.2.  Upload Validation
@@ -583,7 +583,7 @@ Internet-Draft                    TENP                          May 2020
    If the request was not validated properly, the server MUST return a
    "400 Bad Request " error response with a Problem Details Object
    [RFC7807] containing at least the "type", "status" and "detail" as
-   specified in[RFC7807].
+   specified in [RFC7807].
 
 7.  Querying Exposure
 
@@ -593,7 +593,7 @@ Internet-Draft                    TENP                          May 2020
    is covered in Section 3.2.
 
    Information about the diagnosis, client, individual or scope can be
-   attached to the upload using AssertionsSection 5.
+   attached to the upload using Assertions Section 5.
 
 7.1.  Query Request
 
@@ -634,7 +634,7 @@ Internet-Draft                    TENP                          May 2020
    assertions
       OPTIONAL.  An object providing additional assertions related to
       the upload, diagnosis, individual or scope.  The key is an
-      Assertion defined as perSection 5.  The client MUST ignore any
+      Assertion defined as per Section 5.  The client MUST ignore any
       assertions it does not recognize.
 
 7.2.  Query Validation
@@ -715,12 +715,12 @@ Internet-Draft                    TENP                          May 2020
    is covered in Section 3.2.
 
    Information about the diagnosis, client, individual or scope can be
-   attached to the upload using AssertionsSection 5.
+   attached to the upload using Assertions Section 5.
 
 8.1.  Fetch Request
 
    The client SHOULD retrieve the request URI from the Threat Exposure
-   Notification Server Configuration Document as defined inSection 3.2.
+   Notification Server Configuration Document as defined in Section 3.2.
 
 
 
@@ -753,7 +753,7 @@ Internet-Draft                    TENP                          May 2020
    assertions
       OPTIONAL.  An object providing additional assertions related to
       the upload, diagnosis, individual or scope.  The key is an
-      Assertion defined as perSection 5.  The client MUST ignore any
+      Assertion defined as per Section 5.  The client MUST ignore any
       assertions it does not recognize.
 
 8.2.  Fetch Validation
@@ -814,7 +814,7 @@ Internet-Draft                    TENP                          May 2020
    If the request was not validated properly, the server MUST return a
    "400 Bad Request " error response with a Problem Details Object
    [RFC7807] containing at least the "type", "status" and "detail" as
-   specified in[RFC7807].
+   specified in [RFC7807].
 
 9.  Revoking Diagnosis Keys
 
@@ -825,12 +825,12 @@ Internet-Draft                    TENP                          May 2020
    is covered in Section 3.2.
 
    Information about the diagnosis, client, individual or scope can be
-   attached to the upload using assertionsSection 5.
+   attached to the upload using assertions Section 5.
 
 9.1.  Revoke Request
 
    The client SHOULD retrieve the request URI from the Threat Exposure
-   Notification Server Configuration Document as defined inSection 3.2.
+   Notification Server Configuration Document as defined in Section 3.2.
 
    The request object is a JSON object [RFC8259] with the following
    properties:
@@ -850,7 +850,7 @@ Internet-Draft                    TENP                          May 2020
    assertions
       OPTIONAL.  An object providing additional assertions related to
       the upload, diagnosis, individual or scope.  The key is an
-      Assertion defined as perSection 5.  The client MUST ignore any
+      Assertion defined as per Section 5.  The client MUST ignore any
       assertions it does not recognize.
 
 9.2.  Revoke Validation
@@ -880,7 +880,7 @@ Internet-Draft                    TENP                          May 2020
    If the request was not validated properly, the server MUST return a
    "400 Bad Request " error response with a Problem Details Object
    [RFC7807] containing at least the "type", "status" and "detail" as
-   specified in[RFC7807].
+   specified in [RFC7807].
 
 10.  Security Considerations
 
@@ -912,10 +912,10 @@ Internet-Draft                    TENP                          May 2020
    implementation.  The authorization server MUST support TLS version
    1.2 [RFC5246] and MAY support additional TLS mechanisms meeting its
    security requirements.  When using TLS, the client MUST perform a
-   TLS/SSL server certificate check, per[RFC6125].  Implementation
+   TLS/SSL server certificate check, per [RFC6125].  Implementation
    security considerations can be found in "Recommendations for Secure
    Use of Transport Layer Security (TLS) and Datagram Transport Layer
-   Security (DTLS)"[RFC7525].
+   Security (DTLS)" [RFC7525].
 
    To protect against information disclosure and tampering,
    confidentiality protection MUST be applied using TLS with a
@@ -1108,7 +1108,7 @@ Internet-Draft                    TENP                          May 2020
 11.2.  Well-Known URI Registry
 
    This specification registers the well-known URI defined in
-   Section 3.2 in the IANA Well-Known URI registry defined in[RFC8615].
+   Section 3.2 in the IANA Well-Known URI registry defined in [RFC8615].
 
 
 
