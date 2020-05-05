@@ -36,8 +36,6 @@ jobs:
       - run:
           name: Build website
           command: |
-            git config --global user.email "ci@tenprotocol.org"
-            git config --global user.name "CI"
             cd docs
             ./build.sh
       - save_cache:
