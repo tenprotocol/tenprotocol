@@ -723,6 +723,10 @@ Deceased &lt;--+ Diagnosed +----&gt; Recovered
 <dt>Key</dt>
 <dd style="margin-left: 8">
 <br> Keys belong to a device or app, that belong to a user.  </dd>
+<dt>Diagnosis Keys</dt>
+<dd style="margin-left: 8">Keys belonging to a device or app, that belongs to a diagnosed infected user.  </dd>
+<dt>Potential Exposure Keys</dt>
+<dd style="margin-left: 8">Keys belonging to other users (their device or app), with which a user have come in contact with.  </dd>
 </dl>
 
 <p> </p>
@@ -861,7 +865,16 @@ Deceased &lt;--+ Diagnosed +----&gt; Recovered
 <dl>
 <dt>keys</dt>
 <dd style="margin-left: 8">
-<br> REQUIRED. A dictionary where the key is a URI of a key type and the value is an array of strings representing the diagnosis keys for that key type.  </dd>
+<br> REQUIRED. An object denoting the diagnosis keys. It has the following properties: <dl>
+<dt>type</dt>
+<dd style="margin-left: 8">
+<br> REQUIRED. A URI of a key type.  </dd>
+<dt>value</dt>
+<dd style="margin-left: 8">
+<br> REQUIRED. an array of strings representing the diagnosis keys for that key type.  </dd>
+</dl>
+<p> </p>
+</dd>
 <dt>diagnosis</dt>
 <dd style="margin-left: 8">
 <br> REQUIRED. An object providing information about the diagnosis of a threat. It has the following properties: <dl>
@@ -934,7 +947,16 @@ Deceased &lt;--+ Diagnosed +----&gt; Recovered
 <dl>
 <dt>keys</dt>
 <dd style="margin-left: 8">
-<br> REQUIRED. A dictionary where the key is an URI of a key type and the value is an array of strings representing the keys for that key type.  </dd>
+<br> REQUIRED. An object denoting the potential exposure keys. It has the following properties: <dl>
+<dt>type</dt>
+<dd style="margin-left: 8">
+<br> REQUIRED. A URI of a key type.  </dd>
+<dt>value</dt>
+<dd style="margin-left: 8">
+<br> REQUIRED. an array of strings representing the potential exposure keys for that key type.  </dd>
+</dl>
+<p> </p>
+</dd>
 <dt>before</dt>
 <dd style="margin-left: 8">
 <br> OPTIONAL. A date to search for exposures before, formatted as specified in <a href="#RFC3339" class="xref">[RFC3339]</a> with no time zone offset.  </dd>
@@ -1073,7 +1095,16 @@ Deceased &lt;--+ Diagnosed +----&gt; Recovered
 <dl>
 <dt>keys</dt>
 <dd style="margin-left: 8">
-<br> REQUIRED. A dictionary where the key is a URI of a key type and the value is an array of strings representing the diagnosis keys for that key type.  </dd>
+<br> REQUIRED. An object denoting the population of known diagnosis keys. It has the following properties: <dl>
+<dt>type</dt>
+<dd style="margin-left: 8">
+<br> REQUIRED. A URI of a key type.  </dd>
+<dt>value</dt>
+<dd style="margin-left: 8">
+<br> REQUIRED. an array of strings representing the diagnosis keys for that key type.  </dd>
+</dl>
+<p> </p>
+</dd>
 </dl>
 
 <p> </p>
@@ -1096,7 +1127,16 @@ Deceased &lt;--+ Diagnosed +----&gt; Recovered
 <dl>
 <dt>keys</dt>
 <dd style="margin-left: 8">
-<br> REQUIRED. A dictionary where the key is a URI of a key type and the value is an array of strings representing the diagnosis keys for that key type.  </dd>
+<br> REQUIRED. An object denoting the diagnosis keys. It has the following properties: <dl>
+<dt>type</dt>
+<dd style="margin-left: 8">
+<br> REQUIRED. A URI of a key type.  </dd>
+<dt>value</dt>
+<dd style="margin-left: 8">
+<br> REQUIRED. an array of strings representing the diagnosis keys for that key type.  </dd>
+</dl>
+<p> </p>
+</dd>
 <dt>assertions</dt>
 <dd style="margin-left: 8">
 <br> OPTIONAL. An object providing additional assertions related to the upload, diagnosis, individual or scope.  The key is an Assertion defined as per <a href="#Assertions" class="xref">Section 5</a>.  The client MUST ignore any assertions it does not recognize.  </dd>

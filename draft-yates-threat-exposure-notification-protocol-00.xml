@@ -180,6 +180,13 @@ Deceased <--+ Diagnosed +----> Recovered
                             <vspace/>
                             Keys belong to a device or app, that belong to a user.
                         </t>
+                        <t hangText="Diagnosis Keys">
+                            Keys belonging to a device or app, that belongs to a diagnosed infected user.
+                        </t>
+                        <t hangText="Potential Exposure Keys">
+                            Keys belonging to other users (their device or app), with which a user have come in contact
+                            with.
+                        </t>
                     </list>
                 </t>
             </section>
@@ -427,8 +434,17 @@ Deceased <--+ Diagnosed +----> Recovered
                     <list style="hanging">
                         <t hangText="keys">
                             <vspace/>
-                            REQUIRED. A dictionary where the key is a URI of a key type and the value is an array
-                            of strings representing the diagnosis keys for that key type.
+                            REQUIRED. An object denoting the diagnosis keys. It has the following properties:
+                            <list style="hanging">
+                                <t hangText="type">
+                                    <vspace/>
+                                    REQUIRED. A URI of a key type.
+                                </t>
+                                <t hangText="value">
+                                    <vspace/>
+                                    REQUIRED. an array of strings representing the diagnosis keys for that key type.
+                                </t>
+                            </list>
                         </t>
                         <t hangText="diagnosis">
                             <vspace/>
@@ -557,8 +573,18 @@ Deceased <--+ Diagnosed +----> Recovered
                     <list style="hanging">
                         <t hangText="keys">
                             <vspace/>
-                            REQUIRED. A dictionary where the key is an URI of a key type and the value is an array
-                            of strings representing the keys for that key type.
+                            REQUIRED. An object denoting the potential exposure keys. It has the following properties:
+                            <list style="hanging">
+                                <t hangText="type">
+                                    <vspace/>
+                                    REQUIRED. A URI of a key type.
+                                </t>
+                                <t hangText="value">
+                                    <vspace/>
+                                    REQUIRED. an array of strings representing the potential exposure keys for that key
+                                    type.
+                                </t>
+                            </list>
                         </t>
                         <t hangText="before">
                             <vspace/>
@@ -807,8 +833,18 @@ Deceased <--+ Diagnosed +----> Recovered
                     <list style="hanging">
                         <t hangText="keys">
                             <vspace/>
-                            REQUIRED. A dictionary where the key is a URI of a key type and the value is an array
-                            of strings representing the diagnosis keys for that key type.
+                            REQUIRED. An object denoting the population of known diagnosis keys. It has the following
+                            properties:
+                            <list style="hanging">
+                                <t hangText="type">
+                                    <vspace/>
+                                    REQUIRED. A URI of a key type.
+                                </t>
+                                <t hangText="value">
+                                    <vspace/>
+                                    REQUIRED. an array of strings representing the diagnosis keys for that key type.
+                                </t>
+                            </list>
                         </t>
                     </list>
                 </t>
@@ -853,8 +889,17 @@ Deceased <--+ Diagnosed +----> Recovered
                     <list style="hanging">
                         <t hangText="keys">
                             <vspace/>
-                            REQUIRED. A dictionary where the key is a URI of a key type and the value is an array
-                            of strings representing the diagnosis keys for that key type.
+                            REQUIRED. An object denoting the diagnosis keys. It has the following properties:
+                            <list style="hanging">
+                                <t hangText="type">
+                                    <vspace/>
+                                    REQUIRED. A URI of a key type.
+                                </t>
+                                <t hangText="value">
+                                    <vspace/>
+                                    REQUIRED. an array of strings representing the diagnosis keys for that key type.
+                                </t>
+                            </list>
                         </t>
                         <t hangText="assertions">
                             <vspace/>
