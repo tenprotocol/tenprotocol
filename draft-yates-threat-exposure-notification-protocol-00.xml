@@ -432,19 +432,13 @@ Deceased <--+ Diagnosed +----> Recovered
                     <xref target="RFC8259"/>
                     with the following properties:
                     <list style="hanging">
+                        <t hangText="key_type">
+                            <vspace/>
+                            REQUIRED. A URI of a key type.
+                        </t>
                         <t hangText="keys">
                             <vspace/>
-                            REQUIRED. An object denoting the diagnosis keys. It has the following properties:
-                            <list style="hanging">
-                                <t hangText="type">
-                                    <vspace/>
-                                    REQUIRED. A URI of a key type.
-                                </t>
-                                <t hangText="value">
-                                    <vspace/>
-                                    REQUIRED. an array of strings representing the diagnosis keys for that key type.
-                                </t>
-                            </list>
+                            REQUIRED. an array of strings representing the diagnosis keys for that key type.
                         </t>
                         <t hangText="diagnosis">
                             <vspace/>
@@ -571,20 +565,13 @@ Deceased <--+ Diagnosed +----> Recovered
                     <xref target="RFC8259"/>
                     with the following properties:
                     <list style="hanging">
+                        <t hangText="key_type">
+                            <vspace/>
+                            REQUIRED. A URI of a key type.
+                        </t>
                         <t hangText="keys">
                             <vspace/>
-                            REQUIRED. An object denoting the potential exposure keys. It has the following properties:
-                            <list style="hanging">
-                                <t hangText="type">
-                                    <vspace/>
-                                    REQUIRED. A URI of a key type.
-                                </t>
-                                <t hangText="value">
-                                    <vspace/>
-                                    REQUIRED. an array of strings representing the potential exposure keys for that key
-                                    type.
-                                </t>
-                            </list>
+                            REQUIRED. an array of strings representing the potential exposure keys for that key type.
                         </t>
                         <t hangText="before">
                             <vspace/>
@@ -601,10 +588,10 @@ Deceased <--+ Diagnosed +----> Recovered
                             with no time zone offset. If omitted, the server SHOULD provide
                             a reasonable default based on the specified threats.
                         </t>
-                        <t hangText="threats">
+                        <t hangText="threat">
                             <vspace/>
-                            REQUIRED. Array of strings specifying which threats to check for exposure
-                            to <xref target="Descriptors"/>.
+                            REQUIRED. A threat URI as defined in <xref target="Descriptors"/> specifying which threat
+                            to check for exposure.
                         </t>
                         <t hangText="assertions">
                             <vspace/>
@@ -621,7 +608,7 @@ Deceased <--+ Diagnosed +----> Recovered
                     The server SHOULD validate the request, including ensuring e.g., that
                     the
                     <spanx style="verb">key</spanx>
-                    is supported, <spanx style="verb">threats</spanx> are supported, and so on.
+                    is supported, <spanx style="verb">threat</spanx> is supported, and so on.
                 </t>
                 <t>
                     The following Problem Detail Types
@@ -630,18 +617,17 @@ Deceased <--+ Diagnosed +----> Recovered
                     <list style="hanging">
                         <t hangText="https://tenprotocol.org/errors/keys-required">
                             <vspace/>
-                            The <spanx style="verb">keys</spanx> property is missing or is not an object or the value of
-                            one of the keys is not an array.
+                            The <spanx style="verb">keys</spanx> property is missing or is not an array of strings.
                         </t>
                         <t hangText="https://tenprotocol.org/errors/key-not-supported">
                             <vspace/>
-                            One of the keys specified in the
-                            <spanx style="verb">keys</spanx>
+                            The key type specified in the
+                            <spanx style="verb">key_type</spanx>
                             property is not supported by the server.
                         </t>
                         <t hangText="https://tenprotocol.org/errors/threats-required">
                             <vspace/>
-                            The <spanx style="verb">threats</spanx> property is missing or is not an array of strings.
+                            The <spanx style="verb">threat</spanx> property is missing or is not a string.
                         </t>
                         <t hangText="https://tenprotocol.org/errors/threat-not-supported">
                             <vspace/>
@@ -673,11 +659,7 @@ Deceased <--+ Diagnosed +----> Recovered
                     <list style="hanging">
                         <t hangText="exposed">
                             <vspace/>
-                            REQUIRED. A dictionary of exposures to the threats. The key of the dictionary is the
-                            threat URI as defined in
-                            <xref target="Descriptors"/>
-                            and
-                            the value is a boolean denoting whether an exposure to the condition has been flagged.
+                            REQUIRED. A boolean denoting whether an exposure to the threat has been flagged.
                         </t>
                         <t hangText="exposures">
                             <vspace/>
@@ -737,6 +719,10 @@ Deceased <--+ Diagnosed +----> Recovered
                     <xref target="RFC8259"/>
                     with the following properties:
                     <list style="hanging">
+                        <t hangText="key_type">
+                            <vspace/>
+                            REQUIRED. A URI of a key type.
+                        </t>
                         <t hangText="keys">
                             <vspace/>
                             REQUIRED. An array of URI's for the requested key types.
@@ -789,13 +775,13 @@ Deceased <--+ Diagnosed +----> Recovered
                         </t>
                         <t hangText="https://tenprotocol.org/errors/key-not-supported">
                             <vspace/>
-                            One of the keys specified in the
-                            <spanx style="verb">keys</spanx>
+                            The key type specified in the
+                            <spanx style="verb">key_type</spanx>
                             property is not supported by the server.
                         </t>
                         <t hangText="https://tenprotocol.org/errors/threats-required">
                             <vspace/>
-                            The <spanx style="verb">threats</spanx> property is missing or is not an array of strings.
+                            The <spanx style="verb">threat</spanx> property is missing or is not a string.
                         </t>
                         <t hangText="https://tenprotocol.org/errors/threat-not-supported">
                             <vspace/>
@@ -831,22 +817,15 @@ Deceased <--+ Diagnosed +----> Recovered
                     <xref target="RFC8259"/>
                     with the following properties:
                     <list style="hanging">
+                        <t hangText="key_type">
+                            <vspace/>
+                            REQUIRED. A URI of a key type.
+                        </t>
                         <t hangText="keys">
                             <vspace/>
-                            REQUIRED. An object denoting the population of known diagnosis keys. It has the following
-                            properties:
-                            <list style="hanging">
-                                <t hangText="type">
-                                    <vspace/>
-                                    REQUIRED. A URI of a key type.
-                                </t>
-                                <t hangText="value">
-                                    <vspace/>
-                                    REQUIRED. an array of strings representing the diagnosis keys for that key type.
-                                </t>
-                            </list>
+                            REQUIRED. An array of URI's for the requested key types.
                         </t>
-                    </list>
+x                   </list>
                 </t>
             </section>
             <section anchor="FetchError" title="Fetch Error">
@@ -887,19 +866,13 @@ Deceased <--+ Diagnosed +----> Recovered
                     <xref target="RFC8259"/>
                     with the following properties:
                     <list style="hanging">
+                        <t hangText="key_type">
+                            <vspace/>
+                            REQUIRED. A URI of a key type.
+                        </t>
                         <t hangText="keys">
                             <vspace/>
-                            REQUIRED. An object denoting the diagnosis keys. It has the following properties:
-                            <list style="hanging">
-                                <t hangText="type">
-                                    <vspace/>
-                                    REQUIRED. A URI of a key type.
-                                </t>
-                                <t hangText="value">
-                                    <vspace/>
-                                    REQUIRED. an array of strings representing the diagnosis keys for that key type.
-                                </t>
-                            </list>
+                            REQUIRED. An array of URI's for the requested key types.
                         </t>
                         <t hangText="assertions">
                             <vspace/>
@@ -924,13 +897,12 @@ Deceased <--+ Diagnosed +----> Recovered
                     <list style="hanging">
                         <t hangText="https://tenprotocol.org/errors/keys-required">
                             <vspace/>
-                            The <spanx style="verb">keys</spanx> property is missing or is not an object or the value of
-                            one of the keys is not an array.
+                            The <spanx style="verb">keys</spanx> property is missing or is not an array.
                         </t>
                         <t hangText="https://tenprotocol.org/errors/key-not-supported">
                             <vspace/>
-                            One of the keys specified in the
-                            <spanx style="verb">keys</spanx>
+                            The key type specified in the
+                            <spanx style="verb">key_type</spanx>
                             property is not supported by the server.
                         </t>
                     </list>
