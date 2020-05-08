@@ -28,7 +28,7 @@
             </address>
         </author>
 
-        <date year="2020" month="May" day="1"/>
+        <date year="2020" month="May" day="8"/>
         <area>General</area>
         <workgroup>Internet Engineering Task Force</workgroup>
         <keyword>threat exposure notification</keyword>
@@ -179,6 +179,13 @@ Deceased <--+ Diagnosed +----> Recovered
                         <t hangText="Key">
                             <vspace/>
                             Keys belong to a device or app, that belong to a user.
+                        </t>
+                        <t hangText="Diagnosis Keys">
+                            Keys belonging to a device or app, that belongs to a diagnosed infected user.
+                        </t>
+                        <t hangText="Potential Exposure Keys">
+                            Keys belonging to other users (their device or app), with which a user have come in contact
+                            with.
                         </t>
                     </list>
                 </t>
@@ -425,10 +432,13 @@ Deceased <--+ Diagnosed +----> Recovered
                     <xref target="RFC8259"/>
                     with the following properties:
                     <list style="hanging">
+                        <t hangText="key_type">
+                            <vspace/>
+                            REQUIRED. A URI of a key type.
+                        </t>
                         <t hangText="keys">
                             <vspace/>
-                            REQUIRED. A dictionary where the key is a URI of a key type and the value is an array
-                            of strings representing the diagnosis keys for that key type.
+                            REQUIRED. An array of strings representing the diagnosis keys for that key type.
                         </t>
                         <t hangText="diagnosis">
                             <vspace/>
@@ -555,30 +565,34 @@ Deceased <--+ Diagnosed +----> Recovered
                     <xref target="RFC8259"/>
                     with the following properties:
                     <list style="hanging">
+                        <t hangText="key_type">
+                            <vspace/>
+                            REQUIRED. A URI of a key type.
+                        </t>
                         <t hangText="keys">
                             <vspace/>
-                            REQUIRED. A dictionary where the key is an URI of a key type and the value is an array
-                            of strings representing the keys for that key type.
-                        </t>
-                        <t hangText="before">
-                            <vspace/>
-                            OPTIONAL. A date to search for exposures before, formatted as specified
-                            in
-                            <xref target="RFC3339"/>
-                            with no time zone offset.
+                            REQUIRED. An array of strings representing the potential exposure keys for that key type.
                         </t>
                         <t hangText="after">
                             <vspace/>
-                            OPTIONAL. A date to search for exposures after, formatted as specified
+                            OPTIONAL. A time to search for diagnosis keys uploaded after, formatted as specified
+                            in <xref target="RFC3339"/>
+                            with no time zone offset. If omitted, the server SHOULD provide
+                            a reasonable default based on the specified threats. Searches SHOULD be done exclusive
+                            of this time.
+                        </t>
+                        <t hangText="before">
+                            <vspace/>
+                            OPTIONAL. A time to search for diagnosis keys uploaded up to and before, formatted as specified
                             in
                             <xref target="RFC3339"/>
-                            with no time zone offset. If omitted, the server SHOULD provide
-                            a reasonable default based on the specified threats.
+                            with no time zone offset. If omitted, the server SHOULD use latest. Searches SHOULD be done
+                            inclusive of this time.
                         </t>
-                        <t hangText="threats">
+                        <t hangText="threat">
                             <vspace/>
-                            REQUIRED. Array of strings specifying which threats to check for exposure
-                            to <xref target="Descriptors"/>.
+                            REQUIRED. A threat URI as defined in <xref target="Descriptors"/> specifying which threat
+                            to check for exposure.
                         </t>
                         <t hangText="assertions">
                             <vspace/>
@@ -595,7 +609,7 @@ Deceased <--+ Diagnosed +----> Recovered
                     The server SHOULD validate the request, including ensuring e.g., that
                     the
                     <spanx style="verb">key</spanx>
-                    is supported, <spanx style="verb">threats</spanx> are supported, and so on.
+                    is supported, <spanx style="verb">threat</spanx> is supported, and so on.
                 </t>
                 <t>
                     The following Problem Detail Types
@@ -604,18 +618,17 @@ Deceased <--+ Diagnosed +----> Recovered
                     <list style="hanging">
                         <t hangText="https://tenprotocol.org/errors/keys-required">
                             <vspace/>
-                            The <spanx style="verb">keys</spanx> property is missing or is not an object or the value of
-                            one of the keys is not an array.
+                            The <spanx style="verb">keys</spanx> property is missing or is not an array of strings.
                         </t>
                         <t hangText="https://tenprotocol.org/errors/key-not-supported">
                             <vspace/>
-                            One of the keys specified in the
-                            <spanx style="verb">keys</spanx>
+                            The key type specified in the
+                            <spanx style="verb">key_type</spanx>
                             property is not supported by the server.
                         </t>
                         <t hangText="https://tenprotocol.org/errors/threats-required">
                             <vspace/>
-                            The <spanx style="verb">threats</spanx> property is missing or is not an array of strings.
+                            The <spanx style="verb">threat</spanx> property is missing or is not a string.
                         </t>
                         <t hangText="https://tenprotocol.org/errors/threat-not-supported">
                             <vspace/>
@@ -631,6 +644,11 @@ Deceased <--+ Diagnosed +----> Recovered
                             <vspace/>
                             The <spanx style="verb">after</spanx> property is invalid.
                         </t>
+                        <t hangText="https://tenprotocol.org/errors/before-after-invalid">
+                            <vspace/>
+                            The <spanx style="verb">before</spanx> property denotes a time prior to
+                            the one denoted in the <spanx style="verb">after</spanx> property.
+                        </t>
                     </list>
                 </t>
             </section>
@@ -645,19 +663,33 @@ Deceased <--+ Diagnosed +----> Recovered
                     <xref target="RFC8259"/>
                     with the following properties:
                     <list style="hanging">
+                        <t hangText="key_type">
+                            <vspace/>
+                            REQUIRED. A URI of a key type.
+                        </t>
                         <t hangText="exposed">
                             <vspace/>
-                            REQUIRED. A dictionary of exposures to the threats. The key of the dictionary is the
-                            threat URI as defined in
-                            <xref target="Descriptors"/>
-                            and
-                            the value is a boolean denoting whether an exposure to the condition has been flagged.
+                            REQUIRED. A boolean denoting whether an exposure to the threat has been flagged.
                         </t>
                         <t hangText="exposures">
                             <vspace/>
                             OPTIONAL. An array of days when exposures happened formatted as per
                             <xref target="RFC3339"/>
                             without a time component.
+                        </t>
+                        <t hangText="before">
+                            <vspace/>
+                            REQUIRED. The time of the most recent upload across all diagnosis keys considered. This
+                            MAY be used in a subsequent query as "after" to page through results.
+                        </t>
+                        <t hangText="after">
+                            <vspace/>
+                            OPTIONAL. The time of the the oldest upload across all diagnosis keys considered.
+                        </t>
+                        <t hangText="threat">
+                            <vspace/>
+                            REQUIRED. A threat URI as defined in <xref target="Descriptors"/> specifying which threat
+                            to check for exposure.
                         </t>
                         <t hangText="message">
                             <vspace/>
@@ -711,26 +743,27 @@ Deceased <--+ Diagnosed +----> Recovered
                     <xref target="RFC8259"/>
                     with the following properties:
                     <list style="hanging">
-                        <t hangText="keys">
+                        <t hangText="key_type">
                             <vspace/>
-                            REQUIRED. An array of URI's for the requested key types.
-                        </t>
-                        <t hangText="before">
-                            <vspace/>
-                            OPTIONAL. A date to search for exposures before, formatted as specified
-                            in
-                            <xref target="RFC3339"/>
-                            with no time zone offset.
+                            REQUIRED. A URI of a key type.
                         </t>
                         <t hangText="after">
                             <vspace/>
-                            OPTIONAL. A date to search for exposures after, formatted as specified
+                            OPTIONAL. A time to fetch for diagnosis keys uploaded after, formatted as specified
+                            in <xref target="RFC3339"/>
+                            with no time zone offset. If omitted, the server SHOULD provide
+                            a reasonable default based on the specified threats. Searches SHOULD bedone exclusive of
+                            this time.
+                        </t>
+                        <t hangText="before">
+                            <vspace/>
+                            OPTIONAL. A time to fetch for diagnosis keys uploaded before, formatted as specified
                             in
                             <xref target="RFC3339"/>
-                            with no time zone offset. If omitted, the server SHOULD provide
-                            a reasonable default based on the specified threats.
+                            with no time zone offset. If omitted, the server SHOULD use latest. Searches SHOULD be done
+                            inclusive of this time.
                         </t>
-                        <t hangText="threats">
+                        <t hangText="threat">
                             <vspace/>
                             REQUIRED. Array of strings specifying which threats to check for exposure
                             to <xref target="Descriptors"/>.
@@ -757,19 +790,15 @@ Deceased <--+ Diagnosed +----> Recovered
                     <xref target="RFC7807"/>
                     are defined for validation:
                     <list style="hanging">
-                        <t hangText="https://tenprotocol.org/errors/keys-required">
-                            <vspace/>
-                            The <spanx style="verb">keys</spanx> property is missing or is not an array.
-                        </t>
                         <t hangText="https://tenprotocol.org/errors/key-not-supported">
                             <vspace/>
-                            One of the keys specified in the
-                            <spanx style="verb">keys</spanx>
+                            The key type specified in the
+                            <spanx style="verb">key_type</spanx>
                             property is not supported by the server.
                         </t>
                         <t hangText="https://tenprotocol.org/errors/threats-required">
                             <vspace/>
-                            The <spanx style="verb">threats</spanx> property is missing or is not an array of strings.
+                            The <spanx style="verb">threat</spanx> property is missing or is not a string.
                         </t>
                         <t hangText="https://tenprotocol.org/errors/threat-not-supported">
                             <vspace/>
@@ -784,6 +813,11 @@ Deceased <--+ Diagnosed +----> Recovered
                         <t hangText="https://tenprotocol.org/errors/after-invalid">
                             <vspace/>
                             The <spanx style="verb">after</spanx> property is invalid.
+                        </t>
+                        <t hangText="https://tenprotocol.org/errors/before-after-invalid">
+                            <vspace/>
+                            The <spanx style="verb">before</spanx> property denotes a time prior to
+                            the one denoted in the <spanx style="verb">after</spanx> property.
                         </t>
                     </list>
                 </t>
@@ -805,10 +839,27 @@ Deceased <--+ Diagnosed +----> Recovered
                     <xref target="RFC8259"/>
                     with the following properties:
                     <list style="hanging">
+                        <t hangText="key_type">
+                            <vspace/>
+                            REQUIRED. A URI of a key type.
+                        </t>
                         <t hangText="keys">
                             <vspace/>
-                            REQUIRED. A dictionary where the key is a URI of a key type and the value is an array
-                            of strings representing the diagnosis keys for that key type.
+                            REQUIRED. An array of URI's for the requested key types.
+                        </t>
+                        <t hangText="before">
+                            <vspace/>
+                            REQUIRED. The time of the most recent upload across all diagnosis keys considered. This
+                            MAY be used in subsequent fetch requests to page through results.
+                        </t>
+                        <t hangText="after">
+                            <vspace/>
+                            OPTIONAL. The time of the the oldest upload across all diagnosis keys considered.
+                        </t>
+                        <t hangText="threat">
+                            <vspace/>
+                            REQUIRED. Array of strings specifying which threats to check for exposure
+                            to <xref target="Descriptors"/>.
                         </t>
                     </list>
                 </t>
@@ -851,10 +902,13 @@ Deceased <--+ Diagnosed +----> Recovered
                     <xref target="RFC8259"/>
                     with the following properties:
                     <list style="hanging">
+                        <t hangText="key_type">
+                            <vspace/>
+                            REQUIRED. A URI of a key type.
+                        </t>
                         <t hangText="keys">
                             <vspace/>
-                            REQUIRED. A dictionary where the key is a URI of a key type and the value is an array
-                            of strings representing the diagnosis keys for that key type.
+                            REQUIRED. An array of URI's for the requested key types.
                         </t>
                         <t hangText="assertions">
                             <vspace/>
@@ -879,13 +933,12 @@ Deceased <--+ Diagnosed +----> Recovered
                     <list style="hanging">
                         <t hangText="https://tenprotocol.org/errors/keys-required">
                             <vspace/>
-                            The <spanx style="verb">keys</spanx> property is missing or is not an object or the value of
-                            one of the keys is not an array.
+                            The <spanx style="verb">keys</spanx> property is missing or is not an array.
                         </t>
                         <t hangText="https://tenprotocol.org/errors/key-not-supported">
                             <vspace/>
-                            One of the keys specified in the
-                            <spanx style="verb">keys</spanx>
+                            The key type specified in the
+                            <spanx style="verb">key_type</spanx>
                             property is not supported by the server.
                         </t>
                     </list>
@@ -1392,21 +1445,20 @@ Content-Type: application/json
 Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
 
 {
-    "keys": {
-        "https://tenprotocol.org/keys/btle": [
-            "1478E46F897749C691A28351F0B054F1",
-            "20A7412C65A046DCB5538D7DA45A6B5D",
-            "24BFE7A43563495BA36C79A96617A602",
-            "371108A73B964915A62D81E49A783F85",
-            "4075DB637A914896B5459EF3E377AF0D",
-            "5F51F91099B84C9685CD268941A3DEEC",
-            "67684C56F9A6407A99DB57E6B871EC1D",
-            "AA0817D30C64407CB4F5DE1425336922",
-            "CFC046DEF50244D58CA58A0AD7FED287",
-            "D555096A727C49FEADD03488154E6152",
-            "E48A37FB87924885AD6879857DC297B2"
-        ]
-    },
+    "key_type" : "https://tenprotocol.org/keys/btle",
+    "keys": [
+        "1478E46F897749C691A28351F0B054F1",
+        "20A7412C65A046DCB5538D7DA45A6B5D",
+        "24BFE7A43563495BA36C79A96617A602",
+        "371108A73B964915A62D81E49A783F85",
+        "4075DB637A914896B5459EF3E377AF0D",
+        "5F51F91099B84C9685CD268941A3DEEC",
+        "67684C56F9A6407A99DB57E6B871EC1D",
+        "AA0817D30C64407CB4F5DE1425336922",
+        "CFC046DEF50244D58CA58A0AD7FED287",
+        "D555096A727C49FEADD03488154E6152",
+        "E48A37FB87924885AD6879857DC297B2"
+    ],
     "diagnosis": {
         "threat": "https://tenprotocol.org/threats/diseases/covid19",
         "diagnosed": "2020-05-01T01:23:45"
@@ -1470,25 +1522,22 @@ Content-Type: application/json
 Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
 
 {
-    "keys": {
-        "https://tenprotocol.org/keys/btle": [
-            "1478E46F897749C691A28351F0B054F1",
-            "20A7412C65A046DCB5538D7DA45A6B5D",
-            "24BFE7A43563495BA36C79A96617A602",
-            "371108A73B964915A62D81E49A783F85",
-            "4075DB637A914896B5459EF3E377AF0D",
-            "5F51F91099B84C9685CD268941A3DEEC",
-            "67684C56F9A6407A99DB57E6B871EC1D",
-            "AA0817D30C64407CB4F5DE1425336922",
-            "CFC046DEF50244D58CA58A0AD7FED287",
-            "D555096A727C49FEADD03488154E6152",
-            "E48A37FB87924885AD6879857DC297B2"
-        ]
-    },
-    "after": "2020-04-01T00:00:00",
-    "threats": [
-        "https://tenprotocol.org/threats/diseases/covid19"
+    "key_type" : "https://tenprotocol.org/keys/btle",
+    "keys": [
+        "1478E46F897749C691A28351F0B054F1",
+        "20A7412C65A046DCB5538D7DA45A6B5D",
+        "24BFE7A43563495BA36C79A96617A602",
+        "371108A73B964915A62D81E49A783F85",
+        "4075DB637A914896B5459EF3E377AF0D",
+        "5F51F91099B84C9685CD268941A3DEEC",
+        "67684C56F9A6407A99DB57E6B871EC1D",
+        "AA0817D30C64407CB4F5DE1425336922",
+        "CFC046DEF50244D58CA58A0AD7FED287",
+        "D555096A727C49FEADD03488154E6152",
+        "E48A37FB87924885AD6879857DC297B2"
     ],
+    "after": "2020-04-01T01:23:45",
+    "threat": "https://tenprotocol.org/threats/diseases/covid19",
     "assertions": {
         "https://tenprotocol.org/assertions/geo/country/1.0": ["US"],
         "https://tenprotocol.org/assertions/geo/state/1.0": ["CA"]
@@ -1507,10 +1556,11 @@ Content-Type: application/json
 Content-Language: en
 
 {
-    "exposed": {
-        "https://tenprotocol.org/threats/diseases/covid19": true
-    },
+    "key_type" : "https://tenprotocol.org/keys/btle",
+    "exposed": true,
     "exposures": ["2020-04-20"],
+    "before": "2020-05-01T02:13:42",
+    "threat": "https://tenprotocol.org/threats/diseases/covid19",
     "message": "You were exposed to COVID-19 on April 20th 2020.
        Please contact your local health authority.",
     "links": [
@@ -1557,13 +1607,9 @@ Content-Type: application/json
 Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
 
 {
-    "keys": [
-        "https://tenprotocol.org/keys/btle"
-    ],
+    "key_type": "https://tenprotocol.org/keys/btle",
     "after": "2020-04-01T00:00:00",
-    "threats": [
-        "https://tenprotocol.org/threats/diseases/covid19"
-    ],
+    "threat": "https://tenprotocol.org/threats/diseases/covid19",
     "assertions": {
         "https://tenprotocol.org/assertions/geo/country/1.0": ["US"],
         "https://tenprotocol.org/assertions/geo/state/1.0": ["CA"]
@@ -1582,21 +1628,22 @@ Content-Type: application/json
 Content-Language: en
 
 {
-    "keys": {
-        "https://tenprotocol.org/keys/btle": [
-            "1478E46F897749C691A28351F0B054F1",
-            "20A7412C65A046DCB5538D7DA45A6B5D",
-            "24BFE7A43563495BA36C79A96617A602",
-            "371108A73B964915A62D81E49A783F85",
-            "4075DB637A914896B5459EF3E377AF0D",
-            "5F51F91099B84C9685CD268941A3DEEC",
-            "67684C56F9A6407A99DB57E6B871EC1D",
-            "AA0817D30C64407CB4F5DE1425336922",
-            "CFC046DEF50244D58CA58A0AD7FED287",
-            "D555096A727C49FEADD03488154E6152",
-            "E48A37FB87924885AD6879857DC297B2"
-        ]
-    }
+    "key_type" : "https://tenprotocol.org/keys/btle",
+    "keys": [
+        "1478E46F897749C691A28351F0B054F1",
+        "20A7412C65A046DCB5538D7DA45A6B5D",
+        "24BFE7A43563495BA36C79A96617A602",
+        "371108A73B964915A62D81E49A783F85",
+        "4075DB637A914896B5459EF3E377AF0D",
+        "5F51F91099B84C9685CD268941A3DEEC",
+        "67684C56F9A6407A99DB57E6B871EC1D",
+        "AA0817D30C64407CB4F5DE1425336922",
+        "CFC046DEF50244D58CA58A0AD7FED287",
+        "D555096A727C49FEADD03488154E6152",
+        "E48A37FB87924885AD6879857DC297B2"
+    ],
+    "before": "2020-08-01T02:22:10",
+    "threat": "https://tenprotocol.org/threats/diseases/covid19",
 }
                         ]]></artwork>
                     </figure>
@@ -1631,21 +1678,20 @@ Content-Type: application/json
 Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
 
 {
-    "keys": {
-        "https://tenprotocol.org/keys/btle": [
-            "1478E46F897749C691A28351F0B054F1",
-            "20A7412C65A046DCB5538D7DA45A6B5D",
-            "24BFE7A43563495BA36C79A96617A602",
-            "371108A73B964915A62D81E49A783F85",
-            "4075DB637A914896B5459EF3E377AF0D",
-            "5F51F91099B84C9685CD268941A3DEEC",
-            "67684C56F9A6407A99DB57E6B871EC1D",
-            "AA0817D30C64407CB4F5DE1425336922",
-            "CFC046DEF50244D58CA58A0AD7FED287",
-            "D555096A727C49FEADD03488154E6152",
-            "E48A37FB87924885AD6879857DC297B2"
-        ]
-    },
+    "key_type" : "https://tenprotocol.org/keys/btle",
+    "keys": [
+        "1478E46F897749C691A28351F0B054F1",
+        "20A7412C65A046DCB5538D7DA45A6B5D",
+        "24BFE7A43563495BA36C79A96617A602",
+        "371108A73B964915A62D81E49A783F85",
+        "4075DB637A914896B5459EF3E377AF0D",
+        "5F51F91099B84C9685CD268941A3DEEC",
+        "67684C56F9A6407A99DB57E6B871EC1D",
+        "AA0817D30C64407CB4F5DE1425336922",
+        "CFC046DEF50244D58CA58A0AD7FED287",
+        "D555096A727C49FEADD03488154E6152",
+        "E48A37FB87924885AD6879857DC297B2"
+    ],
     "assertions": {
         "https://tenprotocol.org/assertions/geo/country/1.0": ["US"],
         "https://tenprotocol.org/assertions/geo/state/1.0": ["CA"]
