@@ -438,7 +438,7 @@ Deceased <--+ Diagnosed +----> Recovered
                         </t>
                         <t hangText="keys">
                             <vspace/>
-                            REQUIRED. an array of strings representing the diagnosis keys for that key type.
+                            REQUIRED. An array of strings representing the diagnosis keys for that key type.
                         </t>
                         <t hangText="diagnosis">
                             <vspace/>
@@ -571,7 +571,7 @@ Deceased <--+ Diagnosed +----> Recovered
                         </t>
                         <t hangText="keys">
                             <vspace/>
-                            REQUIRED. an array of strings representing the potential exposure keys for that key type.
+                            REQUIRED. An array of strings representing the potential exposure keys for that key type.
                         </t>
                         <t hangText="before">
                             <vspace/>
@@ -723,10 +723,6 @@ Deceased <--+ Diagnosed +----> Recovered
                             <vspace/>
                             REQUIRED. A URI of a key type.
                         </t>
-                        <t hangText="keys">
-                            <vspace/>
-                            REQUIRED. An array of URI's for the requested key types.
-                        </t>
                         <t hangText="before">
                             <vspace/>
                             OPTIONAL. A date to search for exposures before, formatted as specified
@@ -769,10 +765,6 @@ Deceased <--+ Diagnosed +----> Recovered
                     <xref target="RFC7807"/>
                     are defined for validation:
                     <list style="hanging">
-                        <t hangText="https://tenprotocol.org/errors/keys-required">
-                            <vspace/>
-                            The <spanx style="verb">keys</spanx> property is missing or is not an array.
-                        </t>
                         <t hangText="https://tenprotocol.org/errors/key-not-supported">
                             <vspace/>
                             The key type specified in the
@@ -825,7 +817,7 @@ Deceased <--+ Diagnosed +----> Recovered
                             <vspace/>
                             REQUIRED. An array of URI's for the requested key types.
                         </t>
-x                   </list>
+                    </list>
                 </t>
             </section>
             <section anchor="FetchError" title="Fetch Error">
@@ -1409,21 +1401,20 @@ Content-Type: application/json
 Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
 
 {
-    "keys": {
-        "https://tenprotocol.org/keys/btle": [
-            "1478E46F897749C691A28351F0B054F1",
-            "20A7412C65A046DCB5538D7DA45A6B5D",
-            "24BFE7A43563495BA36C79A96617A602",
-            "371108A73B964915A62D81E49A783F85",
-            "4075DB637A914896B5459EF3E377AF0D",
-            "5F51F91099B84C9685CD268941A3DEEC",
-            "67684C56F9A6407A99DB57E6B871EC1D",
-            "AA0817D30C64407CB4F5DE1425336922",
-            "CFC046DEF50244D58CA58A0AD7FED287",
-            "D555096A727C49FEADD03488154E6152",
-            "E48A37FB87924885AD6879857DC297B2"
-        ]
-    },
+    "key_type" : "https://tenprotocol.org/keys/btle",
+    "keys": [
+        "1478E46F897749C691A28351F0B054F1",
+        "20A7412C65A046DCB5538D7DA45A6B5D",
+        "24BFE7A43563495BA36C79A96617A602",
+        "371108A73B964915A62D81E49A783F85",
+        "4075DB637A914896B5459EF3E377AF0D",
+        "5F51F91099B84C9685CD268941A3DEEC",
+        "67684C56F9A6407A99DB57E6B871EC1D",
+        "AA0817D30C64407CB4F5DE1425336922",
+        "CFC046DEF50244D58CA58A0AD7FED287",
+        "D555096A727C49FEADD03488154E6152",
+        "E48A37FB87924885AD6879857DC297B2"
+    ],
     "diagnosis": {
         "threat": "https://tenprotocol.org/threats/diseases/covid19",
         "diagnosed": "2020-05-01T01:23:45"
@@ -1487,25 +1478,22 @@ Content-Type: application/json
 Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
 
 {
-    "keys": {
-        "https://tenprotocol.org/keys/btle": [
-            "1478E46F897749C691A28351F0B054F1",
-            "20A7412C65A046DCB5538D7DA45A6B5D",
-            "24BFE7A43563495BA36C79A96617A602",
-            "371108A73B964915A62D81E49A783F85",
-            "4075DB637A914896B5459EF3E377AF0D",
-            "5F51F91099B84C9685CD268941A3DEEC",
-            "67684C56F9A6407A99DB57E6B871EC1D",
-            "AA0817D30C64407CB4F5DE1425336922",
-            "CFC046DEF50244D58CA58A0AD7FED287",
-            "D555096A727C49FEADD03488154E6152",
-            "E48A37FB87924885AD6879857DC297B2"
-        ]
-    },
-    "after": "2020-04-01T00:00:00",
-    "threats": [
-        "https://tenprotocol.org/threats/diseases/covid19"
+    "key_type" : "https://tenprotocol.org/keys/btle",
+    "keys": [
+        "1478E46F897749C691A28351F0B054F1",
+        "20A7412C65A046DCB5538D7DA45A6B5D",
+        "24BFE7A43563495BA36C79A96617A602",
+        "371108A73B964915A62D81E49A783F85",
+        "4075DB637A914896B5459EF3E377AF0D",
+        "5F51F91099B84C9685CD268941A3DEEC",
+        "67684C56F9A6407A99DB57E6B871EC1D",
+        "AA0817D30C64407CB4F5DE1425336922",
+        "CFC046DEF50244D58CA58A0AD7FED287",
+        "D555096A727C49FEADD03488154E6152",
+        "E48A37FB87924885AD6879857DC297B2"
     ],
+    "after": "2020-04-01T00:00:00",
+    "threat": "https://tenprotocol.org/threats/diseases/covid19",
     "assertions": {
         "https://tenprotocol.org/assertions/geo/country/1.0": ["US"],
         "https://tenprotocol.org/assertions/geo/state/1.0": ["CA"]
@@ -1524,9 +1512,7 @@ Content-Type: application/json
 Content-Language: en
 
 {
-    "exposed": {
-        "https://tenprotocol.org/threats/diseases/covid19": true
-    },
+    "exposed": true,
     "exposures": ["2020-04-20"],
     "message": "You were exposed to COVID-19 on April 20th 2020.
        Please contact your local health authority.",
@@ -1574,13 +1560,9 @@ Content-Type: application/json
 Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
 
 {
-    "keys": [
-        "https://tenprotocol.org/keys/btle"
-    ],
+    "key_type": "https://tenprotocol.org/keys/btle",
     "after": "2020-04-01T00:00:00",
-    "threats": [
-        "https://tenprotocol.org/threats/diseases/covid19"
-    ],
+    "threat": "https://tenprotocol.org/threats/diseases/covid19",
     "assertions": {
         "https://tenprotocol.org/assertions/geo/country/1.0": ["US"],
         "https://tenprotocol.org/assertions/geo/state/1.0": ["CA"]
@@ -1599,21 +1581,20 @@ Content-Type: application/json
 Content-Language: en
 
 {
-    "keys": {
-        "https://tenprotocol.org/keys/btle": [
-            "1478E46F897749C691A28351F0B054F1",
-            "20A7412C65A046DCB5538D7DA45A6B5D",
-            "24BFE7A43563495BA36C79A96617A602",
-            "371108A73B964915A62D81E49A783F85",
-            "4075DB637A914896B5459EF3E377AF0D",
-            "5F51F91099B84C9685CD268941A3DEEC",
-            "67684C56F9A6407A99DB57E6B871EC1D",
-            "AA0817D30C64407CB4F5DE1425336922",
-            "CFC046DEF50244D58CA58A0AD7FED287",
-            "D555096A727C49FEADD03488154E6152",
-            "E48A37FB87924885AD6879857DC297B2"
-        ]
-    }
+    "key_type" : "https://tenprotocol.org/keys/btle",
+    "keys": [
+        "1478E46F897749C691A28351F0B054F1",
+        "20A7412C65A046DCB5538D7DA45A6B5D",
+        "24BFE7A43563495BA36C79A96617A602",
+        "371108A73B964915A62D81E49A783F85",
+        "4075DB637A914896B5459EF3E377AF0D",
+        "5F51F91099B84C9685CD268941A3DEEC",
+        "67684C56F9A6407A99DB57E6B871EC1D",
+        "AA0817D30C64407CB4F5DE1425336922",
+        "CFC046DEF50244D58CA58A0AD7FED287",
+        "D555096A727C49FEADD03488154E6152",
+        "E48A37FB87924885AD6879857DC297B2"
+    ]
 }
                         ]]></artwork>
                     </figure>
@@ -1648,21 +1629,20 @@ Content-Type: application/json
 Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
 
 {
-    "keys": {
-        "https://tenprotocol.org/keys/btle": [
-            "1478E46F897749C691A28351F0B054F1",
-            "20A7412C65A046DCB5538D7DA45A6B5D",
-            "24BFE7A43563495BA36C79A96617A602",
-            "371108A73B964915A62D81E49A783F85",
-            "4075DB637A914896B5459EF3E377AF0D",
-            "5F51F91099B84C9685CD268941A3DEEC",
-            "67684C56F9A6407A99DB57E6B871EC1D",
-            "AA0817D30C64407CB4F5DE1425336922",
-            "CFC046DEF50244D58CA58A0AD7FED287",
-            "D555096A727C49FEADD03488154E6152",
-            "E48A37FB87924885AD6879857DC297B2"
-        ]
-    },
+    "key_type" : "https://tenprotocol.org/keys/btle",
+    "keys": [
+        "1478E46F897749C691A28351F0B054F1",
+        "20A7412C65A046DCB5538D7DA45A6B5D",
+        "24BFE7A43563495BA36C79A96617A602",
+        "371108A73B964915A62D81E49A783F85",
+        "4075DB637A914896B5459EF3E377AF0D",
+        "5F51F91099B84C9685CD268941A3DEEC",
+        "67684C56F9A6407A99DB57E6B871EC1D",
+        "AA0817D30C64407CB4F5DE1425336922",
+        "CFC046DEF50244D58CA58A0AD7FED287",
+        "D555096A727C49FEADD03488154E6152",
+        "E48A37FB87924885AD6879857DC297B2"
+    ],
     "assertions": {
         "https://tenprotocol.org/assertions/geo/country/1.0": ["US"],
         "https://tenprotocol.org/assertions/geo/state/1.0": ["CA"]

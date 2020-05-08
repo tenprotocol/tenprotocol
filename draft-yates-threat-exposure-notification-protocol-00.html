@@ -863,18 +863,12 @@ Deceased &lt;--+ Diagnosed +----&gt; Recovered
 <p id="rfc.section.6.1.p.2">The request object is a JSON object <a href="#RFC8259" class="xref">[RFC8259]</a> with the following properties: </p>
 
 <dl>
-<dt>keys</dt>
-<dd style="margin-left: 8">
-<br> REQUIRED. An object denoting the diagnosis keys. It has the following properties: <dl>
-<dt>type</dt>
+<dt>key_type</dt>
 <dd style="margin-left: 8">
 <br> REQUIRED. A URI of a key type.  </dd>
-<dt>value</dt>
+<dt>keys</dt>
 <dd style="margin-left: 8">
-<br> REQUIRED. an array of strings representing the diagnosis keys for that key type.  </dd>
-</dl>
-<p> </p>
-</dd>
+<br> REQUIRED. An array of strings representing the diagnosis keys for that key type.  </dd>
 <dt>diagnosis</dt>
 <dd style="margin-left: 8">
 <br> REQUIRED. An object providing information about the diagnosis of a threat. It has the following properties: <dl>
@@ -945,27 +939,21 @@ Deceased &lt;--+ Diagnosed +----&gt; Recovered
 <p id="rfc.section.7.1.p.2">The request object is a JSON object <a href="#RFC8259" class="xref">[RFC8259]</a> with the following properties: </p>
 
 <dl>
-<dt>keys</dt>
-<dd style="margin-left: 8">
-<br> REQUIRED. An object denoting the potential exposure keys. It has the following properties: <dl>
-<dt>type</dt>
+<dt>key_type</dt>
 <dd style="margin-left: 8">
 <br> REQUIRED. A URI of a key type.  </dd>
-<dt>value</dt>
+<dt>keys</dt>
 <dd style="margin-left: 8">
-<br> REQUIRED. an array of strings representing the potential exposure keys for that key type.  </dd>
-</dl>
-<p> </p>
-</dd>
+<br> REQUIRED. An array of strings representing the potential exposure keys for that key type.  </dd>
 <dt>before</dt>
 <dd style="margin-left: 8">
 <br> OPTIONAL. A date to search for exposures before, formatted as specified in <a href="#RFC3339" class="xref">[RFC3339]</a> with no time zone offset.  </dd>
 <dt>after</dt>
 <dd style="margin-left: 8">
 <br> OPTIONAL. A date to search for exposures after, formatted as specified in <a href="#RFC3339" class="xref">[RFC3339]</a> with no time zone offset. If omitted, the server SHOULD provide a reasonable default based on the specified threats.  </dd>
-<dt>threats</dt>
+<dt>threat</dt>
 <dd style="margin-left: 8">
-<br> REQUIRED. Array of strings specifying which threats to check for exposure to <a href="#Descriptors" class="xref">Section 4</a>.  </dd>
+<br> REQUIRED. A threat URI as defined in <a href="#Descriptors" class="xref">Section 4</a> specifying which threat to check for exposure.  </dd>
 <dt>assertions</dt>
 <dd style="margin-left: 8">
 <br> OPTIONAL. An object providing additional assertions related to the upload, diagnosis, individual or scope.  The key is an Assertion defined as per <a href="#Assertions" class="xref">Section 5</a>.  The client MUST ignore any assertions it does not recognize.  </dd>
@@ -975,19 +963,19 @@ Deceased &lt;--+ Diagnosed +----&gt; Recovered
 <h1 id="rfc.section.7.2">
 <a href="#rfc.section.7.2">7.2.</a> <a href="#QueryValidation" id="QueryValidation">Query Validation</a>
 </h1>
-<p id="rfc.section.7.2.p.1">The server SHOULD validate the request, including ensuring e.g., that the <samp>key</samp> is supported, <samp>threats</samp> are supported, and so on.  </p>
+<p id="rfc.section.7.2.p.1">The server SHOULD validate the request, including ensuring e.g., that the <samp>key</samp> is supported, <samp>threat</samp> is supported, and so on.  </p>
 <p id="rfc.section.7.2.p.2">The following Problem Detail Types <a href="#RFC7807" class="xref">[RFC7807]</a> are defined for validation: </p>
 
 <dl>
 <dt>https://tenprotocol.org/errors/keys-required</dt>
 <dd style="margin-left: 8">
-<br> The <samp>keys</samp> property is missing or is not an object or the value of one of the keys is not an array.  </dd>
+<br> The <samp>keys</samp> property is missing or is not an array of strings.  </dd>
 <dt>https://tenprotocol.org/errors/key-not-supported</dt>
 <dd style="margin-left: 8">
-<br> One of the keys specified in the <samp>keys</samp> property is not supported by the server.  </dd>
+<br> The key type specified in the <samp>key_type</samp> property is not supported by the server.  </dd>
 <dt>https://tenprotocol.org/errors/threats-required</dt>
 <dd style="margin-left: 8">
-<br> The <samp>threats</samp> property is missing or is not an array of strings.  </dd>
+<br> The <samp>threat</samp> property is missing or is not a string.  </dd>
 <dt>https://tenprotocol.org/errors/threat-not-supported</dt>
 <dd style="margin-left: 8">
 <br> The threat specified in the <samp>threat</samp> property is not supported by the server.  </dd>
@@ -1009,7 +997,7 @@ Deceased &lt;--+ Diagnosed +----&gt; Recovered
 <dl>
 <dt>exposed</dt>
 <dd style="margin-left: 8">
-<br> REQUIRED. A dictionary of exposures to the threats. The key of the dictionary is the threat URI as defined in <a href="#Descriptors" class="xref">Section 4</a> and the value is a boolean denoting whether an exposure to the condition has been flagged.  </dd>
+<br> REQUIRED. A boolean denoting whether an exposure to the threat has been flagged.  </dd>
 <dt>exposures</dt>
 <dd style="margin-left: 8">
 <br> OPTIONAL. An array of days when exposures happened formatted as per <a href="#RFC3339" class="xref">[RFC3339]</a> without a time component.  </dd>
@@ -1039,9 +1027,9 @@ Deceased &lt;--+ Diagnosed +----&gt; Recovered
 <p id="rfc.section.8.1.p.2">The request object is a JSON object <a href="#RFC8259" class="xref">[RFC8259]</a> with the following properties: </p>
 
 <dl>
-<dt>keys</dt>
+<dt>key_type</dt>
 <dd style="margin-left: 8">
-<br> REQUIRED. An array of URI's for the requested key types.  </dd>
+<br> REQUIRED. A URI of a key type.  </dd>
 <dt>before</dt>
 <dd style="margin-left: 8">
 <br> OPTIONAL. A date to search for exposures before, formatted as specified in <a href="#RFC3339" class="xref">[RFC3339]</a> with no time zone offset.  </dd>
@@ -1064,15 +1052,12 @@ Deceased &lt;--+ Diagnosed +----&gt; Recovered
 <p id="rfc.section.8.2.p.2">The following Problem Detail Types <a href="#RFC7807" class="xref">[RFC7807]</a> are defined for validation: </p>
 
 <dl>
-<dt>https://tenprotocol.org/errors/keys-required</dt>
-<dd style="margin-left: 8">
-<br> The <samp>keys</samp> property is missing or is not an array.  </dd>
 <dt>https://tenprotocol.org/errors/key-not-supported</dt>
 <dd style="margin-left: 8">
-<br> One of the keys specified in the <samp>keys</samp> property is not supported by the server.  </dd>
+<br> The key type specified in the <samp>key_type</samp> property is not supported by the server.  </dd>
 <dt>https://tenprotocol.org/errors/threats-required</dt>
 <dd style="margin-left: 8">
-<br> The <samp>threats</samp> property is missing or is not an array of strings.  </dd>
+<br> The <samp>threat</samp> property is missing or is not a string.  </dd>
 <dt>https://tenprotocol.org/errors/threat-not-supported</dt>
 <dd style="margin-left: 8">
 <br> The threat specified in the <samp>threat</samp> property is not supported by the server.  </dd>
@@ -1093,18 +1078,12 @@ Deceased &lt;--+ Diagnosed +----&gt; Recovered
 <p id="rfc.section.8.3.p.3">The request object is a JSON object <a href="#RFC8259" class="xref">[RFC8259]</a> with the following properties: </p>
 
 <dl>
-<dt>keys</dt>
-<dd style="margin-left: 8">
-<br> REQUIRED. An object denoting the population of known diagnosis keys. It has the following properties: <dl>
-<dt>type</dt>
+<dt>key_type</dt>
 <dd style="margin-left: 8">
 <br> REQUIRED. A URI of a key type.  </dd>
-<dt>value</dt>
+<dt>keys</dt>
 <dd style="margin-left: 8">
-<br> REQUIRED. an array of strings representing the diagnosis keys for that key type.  </dd>
-</dl>
-<p> </p>
-</dd>
+<br> REQUIRED. An array of URI's for the requested key types.  </dd>
 </dl>
 
 <p> </p>
@@ -1125,18 +1104,12 @@ Deceased &lt;--+ Diagnosed +----&gt; Recovered
 <p id="rfc.section.9.1.p.2">The request object is a JSON object <a href="#RFC8259" class="xref">[RFC8259]</a> with the following properties: </p>
 
 <dl>
-<dt>keys</dt>
-<dd style="margin-left: 8">
-<br> REQUIRED. An object denoting the diagnosis keys. It has the following properties: <dl>
-<dt>type</dt>
+<dt>key_type</dt>
 <dd style="margin-left: 8">
 <br> REQUIRED. A URI of a key type.  </dd>
-<dt>value</dt>
+<dt>keys</dt>
 <dd style="margin-left: 8">
-<br> REQUIRED. an array of strings representing the diagnosis keys for that key type.  </dd>
-</dl>
-<p> </p>
-</dd>
+<br> REQUIRED. An array of URI's for the requested key types.  </dd>
 <dt>assertions</dt>
 <dd style="margin-left: 8">
 <br> OPTIONAL. An object providing additional assertions related to the upload, diagnosis, individual or scope.  The key is an Assertion defined as per <a href="#Assertions" class="xref">Section 5</a>.  The client MUST ignore any assertions it does not recognize.  </dd>
@@ -1152,10 +1125,10 @@ Deceased &lt;--+ Diagnosed +----&gt; Recovered
 <dl>
 <dt>https://tenprotocol.org/errors/keys-required</dt>
 <dd style="margin-left: 8">
-<br> The <samp>keys</samp> property is missing or is not an object or the value of one of the keys is not an array.  </dd>
+<br> The <samp>keys</samp> property is missing or is not an array.  </dd>
 <dt>https://tenprotocol.org/errors/key-not-supported</dt>
 <dd style="margin-left: 8">
-<br> One of the keys specified in the <samp>keys</samp> property is not supported by the server.  </dd>
+<br> The key type specified in the <samp>key_type</samp> property is not supported by the server.  </dd>
 </dl>
 
 <p> </p>
@@ -1440,21 +1413,20 @@ Content-Type: application/json
 Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
 
 {
-    "keys": {
-        "https://tenprotocol.org/keys/btle": [
-            "1478E46F897749C691A28351F0B054F1",
-            "20A7412C65A046DCB5538D7DA45A6B5D",
-            "24BFE7A43563495BA36C79A96617A602",
-            "371108A73B964915A62D81E49A783F85",
-            "4075DB637A914896B5459EF3E377AF0D",
-            "5F51F91099B84C9685CD268941A3DEEC",
-            "67684C56F9A6407A99DB57E6B871EC1D",
-            "AA0817D30C64407CB4F5DE1425336922",
-            "CFC046DEF50244D58CA58A0AD7FED287",
-            "D555096A727C49FEADD03488154E6152",
-            "E48A37FB87924885AD6879857DC297B2"
-        ]
-    },
+    "key_type" : "https://tenprotocol.org/keys/btle",
+    "keys": [
+        "1478E46F897749C691A28351F0B054F1",
+        "20A7412C65A046DCB5538D7DA45A6B5D",
+        "24BFE7A43563495BA36C79A96617A602",
+        "371108A73B964915A62D81E49A783F85",
+        "4075DB637A914896B5459EF3E377AF0D",
+        "5F51F91099B84C9685CD268941A3DEEC",
+        "67684C56F9A6407A99DB57E6B871EC1D",
+        "AA0817D30C64407CB4F5DE1425336922",
+        "CFC046DEF50244D58CA58A0AD7FED287",
+        "D555096A727C49FEADD03488154E6152",
+        "E48A37FB87924885AD6879857DC297B2"
+    ],
     "diagnosis": {
         "threat": "https://tenprotocol.org/threats/diseases/covid19",
         "diagnosed": "2020-05-01T01:23:45"
@@ -1506,25 +1478,22 @@ Content-Type: application/json
 Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
 
 {
-    "keys": {
-        "https://tenprotocol.org/keys/btle": [
-            "1478E46F897749C691A28351F0B054F1",
-            "20A7412C65A046DCB5538D7DA45A6B5D",
-            "24BFE7A43563495BA36C79A96617A602",
-            "371108A73B964915A62D81E49A783F85",
-            "4075DB637A914896B5459EF3E377AF0D",
-            "5F51F91099B84C9685CD268941A3DEEC",
-            "67684C56F9A6407A99DB57E6B871EC1D",
-            "AA0817D30C64407CB4F5DE1425336922",
-            "CFC046DEF50244D58CA58A0AD7FED287",
-            "D555096A727C49FEADD03488154E6152",
-            "E48A37FB87924885AD6879857DC297B2"
-        ]
-    },
-    "after": "2020-04-01T00:00:00",
-    "threats": [
-        "https://tenprotocol.org/threats/diseases/covid19"
+    "key_type" : "https://tenprotocol.org/keys/btle",
+    "keys": [
+        "1478E46F897749C691A28351F0B054F1",
+        "20A7412C65A046DCB5538D7DA45A6B5D",
+        "24BFE7A43563495BA36C79A96617A602",
+        "371108A73B964915A62D81E49A783F85",
+        "4075DB637A914896B5459EF3E377AF0D",
+        "5F51F91099B84C9685CD268941A3DEEC",
+        "67684C56F9A6407A99DB57E6B871EC1D",
+        "AA0817D30C64407CB4F5DE1425336922",
+        "CFC046DEF50244D58CA58A0AD7FED287",
+        "D555096A727C49FEADD03488154E6152",
+        "E48A37FB87924885AD6879857DC297B2"
     ],
+    "after": "2020-04-01T00:00:00",
+    "threat": "https://tenprotocol.org/threats/diseases/covid19",
     "assertions": {
         "https://tenprotocol.org/assertions/geo/country/1.0": ["US"],
         "https://tenprotocol.org/assertions/geo/state/1.0": ["CA"]
@@ -1540,9 +1509,7 @@ Content-Type: application/json
 Content-Language: en
 
 {
-    "exposed": {
-        "https://tenprotocol.org/threats/diseases/covid19": true
-    },
+    "exposed": true,
     "exposures": ["2020-04-20"],
     "message": "You were exposed to COVID-19 on April 20th 2020.
        Please contact your local health authority.",
@@ -1584,13 +1551,9 @@ Content-Type: application/json
 Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
 
 {
-    "keys": [
-        "https://tenprotocol.org/keys/btle"
-    ],
+    "key_type": "https://tenprotocol.org/keys/btle",
     "after": "2020-04-01T00:00:00",
-    "threats": [
-        "https://tenprotocol.org/threats/diseases/covid19"
-    ],
+    "threat": "https://tenprotocol.org/threats/diseases/covid19",
     "assertions": {
         "https://tenprotocol.org/assertions/geo/country/1.0": ["US"],
         "https://tenprotocol.org/assertions/geo/state/1.0": ["CA"]
@@ -1606,21 +1569,20 @@ Content-Type: application/json
 Content-Language: en
 
 {
-    "keys": {
-        "https://tenprotocol.org/keys/btle": [
-            "1478E46F897749C691A28351F0B054F1",
-            "20A7412C65A046DCB5538D7DA45A6B5D",
-            "24BFE7A43563495BA36C79A96617A602",
-            "371108A73B964915A62D81E49A783F85",
-            "4075DB637A914896B5459EF3E377AF0D",
-            "5F51F91099B84C9685CD268941A3DEEC",
-            "67684C56F9A6407A99DB57E6B871EC1D",
-            "AA0817D30C64407CB4F5DE1425336922",
-            "CFC046DEF50244D58CA58A0AD7FED287",
-            "D555096A727C49FEADD03488154E6152",
-            "E48A37FB87924885AD6879857DC297B2"
-        ]
-    }
+    "key_type" : "https://tenprotocol.org/keys/btle",
+    "keys": [
+        "1478E46F897749C691A28351F0B054F1",
+        "20A7412C65A046DCB5538D7DA45A6B5D",
+        "24BFE7A43563495BA36C79A96617A602",
+        "371108A73B964915A62D81E49A783F85",
+        "4075DB637A914896B5459EF3E377AF0D",
+        "5F51F91099B84C9685CD268941A3DEEC",
+        "67684C56F9A6407A99DB57E6B871EC1D",
+        "AA0817D30C64407CB4F5DE1425336922",
+        "CFC046DEF50244D58CA58A0AD7FED287",
+        "D555096A727C49FEADD03488154E6152",
+        "E48A37FB87924885AD6879857DC297B2"
+    ]
 }
                         </pre>
 <p></p>
@@ -1649,21 +1611,20 @@ Content-Type: application/json
 Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
 
 {
-    "keys": {
-        "https://tenprotocol.org/keys/btle": [
-            "1478E46F897749C691A28351F0B054F1",
-            "20A7412C65A046DCB5538D7DA45A6B5D",
-            "24BFE7A43563495BA36C79A96617A602",
-            "371108A73B964915A62D81E49A783F85",
-            "4075DB637A914896B5459EF3E377AF0D",
-            "5F51F91099B84C9685CD268941A3DEEC",
-            "67684C56F9A6407A99DB57E6B871EC1D",
-            "AA0817D30C64407CB4F5DE1425336922",
-            "CFC046DEF50244D58CA58A0AD7FED287",
-            "D555096A727C49FEADD03488154E6152",
-            "E48A37FB87924885AD6879857DC297B2"
-        ]
-    },
+    "key_type" : "https://tenprotocol.org/keys/btle",
+    "keys": [
+        "1478E46F897749C691A28351F0B054F1",
+        "20A7412C65A046DCB5538D7DA45A6B5D",
+        "24BFE7A43563495BA36C79A96617A602",
+        "371108A73B964915A62D81E49A783F85",
+        "4075DB637A914896B5459EF3E377AF0D",
+        "5F51F91099B84C9685CD268941A3DEEC",
+        "67684C56F9A6407A99DB57E6B871EC1D",
+        "AA0817D30C64407CB4F5DE1425336922",
+        "CFC046DEF50244D58CA58A0AD7FED287",
+        "D555096A727C49FEADD03488154E6152",
+        "E48A37FB87924885AD6879857DC297B2"
+    ],
     "assertions": {
         "https://tenprotocol.org/assertions/geo/country/1.0": ["US"],
         "https://tenprotocol.org/assertions/geo/state/1.0": ["CA"]
