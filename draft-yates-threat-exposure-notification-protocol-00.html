@@ -447,12 +447,12 @@
 <link href="#rfc.authors" rel="Chapter">
 
 
-  <meta name="generator" content="xml2rfc version 2.44.0 - https://tools.ietf.org/tools/xml2rfc" />
+  <meta name="generator" content="xml2rfc version 2.43.0 - https://tools.ietf.org/tools/xml2rfc" />
   <link rel="schema.dct" href="http://purl.org/dc/terms/" />
 
   <meta name="dct.creator" content="Yates, S. and Y. Salomon" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-yates-threat-exposure-notification-protocol-00" />
-  <meta name="dct.issued" scheme="ISO8601" content="2020-05-01" />
+  <meta name="dct.issued" scheme="ISO8601" content="2020-05-08" />
   <meta name="dct.abstract" content="This specification defines a protocol for an HTTP- and JSON-based Threat Exposure Notification by outlining how clients upload diagnosis keys, query exposure, revoke diagnosis keys and fetch diagnosis keys from a server.   " />
   <meta name="description" content="This specification defines a protocol for an HTTP- and JSON-based Threat Exposure Notification by outlining how clients upload diagnosis keys, query exposure, revoke diagnosis keys and fetch diagnosis keys from a server.   " />
 
@@ -476,8 +476,8 @@
 <td class="right">Switchbit, Inc.</td>
 </tr>
 <tr>
-<td class="left">Expires: November 2, 2020</td>
-<td class="right">May 1, 2020</td>
+<td class="left">Expires: November 9, 2020</td>
+<td class="right">May 8, 2020</td>
 </tr>
 
     	
@@ -493,7 +493,7 @@
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at https://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on November 2, 2020.</p>
+<p>This Internet-Draft will expire on November 9, 2020.</p>
 <h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
 <p>Copyright (c) 2020 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (https://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.</p>
@@ -947,10 +947,10 @@ Deceased &lt;--+ Diagnosed +----&gt; Recovered
 <br> REQUIRED. An array of strings representing the potential exposure keys for that key type.  </dd>
 <dt>after</dt>
 <dd style="margin-left: 8">
-<br> OPTIONAL. A time to search for diagnosis keys uploaded at or after, formatted as specified in <a href="#RFC3339" class="xref">[RFC3339]</a> with no time zone offset. If omitted, the server SHOULD provide a reasonable default based on the specified threats.  </dd>
+<br> OPTIONAL. A time to search for diagnosis keys uploaded after, formatted as specified in <a href="#RFC3339" class="xref">[RFC3339]</a> with no time zone offset. If omitted, the server SHOULD provide a reasonable default based on the specified threats. Searches SHOULD be done exclusive of this time.  </dd>
 <dt>before</dt>
 <dd style="margin-left: 8">
-<br> OPTIONAL. A time to search for diagnosis keys uploaded before, formatted as specified in <a href="#RFC3339" class="xref">[RFC3339]</a> with no time zone offset. If omitted, the server SHOULD use latest.  </dd>
+<br> OPTIONAL. A time to search for diagnosis keys uploaded up to and before, formatted as specified in <a href="#RFC3339" class="xref">[RFC3339]</a> with no time zone offset. If omitted, the server SHOULD use latest. Searches SHOULD be done inclusive of this time.  </dd>
 <dt>threat</dt>
 <dd style="margin-left: 8">
 <br> REQUIRED. A threat URI as defined in <a href="#Descriptors" class="xref">Section 4</a> specifying which threat to check for exposure.  </dd>
@@ -1009,7 +1009,7 @@ Deceased &lt;--+ Diagnosed +----&gt; Recovered
 <br> OPTIONAL. An array of days when exposures happened formatted as per <a href="#RFC3339" class="xref">[RFC3339]</a> without a time component.  </dd>
 <dt>before</dt>
 <dd style="margin-left: 8">
-<br> REQUIRED. The time of the most recent upload across all diagnosis keys considered.  </dd>
+<br> REQUIRED. The time of the most recent upload across all diagnosis keys considered. This MAY be used in a subsequent query as "after" to page through results.  </dd>
 <dt>after</dt>
 <dd style="margin-left: 8">
 <br> OPTIONAL. The time of the the oldest upload across all diagnosis keys considered.  </dd>
@@ -1047,10 +1047,10 @@ Deceased &lt;--+ Diagnosed +----&gt; Recovered
 <br> REQUIRED. A URI of a key type.  </dd>
 <dt>after</dt>
 <dd style="margin-left: 8">
-<br> OPTIONAL. A time to fetch for diagnosis keys uploaded at or after, formatted as specified in <a href="#RFC3339" class="xref">[RFC3339]</a> with no time zone offset. If omitted, the server SHOULD provide a reasonable default based on the specified threats.  </dd>
+<br> OPTIONAL. A time to fetch for diagnosis keys uploaded after, formatted as specified in <a href="#RFC3339" class="xref">[RFC3339]</a> with no time zone offset. If omitted, the server SHOULD provide a reasonable default based on the specified threats. Searches SHOULD bedone exclusive of this time.  </dd>
 <dt>before</dt>
 <dd style="margin-left: 8">
-<br> OPTIONAL. A time to fetch for diagnosis keys uploaded before, formatted as specified in <a href="#RFC3339" class="xref">[RFC3339]</a> with no time zone offset. If omitted, the server SHOULD use latest.  </dd>
+<br> OPTIONAL. A time to fetch for diagnosis keys uploaded before, formatted as specified in <a href="#RFC3339" class="xref">[RFC3339]</a> with no time zone offset. If omitted, the server SHOULD use latest. Searches SHOULD be done inclusive of this time.  </dd>
 <dt>threat</dt>
 <dd style="margin-left: 8">
 <br> REQUIRED. Array of strings specifying which threats to check for exposure to <a href="#Descriptors" class="xref">Section 4</a>.  </dd>
@@ -1104,7 +1104,7 @@ Deceased &lt;--+ Diagnosed +----&gt; Recovered
 <br> REQUIRED. An array of URI's for the requested key types.  </dd>
 <dt>before</dt>
 <dd style="margin-left: 8">
-<br> REQUIRED. The time of the most recent upload across all diagnosis keys considered.  </dd>
+<br> REQUIRED. The time of the most recent upload across all diagnosis keys considered. This MAY be used in subsequent fetch requests to page through results.  </dd>
 <dt>after</dt>
 <dd style="margin-left: 8">
 <br> OPTIONAL. The time of the the oldest upload across all diagnosis keys considered.  </dd>

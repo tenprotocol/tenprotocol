@@ -5,7 +5,7 @@
 Internet Engineering Task Force                                 S. Yates
 Internet-Draft                                                Y. Salomon
 Intended status: Experimental                            Switchbit, Inc.
-Expires: November 2, 2020                                    May 1, 2020
+Expires: November 9, 2020                                    May 8, 2020
 
 
                  Threat Exposure Notification Protocol
@@ -33,7 +33,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on November 2, 2020.
+   This Internet-Draft will expire on November 9, 2020.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Yates & Salomon         Expires November 2, 2020                [Page 1]
+Yates & Salomon         Expires November 9, 2020                [Page 1]
 
 Internet-Draft                    TENP                          May 2020
 
@@ -102,28 +102,28 @@ Table of Contents
      9.3.  Revoke Response . . . . . . . . . . . . . . . . . . . . .  17
      9.4.  Revoke Error  . . . . . . . . . . . . . . . . . . . . . .  17
    10. Security Considerations . . . . . . . . . . . . . . . . . . .  17
-     10.1.  Authentication and Authorization . . . . . . . . . . . .  17
-     10.2.  Privacy Considerations . . . . . . . . . . . . . . . . .  17
+     10.1.  Authentication and Authorization . . . . . . . . . . . .  18
+     10.2.  Privacy Considerations . . . . . . . . . . . . . . . . .  18
      10.3.  TLS Requirements . . . . . . . . . . . . . . . . . . . .  18
    11. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  18
 
 
 
-Yates & Salomon         Expires November 2, 2020                [Page 2]
+Yates & Salomon         Expires November 9, 2020                [Page 2]
 
 Internet-Draft                    TENP                          May 2020
 
 
      11.1.  Threat Exposure Notification Server Metadata Registry  .  19
-       11.1.1.  Registration Template  . . . . . . . . . . . . . . .  19
+       11.1.1.  Registration Template  . . . . . . . . . . . . . . .  20
        11.1.2.  Initial Registry Contents  . . . . . . . . . . . . .  20
-     11.2.  Well-Known URI Registry  . . . . . . . . . . . . . . . .  21
-       11.2.1.  Registry Contents  . . . . . . . . . . . . . . . . .  21
+     11.2.  Well-Known URI Registry  . . . . . . . . . . . . . . . .  22
+       11.2.1.  Registry Contents  . . . . . . . . . . . . . . . . .  22
    12. References  . . . . . . . . . . . . . . . . . . . . . . . . .  22
      12.1.  Normative References . . . . . . . . . . . . . . . . . .  22
      12.2.  Informative References . . . . . . . . . . . . . . . . .  23
-   Appendix A.  Configuration Examples (Non-normative) . . . . . . .  23
-     A.1.  Example Configuration Request . . . . . . . . . . . . . .  23
+   Appendix A.  Configuration Examples (Non-normative) . . . . . . .  24
+     A.1.  Example Configuration Request . . . . . . . . . . . . . .  24
      A.2.  Example Configuration Response  . . . . . . . . . . . . .  24
    Appendix B.  Upload Examples (Non-normative)  . . . . . . . . . .  24
      B.1.  Example Upload Request  . . . . . . . . . . . . . . . . .  24
@@ -165,7 +165,7 @@ Internet-Draft                    TENP                          May 2020
 
 
 
-Yates & Salomon         Expires November 2, 2020                [Page 3]
+Yates & Salomon         Expires November 9, 2020                [Page 3]
 
 Internet-Draft                    TENP                          May 2020
 
@@ -221,7 +221,7 @@ Internet-Draft                    TENP                          May 2020
 
 
 
-Yates & Salomon         Expires November 2, 2020                [Page 4]
+Yates & Salomon         Expires November 9, 2020                [Page 4]
 
 Internet-Draft                    TENP                          May 2020
 
@@ -277,7 +277,7 @@ Internet-Draft                    TENP                          May 2020
 
 
 
-Yates & Salomon         Expires November 2, 2020                [Page 5]
+Yates & Salomon         Expires November 9, 2020                [Page 5]
 
 Internet-Draft                    TENP                          May 2020
 
@@ -333,7 +333,7 @@ Internet-Draft                    TENP                          May 2020
 
 
 
-Yates & Salomon         Expires November 2, 2020                [Page 6]
+Yates & Salomon         Expires November 9, 2020                [Page 6]
 
 Internet-Draft                    TENP                          May 2020
 
@@ -389,7 +389,7 @@ Internet-Draft                    TENP                          May 2020
 
 
 
-Yates & Salomon         Expires November 2, 2020                [Page 7]
+Yates & Salomon         Expires November 9, 2020                [Page 7]
 
 Internet-Draft                    TENP                          May 2020
 
@@ -445,7 +445,7 @@ Internet-Draft                    TENP                          May 2020
 
 
 
-Yates & Salomon         Expires November 2, 2020                [Page 8]
+Yates & Salomon         Expires November 9, 2020                [Page 8]
 
 Internet-Draft                    TENP                          May 2020
 
@@ -501,7 +501,7 @@ Internet-Draft                    TENP                          May 2020
 
 
 
-Yates & Salomon         Expires November 2, 2020                [Page 9]
+Yates & Salomon         Expires November 9, 2020                [Page 9]
 
 Internet-Draft                    TENP                          May 2020
 
@@ -557,7 +557,7 @@ Internet-Draft                    TENP                          May 2020
 
 
 
-Yates & Salomon         Expires November 2, 2020               [Page 10]
+Yates & Salomon         Expires November 9, 2020               [Page 10]
 
 Internet-Draft                    TENP                          May 2020
 
@@ -613,7 +613,7 @@ Internet-Draft                    TENP                          May 2020
 
 
 
-Yates & Salomon         Expires November 2, 2020               [Page 11]
+Yates & Salomon         Expires November 9, 2020               [Page 11]
 
 Internet-Draft                    TENP                          May 2020
 
@@ -629,15 +629,17 @@ Internet-Draft                    TENP                          May 2020
       keys for that key type.
 
    after
-      OPTIONAL.  A time to search for diagnosis keys uploaded at or
-      after, formatted as specified in [RFC3339] with no time zone
-      offset.  If omitted, the server SHOULD provide a reasonable
-      default based on the specified threats.
+      OPTIONAL.  A time to search for diagnosis keys uploaded after,
+      formatted as specified in [RFC3339] with no time zone offset.  If
+      omitted, the server SHOULD provide a reasonable default based on
+      the specified threats.  Searches SHOULD be done exclusive of this
+      time.
 
    before
-      OPTIONAL.  A time to search for diagnosis keys uploaded before,
-      formatted as specified in [RFC3339] with no time zone offset.  If
-      omitted, the server SHOULD use latest.
+      OPTIONAL.  A time to search for diagnosis keys uploaded up to and
+      before, formatted as specified in [RFC3339] with no time zone
+      offset.  If omitted, the server SHOULD use latest.  Searches
+      SHOULD be done inclusive of this time.
 
    threat
       REQUIRED.  A threat URI as defined in Section 4 specifying which
@@ -664,15 +666,16 @@ Internet-Draft                    TENP                          May 2020
       The key type specified in the "key_type" property is not supported
       by the server.
 
-   https://tenprotocol.org/errors/threats-required
-      The "threat" property is missing or is not a string.
 
 
 
-Yates & Salomon         Expires November 2, 2020               [Page 12]
+Yates & Salomon         Expires November 9, 2020               [Page 12]
 
 Internet-Draft                    TENP                          May 2020
 
+
+   https://tenprotocol.org/errors/threats-required
+      The "threat" property is missing or is not a string.
 
    https://tenprotocol.org/errors/threat-not-supported
       The threat specified in the "threat" property is not supported by
@@ -710,25 +713,28 @@ Internet-Draft                    TENP                          May 2020
 
    before
       REQUIRED.  The time of the most recent upload across all diagnosis
-      keys considered.
+      keys considered.  This MAY be used in a subsequent query as
+      "after" to page through results.
 
    after
       OPTIONAL.  The time of the the oldest upload across all diagnosis
       keys considered.
 
    threat
+
+
+
+
+Yates & Salomon         Expires November 9, 2020               [Page 13]
+
+Internet-Draft                    TENP                          May 2020
+
+
       REQUIRED.  A threat URI as defined in Section 4 specifying which
       threat to check for exposure.
 
    message
       A human-readable message to be displayed to the user.
-
-
-
-Yates & Salomon         Expires November 2, 2020               [Page 13]
-
-Internet-Draft                    TENP                          May 2020
-
 
    links
       A list of WebLinks for more information ( [RFC7033] [RFC8288]).
@@ -763,29 +769,31 @@ Internet-Draft                    TENP                          May 2020
       REQUIRED.  A URI of a key type.
 
    after
-      OPTIONAL.  A time to fetch for diagnosis keys uploaded at or
-      after, formatted as specified in [RFC3339] with no time zone
-      offset.  If omitted, the server SHOULD provide a reasonable
-      default based on the specified threats.
+      OPTIONAL.  A time to fetch for diagnosis keys uploaded after,
+      formatted as specified in [RFC3339] with no time zone offset.  If
+      omitted, the server SHOULD provide a reasonable default based on
+      the specified threats.  Searches SHOULD bedone exclusive of this
+      time.
 
    before
       OPTIONAL.  A time to fetch for diagnosis keys uploaded before,
       formatted as specified in [RFC3339] with no time zone offset.  If
-      omitted, the server SHOULD use latest.
+
+
+
+Yates & Salomon         Expires November 9, 2020               [Page 14]
+
+Internet-Draft                    TENP                          May 2020
+
+
+      omitted, the server SHOULD use latest.  Searches SHOULD be done
+      inclusive of this time.
 
    threat
       REQUIRED.  Array of strings specifying which threats to check for
       exposure to Section 4.
 
    assertions
-
-
-
-Yates & Salomon         Expires November 2, 2020               [Page 14]
-
-Internet-Draft                    TENP                          May 2020
-
-
       OPTIONAL.  An object providing additional assertions related to
       the upload, diagnosis, individual or scope.  The key is an
       Assertion defined as per Section 5.  The client MUST ignore any
@@ -826,6 +834,14 @@ Internet-Draft                    TENP                          May 2020
    server will return a "200 OK" response with a "Content-Type" header
    equal to "application/json".
 
+
+
+
+Yates & Salomon         Expires November 9, 2020               [Page 15]
+
+Internet-Draft                    TENP                          May 2020
+
+
    The client and server SHOULD support Chunked Transfer Encoding
    [RFC7230] as the resulting response entity may be large.
 
@@ -835,19 +851,13 @@ Internet-Draft                    TENP                          May 2020
    key_type
       REQUIRED.  A URI of a key type.
 
-
-
-Yates & Salomon         Expires November 2, 2020               [Page 15]
-
-Internet-Draft                    TENP                          May 2020
-
-
    keys
       REQUIRED.  An array of URI's for the requested key types.
 
    before
       REQUIRED.  The time of the most recent upload across all diagnosis
-      keys considered.
+      keys considered.  This MAY be used in subsequent fetch requests to
+      page through results.
 
    after
       OPTIONAL.  The time of the the oldest upload across all diagnosis
@@ -880,6 +890,14 @@ Internet-Draft                    TENP                          May 2020
    The client SHOULD retrieve the request URI from the Threat Exposure
    Notification Server Configuration Document as defined in Section 3.2.
 
+
+
+
+Yates & Salomon         Expires November 9, 2020               [Page 16]
+
+Internet-Draft                    TENP                          May 2020
+
+
    The request object is a JSON object [RFC8259] with the following
    properties:
 
@@ -890,14 +908,6 @@ Internet-Draft                    TENP                          May 2020
       REQUIRED.  An array of URI's for the requested key types.
 
    assertions
-
-
-
-Yates & Salomon         Expires November 2, 2020               [Page 16]
-
-Internet-Draft                    TENP                          May 2020
-
-
       OPTIONAL.  An object providing additional assertions related to
       the upload, diagnosis, individual or scope.  The key is an
       Assertion defined as per Section 5.  The client MUST ignore any
@@ -933,6 +943,17 @@ Internet-Draft                    TENP                          May 2020
 
 10.  Security Considerations
 
+
+
+
+
+
+
+Yates & Salomon         Expires November 9, 2020               [Page 17]
+
+Internet-Draft                    TENP                          May 2020
+
+
 10.1.  Authentication and Authorization
 
    This specification does not specify a method for authorizing calls to
@@ -944,15 +965,6 @@ Internet-Draft                    TENP                          May 2020
    While the Assertions mechanism allows the requests to be augmented,
    it is up to the client and server to ensure that any assertions
    provided to not expose any personally identifiable information (PII).
-
-
-
-
-
-Yates & Salomon         Expires November 2, 2020               [Page 17]
-
-Internet-Draft                    TENP                          May 2020
-
 
 10.3.  TLS Requirements
 
@@ -990,6 +1002,14 @@ Internet-Draft                    TENP                          May 2020
    Within the review period, the Designated Experts will either approve
    or deny the registration request, communicating this decision to the
    review list and IANA.  Denials should include an explanation and, if
+
+
+
+Yates & Salomon         Expires November 9, 2020               [Page 18]
+
+Internet-Draft                    TENP                          May 2020
+
+
    applicable, suggestions as to how to make the request successful.
    Registration requests that are undetermined for a period longer than
    21 days can be brought to the IESG's attention (using the
@@ -1000,15 +1020,6 @@ Internet-Draft                    TENP                          May 2020
    functionality, determining whether it is likely to be of general
    applicability or whether it is useful only for a single application,
    and whether the registration makes sense.
-
-
-
-
-
-Yates & Salomon         Expires November 2, 2020               [Page 18]
-
-Internet-Draft                    TENP                          May 2020
-
 
    IANA must only accept registry updates from the Designated Experts
    and should direct all requests for registration to the review mailing
@@ -1044,6 +1055,17 @@ Internet-Draft                    TENP                          May 2020
    represented in JSON strings as escaped characters must not be
    accepted.
 
+
+
+
+
+
+
+Yates & Salomon         Expires November 9, 2020               [Page 19]
+
+Internet-Draft                    TENP                          May 2020
+
+
 11.1.1.  Registration Template
 
    Metadata Name:
@@ -1058,14 +1080,6 @@ Internet-Draft                    TENP                          May 2020
       Brief description of the metadata (e.g., "Query Endpoint URL").
 
    Metadata Type:
-
-
-
-Yates & Salomon         Expires November 2, 2020               [Page 19]
-
-Internet-Draft                    TENP                          May 2020
-
-
       Description of the metadata type (e.g., string, boolean, number)
       and whether multiple values are expected (e.g., array of strings,
       array of numbers).
@@ -1100,6 +1114,14 @@ Internet-Draft                    TENP                          May 2020
 
    o  Metadata Description: URL of the server's Query endpoint.
 
+
+
+
+Yates & Salomon         Expires November 9, 2020               [Page 20]
+
+Internet-Draft                    TENP                          May 2020
+
+
    o  Change Controller: tenp-ext-review@tenprotocol.org
 
    o  Specification Document(s): Section 3 of this specification.
@@ -1114,13 +1136,6 @@ Internet-Draft                    TENP                          May 2020
    o  Change Controller: tenp-ext-review@tenprotocol.org
 
    o  Specification Document(s): Section 3 of this specification.
-
-
-
-Yates & Salomon         Expires November 2, 2020               [Page 20]
-
-Internet-Draft                    TENP                          May 2020
-
 
    o  Metadata Name: upload_endpoint
 
@@ -1154,6 +1169,15 @@ Internet-Draft                    TENP                          May 2020
 
    o  Specification Document(s): Section 3 of this specification.
 
+
+
+
+
+Yates & Salomon         Expires November 9, 2020               [Page 21]
+
+Internet-Draft                    TENP                          May 2020
+
+
 11.2.  Well-Known URI Registry
 
    This specification registers the well-known URI defined in
@@ -1165,18 +1189,6 @@ Internet-Draft                    TENP                          May 2020
    o  Change controller: IESG
    o  Specification document: Section 3.2 of this specification.
    o  Related information: (none)
-
-
-
-
-
-
-
-
-Yates & Salomon         Expires November 2, 2020               [Page 21]
-
-Internet-Draft                    TENP                          May 2020
-
 
 12.  References
 
@@ -1215,6 +1227,13 @@ Internet-Draft                    TENP                          May 2020
               "WebFinger", RFC 7033, DOI 10.17487/RFC7033, September
               2013, <https://www.rfc-editor.org/info/rfc7033>.
 
+
+
+Yates & Salomon         Expires November 9, 2020               [Page 22]
+
+Internet-Draft                    TENP                          May 2020
+
+
    [RFC7230]  Fielding, R., Ed. and J. Reschke, Ed., "Hypertext Transfer
               Protocol (HTTP/1.1): Message Syntax and Routing",
               RFC 7230, DOI 10.17487/RFC7230, June 2014,
@@ -1225,14 +1244,6 @@ Internet-Draft                    TENP                          May 2020
               Security (TLS) and Datagram Transport Layer Security
               (DTLS)", BCP 195, RFC 7525, DOI 10.17487/RFC7525, May
               2015, <https://www.rfc-editor.org/info/rfc7525>.
-
-
-
-
-Yates & Salomon         Expires November 2, 2020               [Page 22]
-
-Internet-Draft                    TENP                          May 2020
-
 
    [RFC7807]  Nottingham, M. and E. Wilde, "Problem Details for HTTP
               APIs", RFC 7807, DOI 10.17487/RFC7807, March 2016,
@@ -1267,6 +1278,18 @@ Internet-Draft                    TENP                          May 2020
               content/uploads/2020/04/The-PACT-protocol-specification-
               ver-0.1.pdf>.
 
+
+
+
+
+
+
+
+Yates & Salomon         Expires November 9, 2020               [Page 23]
+
+Internet-Draft                    TENP                          May 2020
+
+
    [who]      World Health Organization (WHO) and Center for Disease
               Control and Prevention (CDC), "Emergency Guideline -
               Implementation and management of contact tracing for Ebola
@@ -1280,15 +1303,6 @@ A.1.  Example Configuration Request
 
    The client would make the following request to the server
    "https://example.com" to obtain its Configuration document:
-
-
-
-
-
-Yates & Salomon         Expires November 2, 2020               [Page 23]
-
-Internet-Draft                    TENP                          May 2020
-
 
    GET /.well-known/threat-exposure-configuration HTTP/1.1
    Accept: application/json
@@ -1327,21 +1341,7 @@ B.1.  Example Upload Request
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Yates & Salomon         Expires November 2, 2020               [Page 24]
+Yates & Salomon         Expires November 9, 2020               [Page 24]
 
 Internet-Draft                    TENP                          May 2020
 
@@ -1397,7 +1397,7 @@ B.4.  Example Upload Error Response
 
 
 
-Yates & Salomon         Expires November 2, 2020               [Page 25]
+Yates & Salomon         Expires November 9, 2020               [Page 25]
 
 Internet-Draft                    TENP                          May 2020
 
@@ -1453,7 +1453,7 @@ C.2.  Example Query Response
 
 
 
-Yates & Salomon         Expires November 2, 2020               [Page 26]
+Yates & Salomon         Expires November 9, 2020               [Page 26]
 
 Internet-Draft                    TENP                          May 2020
 
@@ -1509,7 +1509,7 @@ D.1.  Example Fetch Request
 
 
 
-Yates & Salomon         Expires November 2, 2020               [Page 27]
+Yates & Salomon         Expires November 9, 2020               [Page 27]
 
 Internet-Draft                    TENP                          May 2020
 
@@ -1565,7 +1565,7 @@ D.3.  Example Fetch Error Response
 
 
 
-Yates & Salomon         Expires November 2, 2020               [Page 28]
+Yates & Salomon         Expires November 9, 2020               [Page 28]
 
 Internet-Draft                    TENP                          May 2020
 
@@ -1621,7 +1621,7 @@ E.2.  Example Revoke Successful Response
 
 
 
-Yates & Salomon         Expires November 2, 2020               [Page 29]
+Yates & Salomon         Expires November 9, 2020               [Page 29]
 
 Internet-Draft                    TENP                          May 2020
 
@@ -1677,4 +1677,4 @@ Authors' Addresses
 
 
 
-Yates & Salomon         Expires November 2, 2020               [Page 30]
+Yates & Salomon         Expires November 9, 2020               [Page 30]

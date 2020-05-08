@@ -28,7 +28,7 @@
             </address>
         </author>
 
-        <date year="2020" month="May" day="1"/>
+        <date year="2020" month="May" day="8"/>
         <area>General</area>
         <workgroup>Internet Engineering Task Force</workgroup>
         <keyword>threat exposure notification</keyword>
@@ -575,17 +575,19 @@ Deceased <--+ Diagnosed +----> Recovered
                         </t>
                         <t hangText="after">
                             <vspace/>
-                            OPTIONAL. A time to search for diagnosis keys uploaded at or after, formatted as specified
+                            OPTIONAL. A time to search for diagnosis keys uploaded after, formatted as specified
                             in <xref target="RFC3339"/>
                             with no time zone offset. If omitted, the server SHOULD provide
-                            a reasonable default based on the specified threats.
+                            a reasonable default based on the specified threats. Searches SHOULD be done exclusive
+                            of this time.
                         </t>
                         <t hangText="before">
                             <vspace/>
-                            OPTIONAL. A time to search for diagnosis keys uploaded before, formatted as specified
+                            OPTIONAL. A time to search for diagnosis keys uploaded up to and before, formatted as specified
                             in
                             <xref target="RFC3339"/>
-                            with no time zone offset. If omitted, the server SHOULD use latest.
+                            with no time zone offset. If omitted, the server SHOULD use latest. Searches SHOULD be done
+                            inclusive of this time.
                         </t>
                         <t hangText="threat">
                             <vspace/>
@@ -677,7 +679,8 @@ Deceased <--+ Diagnosed +----> Recovered
                         </t>
                         <t hangText="before">
                             <vspace/>
-                            REQUIRED. The time of the most recent upload across all diagnosis keys considered.
+                            REQUIRED. The time of the most recent upload across all diagnosis keys considered. This
+                            MAY be used in a subsequent query as "after" to page through results.
                         </t>
                         <t hangText="after">
                             <vspace/>
@@ -746,17 +749,19 @@ Deceased <--+ Diagnosed +----> Recovered
                         </t>
                         <t hangText="after">
                             <vspace/>
-                            OPTIONAL. A time to fetch for diagnosis keys uploaded at or after, formatted as specified
+                            OPTIONAL. A time to fetch for diagnosis keys uploaded after, formatted as specified
                             in <xref target="RFC3339"/>
                             with no time zone offset. If omitted, the server SHOULD provide
-                            a reasonable default based on the specified threats.
+                            a reasonable default based on the specified threats. Searches SHOULD bedone exclusive of
+                            this time.
                         </t>
                         <t hangText="before">
                             <vspace/>
                             OPTIONAL. A time to fetch for diagnosis keys uploaded before, formatted as specified
                             in
                             <xref target="RFC3339"/>
-                            with no time zone offset. If omitted, the server SHOULD use latest.
+                            with no time zone offset. If omitted, the server SHOULD use latest. Searches SHOULD be done
+                            inclusive of this time.
                         </t>
                         <t hangText="threat">
                             <vspace/>
@@ -844,7 +849,8 @@ Deceased <--+ Diagnosed +----> Recovered
                         </t>
                         <t hangText="before">
                             <vspace/>
-                            REQUIRED. The time of the most recent upload across all diagnosis keys considered.
+                            REQUIRED. The time of the most recent upload across all diagnosis keys considered. This
+                            MAY be used in subsequent fetch requests to page through results.
                         </t>
                         <t hangText="after">
                             <vspace/>
