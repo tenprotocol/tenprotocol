@@ -945,12 +945,12 @@ Deceased &lt;--+ Diagnosed +----&gt; Recovered
 <dt>keys</dt>
 <dd style="margin-left: 8">
 <br> REQUIRED. An array of strings representing the potential exposure keys for that key type.  </dd>
-<dt>before</dt>
-<dd style="margin-left: 8">
-<br> OPTIONAL. A date to search for exposures before, formatted as specified in <a href="#RFC3339" class="xref">[RFC3339]</a> with no time zone offset.  </dd>
 <dt>after</dt>
 <dd style="margin-left: 8">
-<br> OPTIONAL. A date to search for exposures after, formatted as specified in <a href="#RFC3339" class="xref">[RFC3339]</a> with no time zone offset. If omitted, the server SHOULD provide a reasonable default based on the specified threats.  </dd>
+<br> OPTIONAL. A time to search for diagnosis keys uploaded at or after, formatted as specified in <a href="#RFC3339" class="xref">[RFC3339]</a> with no time zone offset. If omitted, the server SHOULD provide a reasonable default based on the specified threats.  </dd>
+<dt>before</dt>
+<dd style="margin-left: 8">
+<br> OPTIONAL. A time to search for diagnosis keys uploaded before, formatted as specified in <a href="#RFC3339" class="xref">[RFC3339]</a> with no time zone offset. If omitted, the server SHOULD use latest.  </dd>
 <dt>threat</dt>
 <dd style="margin-left: 8">
 <br> REQUIRED. A threat URI as defined in <a href="#Descriptors" class="xref">Section 4</a> specifying which threat to check for exposure.  </dd>
@@ -985,6 +985,9 @@ Deceased &lt;--+ Diagnosed +----&gt; Recovered
 <dt>https://tenprotocol.org/errors/after-invalid</dt>
 <dd style="margin-left: 8">
 <br> The <samp>after</samp> property is invalid.  </dd>
+<dt>https://tenprotocol.org/errors/before-after-invalid</dt>
+<dd style="margin-left: 8">
+<br> The <samp>before</samp> property denotes a time prior to the one denoted in the <samp>after</samp> property.  </dd>
 </dl>
 
 <p> </p>
@@ -995,12 +998,24 @@ Deceased &lt;--+ Diagnosed +----&gt; Recovered
 <p id="rfc.section.7.3.p.2">The request object is a JSON object <a href="#RFC8259" class="xref">[RFC8259]</a> with the following properties: </p>
 
 <dl>
+<dt>key_type</dt>
+<dd style="margin-left: 8">
+<br> REQUIRED. A URI of a key type.  </dd>
 <dt>exposed</dt>
 <dd style="margin-left: 8">
 <br> REQUIRED. A boolean denoting whether an exposure to the threat has been flagged.  </dd>
 <dt>exposures</dt>
 <dd style="margin-left: 8">
 <br> OPTIONAL. An array of days when exposures happened formatted as per <a href="#RFC3339" class="xref">[RFC3339]</a> without a time component.  </dd>
+<dt>before</dt>
+<dd style="margin-left: 8">
+<br> REQUIRED. The time of the most recent upload across all diagnosis keys considered.  </dd>
+<dt>after</dt>
+<dd style="margin-left: 8">
+<br> OPTIONAL. The time of the the oldest upload across all diagnosis keys considered.  </dd>
+<dt>threat</dt>
+<dd style="margin-left: 8">
+<br> REQUIRED. A threat URI as defined in <a href="#Descriptors" class="xref">Section 4</a> specifying which threat to check for exposure.  </dd>
 <dt>message</dt>
 <dd style="margin-left: 8">
 <br> A human-readable message to be displayed to the user.  </dd>
@@ -1030,13 +1045,13 @@ Deceased &lt;--+ Diagnosed +----&gt; Recovered
 <dt>key_type</dt>
 <dd style="margin-left: 8">
 <br> REQUIRED. A URI of a key type.  </dd>
-<dt>before</dt>
-<dd style="margin-left: 8">
-<br> OPTIONAL. A date to search for exposures before, formatted as specified in <a href="#RFC3339" class="xref">[RFC3339]</a> with no time zone offset.  </dd>
 <dt>after</dt>
 <dd style="margin-left: 8">
-<br> OPTIONAL. A date to search for exposures after, formatted as specified in <a href="#RFC3339" class="xref">[RFC3339]</a> with no time zone offset. If omitted, the server SHOULD provide a reasonable default based on the specified threats.  </dd>
-<dt>threats</dt>
+<br> OPTIONAL. A time to fetch for diagnosis keys uploaded at or after, formatted as specified in <a href="#RFC3339" class="xref">[RFC3339]</a> with no time zone offset. If omitted, the server SHOULD provide a reasonable default based on the specified threats.  </dd>
+<dt>before</dt>
+<dd style="margin-left: 8">
+<br> OPTIONAL. A time to fetch for diagnosis keys uploaded before, formatted as specified in <a href="#RFC3339" class="xref">[RFC3339]</a> with no time zone offset. If omitted, the server SHOULD use latest.  </dd>
+<dt>threat</dt>
 <dd style="margin-left: 8">
 <br> REQUIRED. Array of strings specifying which threats to check for exposure to <a href="#Descriptors" class="xref">Section 4</a>.  </dd>
 <dt>assertions</dt>
@@ -1067,6 +1082,9 @@ Deceased &lt;--+ Diagnosed +----&gt; Recovered
 <dt>https://tenprotocol.org/errors/after-invalid</dt>
 <dd style="margin-left: 8">
 <br> The <samp>after</samp> property is invalid.  </dd>
+<dt>https://tenprotocol.org/errors/before-after-invalid</dt>
+<dd style="margin-left: 8">
+<br> The <samp>before</samp> property denotes a time prior to the one denoted in the <samp>after</samp> property.  </dd>
 </dl>
 
 <p> </p>
@@ -1084,6 +1102,15 @@ Deceased &lt;--+ Diagnosed +----&gt; Recovered
 <dt>keys</dt>
 <dd style="margin-left: 8">
 <br> REQUIRED. An array of URI's for the requested key types.  </dd>
+<dt>before</dt>
+<dd style="margin-left: 8">
+<br> REQUIRED. The time of the most recent upload across all diagnosis keys considered.  </dd>
+<dt>after</dt>
+<dd style="margin-left: 8">
+<br> OPTIONAL. The time of the the oldest upload across all diagnosis keys considered.  </dd>
+<dt>threat</dt>
+<dd style="margin-left: 8">
+<br> REQUIRED. Array of strings specifying which threats to check for exposure to <a href="#Descriptors" class="xref">Section 4</a>.  </dd>
 </dl>
 
 <p> </p>
@@ -1492,7 +1519,7 @@ Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
         "D555096A727C49FEADD03488154E6152",
         "E48A37FB87924885AD6879857DC297B2"
     ],
-    "after": "2020-04-01T00:00:00",
+    "after": "2020-04-01T01:23:45",
     "threat": "https://tenprotocol.org/threats/diseases/covid19",
     "assertions": {
         "https://tenprotocol.org/assertions/geo/country/1.0": ["US"],
@@ -1509,8 +1536,11 @@ Content-Type: application/json
 Content-Language: en
 
 {
+    "key_type" : "https://tenprotocol.org/keys/btle",
     "exposed": true,
     "exposures": ["2020-04-20"],
+    "before": "2020-05-01T02:13:42",
+    "threat": "https://tenprotocol.org/threats/diseases/covid19",
     "message": "You were exposed to COVID-19 on April 20th 2020.
        Please contact your local health authority.",
     "links": [
@@ -1582,7 +1612,9 @@ Content-Language: en
         "CFC046DEF50244D58CA58A0AD7FED287",
         "D555096A727C49FEADD03488154E6152",
         "E48A37FB87924885AD6879857DC297B2"
-    ]
+    ],
+    "before": "2020-08-01T02:22:10",
+    "threat": "https://tenprotocol.org/threats/diseases/covid19",
 }
                         </pre>
 <p></p>

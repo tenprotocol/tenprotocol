@@ -573,20 +573,19 @@ Deceased <--+ Diagnosed +----> Recovered
                             <vspace/>
                             REQUIRED. An array of strings representing the potential exposure keys for that key type.
                         </t>
-                        <t hangText="before">
-                            <vspace/>
-                            OPTIONAL. A date to search for exposures before, formatted as specified
-                            in
-                            <xref target="RFC3339"/>
-                            with no time zone offset.
-                        </t>
                         <t hangText="after">
                             <vspace/>
-                            OPTIONAL. A date to search for exposures after, formatted as specified
-                            in
-                            <xref target="RFC3339"/>
+                            OPTIONAL. A time to search for diagnosis keys uploaded at or after, formatted as specified
+                            in <xref target="RFC3339"/>
                             with no time zone offset. If omitted, the server SHOULD provide
                             a reasonable default based on the specified threats.
+                        </t>
+                        <t hangText="before">
+                            <vspace/>
+                            OPTIONAL. A time to search for diagnosis keys uploaded before, formatted as specified
+                            in
+                            <xref target="RFC3339"/>
+                            with no time zone offset. If omitted, the server SHOULD use latest.
                         </t>
                         <t hangText="threat">
                             <vspace/>
@@ -643,6 +642,11 @@ Deceased <--+ Diagnosed +----> Recovered
                             <vspace/>
                             The <spanx style="verb">after</spanx> property is invalid.
                         </t>
+                        <t hangText="https://tenprotocol.org/errors/before-after-invalid">
+                            <vspace/>
+                            The <spanx style="verb">before</spanx> property denotes a time prior to
+                            the one denoted in the <spanx style="verb">after</spanx> property.
+                        </t>
                     </list>
                 </t>
             </section>
@@ -657,6 +661,10 @@ Deceased <--+ Diagnosed +----> Recovered
                     <xref target="RFC8259"/>
                     with the following properties:
                     <list style="hanging">
+                        <t hangText="key_type">
+                            <vspace/>
+                            REQUIRED. A URI of a key type.
+                        </t>
                         <t hangText="exposed">
                             <vspace/>
                             REQUIRED. A boolean denoting whether an exposure to the threat has been flagged.
@@ -666,6 +674,19 @@ Deceased <--+ Diagnosed +----> Recovered
                             OPTIONAL. An array of days when exposures happened formatted as per
                             <xref target="RFC3339"/>
                             without a time component.
+                        </t>
+                        <t hangText="before">
+                            <vspace/>
+                            REQUIRED. The time of the most recent upload across all diagnosis keys considered.
+                        </t>
+                        <t hangText="after">
+                            <vspace/>
+                            OPTIONAL. The time of the the oldest upload across all diagnosis keys considered.
+                        </t>
+                        <t hangText="threat">
+                            <vspace/>
+                            REQUIRED. A threat URI as defined in <xref target="Descriptors"/> specifying which threat
+                            to check for exposure.
                         </t>
                         <t hangText="message">
                             <vspace/>
@@ -723,22 +744,21 @@ Deceased <--+ Diagnosed +----> Recovered
                             <vspace/>
                             REQUIRED. A URI of a key type.
                         </t>
-                        <t hangText="before">
-                            <vspace/>
-                            OPTIONAL. A date to search for exposures before, formatted as specified
-                            in
-                            <xref target="RFC3339"/>
-                            with no time zone offset.
-                        </t>
                         <t hangText="after">
                             <vspace/>
-                            OPTIONAL. A date to search for exposures after, formatted as specified
-                            in
-                            <xref target="RFC3339"/>
+                            OPTIONAL. A time to fetch for diagnosis keys uploaded at or after, formatted as specified
+                            in <xref target="RFC3339"/>
                             with no time zone offset. If omitted, the server SHOULD provide
                             a reasonable default based on the specified threats.
                         </t>
-                        <t hangText="threats">
+                        <t hangText="before">
+                            <vspace/>
+                            OPTIONAL. A time to fetch for diagnosis keys uploaded before, formatted as specified
+                            in
+                            <xref target="RFC3339"/>
+                            with no time zone offset. If omitted, the server SHOULD use latest.
+                        </t>
+                        <t hangText="threat">
                             <vspace/>
                             REQUIRED. Array of strings specifying which threats to check for exposure
                             to <xref target="Descriptors"/>.
@@ -789,6 +809,11 @@ Deceased <--+ Diagnosed +----> Recovered
                             <vspace/>
                             The <spanx style="verb">after</spanx> property is invalid.
                         </t>
+                        <t hangText="https://tenprotocol.org/errors/before-after-invalid">
+                            <vspace/>
+                            The <spanx style="verb">before</spanx> property denotes a time prior to
+                            the one denoted in the <spanx style="verb">after</spanx> property.
+                        </t>
                     </list>
                 </t>
             </section>
@@ -816,6 +841,19 @@ Deceased <--+ Diagnosed +----> Recovered
                         <t hangText="keys">
                             <vspace/>
                             REQUIRED. An array of URI's for the requested key types.
+                        </t>
+                        <t hangText="before">
+                            <vspace/>
+                            REQUIRED. The time of the most recent upload across all diagnosis keys considered.
+                        </t>
+                        <t hangText="after">
+                            <vspace/>
+                            OPTIONAL. The time of the the oldest upload across all diagnosis keys considered.
+                        </t>
+                        <t hangText="threat">
+                            <vspace/>
+                            REQUIRED. Array of strings specifying which threats to check for exposure
+                            to <xref target="Descriptors"/>.
                         </t>
                     </list>
                 </t>
@@ -1492,7 +1530,7 @@ Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
         "D555096A727C49FEADD03488154E6152",
         "E48A37FB87924885AD6879857DC297B2"
     ],
-    "after": "2020-04-01T00:00:00",
+    "after": "2020-04-01T01:23:45",
     "threat": "https://tenprotocol.org/threats/diseases/covid19",
     "assertions": {
         "https://tenprotocol.org/assertions/geo/country/1.0": ["US"],
@@ -1512,8 +1550,11 @@ Content-Type: application/json
 Content-Language: en
 
 {
+    "key_type" : "https://tenprotocol.org/keys/btle",
     "exposed": true,
     "exposures": ["2020-04-20"],
+    "before": "2020-05-01T02:13:42",
+    "threat": "https://tenprotocol.org/threats/diseases/covid19",
     "message": "You were exposed to COVID-19 on April 20th 2020.
        Please contact your local health authority.",
     "links": [
@@ -1594,7 +1635,9 @@ Content-Language: en
         "CFC046DEF50244D58CA58A0AD7FED287",
         "D555096A727C49FEADD03488154E6152",
         "E48A37FB87924885AD6879857DC297B2"
-    ]
+    ],
+    "before": "2020-08-01T02:22:10",
+    "threat": "https://tenprotocol.org/threats/diseases/covid19",
 }
                         ]]></artwork>
                     </figure>

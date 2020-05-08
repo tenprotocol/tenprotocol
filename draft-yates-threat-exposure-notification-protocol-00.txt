@@ -90,22 +90,22 @@ Table of Contents
      7.1.  Query Request . . . . . . . . . . . . . . . . . . . . . .  11
      7.2.  Query Validation  . . . . . . . . . . . . . . . . . . . .  12
      7.3.  Query Response  . . . . . . . . . . . . . . . . . . . . .  13
-     7.4.  Query Error Response  . . . . . . . . . . . . . . . . . .  13
-   8.  Fetching Diagnosis Keys . . . . . . . . . . . . . . . . . . .  13
+     7.4.  Query Error Response  . . . . . . . . . . . . . . . . . .  14
+   8.  Fetching Diagnosis Keys . . . . . . . . . . . . . . . . . . .  14
      8.1.  Fetch Request . . . . . . . . . . . . . . . . . . . . . .  14
-     8.2.  Fetch Validation  . . . . . . . . . . . . . . . . . . . .  14
+     8.2.  Fetch Validation  . . . . . . . . . . . . . . . . . . . .  15
      8.3.  Fetch Response  . . . . . . . . . . . . . . . . . . . . .  15
-     8.4.  Fetch Error . . . . . . . . . . . . . . . . . . . . . . .  15
-   9.  Revoking Diagnosis Keys . . . . . . . . . . . . . . . . . . .  15
+     8.4.  Fetch Error . . . . . . . . . . . . . . . . . . . . . . .  16
+   9.  Revoking Diagnosis Keys . . . . . . . . . . . . . . . . . . .  16
      9.1.  Revoke Request  . . . . . . . . . . . . . . . . . . . . .  16
-     9.2.  Revoke Validation . . . . . . . . . . . . . . . . . . . .  16
-     9.3.  Revoke Response . . . . . . . . . . . . . . . . . . . . .  16
-     9.4.  Revoke Error  . . . . . . . . . . . . . . . . . . . . . .  16
+     9.2.  Revoke Validation . . . . . . . . . . . . . . . . . . . .  17
+     9.3.  Revoke Response . . . . . . . . . . . . . . . . . . . . .  17
+     9.4.  Revoke Error  . . . . . . . . . . . . . . . . . . . . . .  17
    10. Security Considerations . . . . . . . . . . . . . . . . . . .  17
      10.1.  Authentication and Authorization . . . . . . . . . . . .  17
      10.2.  Privacy Considerations . . . . . . . . . . . . . . . . .  17
-     10.3.  TLS Requirements . . . . . . . . . . . . . . . . . . . .  17
-   11. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  17
+     10.3.  TLS Requirements . . . . . . . . . . . . . . . . . . . .  18
+   11. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  18
 
 
 
@@ -114,36 +114,36 @@ Yates & Salomon         Expires November 2, 2020                [Page 2]
 Internet-Draft                    TENP                          May 2020
 
 
-     11.1.  Threat Exposure Notification Server Metadata Registry  .  18
+     11.1.  Threat Exposure Notification Server Metadata Registry  .  19
        11.1.1.  Registration Template  . . . . . . . . . . . . . . .  19
-       11.1.2.  Initial Registry Contents  . . . . . . . . . . . . .  19
+       11.1.2.  Initial Registry Contents  . . . . . . . . . . . . .  20
      11.2.  Well-Known URI Registry  . . . . . . . . . . . . . . . .  21
        11.2.1.  Registry Contents  . . . . . . . . . . . . . . . . .  21
-   12. References  . . . . . . . . . . . . . . . . . . . . . . . . .  21
-     12.1.  Normative References . . . . . . . . . . . . . . . . . .  21
-     12.2.  Informative References . . . . . . . . . . . . . . . . .  22
+   12. References  . . . . . . . . . . . . . . . . . . . . . . . . .  22
+     12.1.  Normative References . . . . . . . . . . . . . . . . . .  22
+     12.2.  Informative References . . . . . . . . . . . . . . . . .  23
    Appendix A.  Configuration Examples (Non-normative) . . . . . . .  23
      A.1.  Example Configuration Request . . . . . . . . . . . . . .  23
-     A.2.  Example Configuration Response  . . . . . . . . . . . . .  23
-   Appendix B.  Upload Examples (Non-normative)  . . . . . . . . . .  23
-     B.1.  Example Upload Request  . . . . . . . . . . . . . . . . .  23
-     B.2.  Example Upload Successful Response  . . . . . . . . . . .  24
-     B.3.  Example Upload Empty Response . . . . . . . . . . . . . .  24
-     B.4.  Example Upload Error Response . . . . . . . . . . . . . .  24
-   Appendix C.  Query Examples (Non-normative) . . . . . . . . . . .  25
-     C.1.  Example Query Request . . . . . . . . . . . . . . . . . .  25
-     C.2.  Example Query Response  . . . . . . . . . . . . . . . . .  25
-     C.3.  Example Query Error Response  . . . . . . . . . . . . . .  26
-   Appendix D.  Fetch Examples (Non-normative) . . . . . . . . . . .  26
-     D.1.  Example Fetch Request . . . . . . . . . . . . . . . . . .  26
-     D.2.  Example Fetch Response  . . . . . . . . . . . . . . . . .  27
-     D.3.  Example Fetch Error Response  . . . . . . . . . . . . . .  27
-   Appendix E.  Revoke Examples (Non-normative)  . . . . . . . . . .  28
-     E.1.  Example Revoke Request  . . . . . . . . . . . . . . . . .  28
-     E.2.  Example Revoke Successful Response  . . . . . . . . . . .  28
-     E.3.  Example Revoke Empty Response . . . . . . . . . . . . . .  29
-     E.4.  Example Revoke Error Response . . . . . . . . . . . . . .  29
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  29
+     A.2.  Example Configuration Response  . . . . . . . . . . . . .  24
+   Appendix B.  Upload Examples (Non-normative)  . . . . . . . . . .  24
+     B.1.  Example Upload Request  . . . . . . . . . . . . . . . . .  24
+     B.2.  Example Upload Successful Response  . . . . . . . . . . .  25
+     B.3.  Example Upload Empty Response . . . . . . . . . . . . . .  25
+     B.4.  Example Upload Error Response . . . . . . . . . . . . . .  25
+   Appendix C.  Query Examples (Non-normative) . . . . . . . . . . .  26
+     C.1.  Example Query Request . . . . . . . . . . . . . . . . . .  26
+     C.2.  Example Query Response  . . . . . . . . . . . . . . . . .  26
+     C.3.  Example Query Error Response  . . . . . . . . . . . . . .  27
+   Appendix D.  Fetch Examples (Non-normative) . . . . . . . . . . .  27
+     D.1.  Example Fetch Request . . . . . . . . . . . . . . . . . .  27
+     D.2.  Example Fetch Response  . . . . . . . . . . . . . . . . .  28
+     D.3.  Example Fetch Error Response  . . . . . . . . . . . . . .  28
+   Appendix E.  Revoke Examples (Non-normative)  . . . . . . . . . .  29
+     E.1.  Example Revoke Request  . . . . . . . . . . . . . . . . .  29
+     E.2.  Example Revoke Successful Response  . . . . . . . . . . .  29
+     E.3.  Example Revoke Empty Response . . . . . . . . . . . . . .  30
+     E.4.  Example Revoke Error Response . . . . . . . . . . . . . .  30
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  30
 
 1.  Introduction
 
@@ -628,15 +628,16 @@ Internet-Draft                    TENP                          May 2020
       REQUIRED.  An array of strings representing the potential exposure
       keys for that key type.
 
-   before
-      OPTIONAL.  A date to search for exposures before, formatted as
-      specified in [RFC3339] with no time zone offset.
-
    after
-      OPTIONAL.  A date to search for exposures after, formatted as
-      specified in [RFC3339] with no time zone offset.  If omitted, the
-      server SHOULD provide a reasonable default based on the specified
-      threats.
+      OPTIONAL.  A time to search for diagnosis keys uploaded at or
+      after, formatted as specified in [RFC3339] with no time zone
+      offset.  If omitted, the server SHOULD provide a reasonable
+      default based on the specified threats.
+
+   before
+      OPTIONAL.  A time to search for diagnosis keys uploaded before,
+      formatted as specified in [RFC3339] with no time zone offset.  If
+      omitted, the server SHOULD use latest.
 
    threat
       REQUIRED.  A threat URI as defined in Section 4 specifying which
@@ -668,7 +669,6 @@ Internet-Draft                    TENP                          May 2020
 
 
 
-
 Yates & Salomon         Expires November 2, 2020               [Page 12]
 
 Internet-Draft                    TENP                          May 2020
@@ -684,6 +684,10 @@ Internet-Draft                    TENP                          May 2020
    https://tenprotocol.org/errors/after-invalid
       The "after" property is invalid.
 
+   https://tenprotocol.org/errors/before-after-invalid
+      The "before" property denotes a time prior to the one denoted in
+      the "after" property.
+
 7.3.  Query Response
 
    If the server has validated the request and accepted the query, the
@@ -693,6 +697,9 @@ Internet-Draft                    TENP                          May 2020
    The request object is a JSON object [RFC8259] with the following
    properties:
 
+   key_type
+      REQUIRED.  A URI of a key type.
+
    exposed
       REQUIRED.  A boolean denoting whether an exposure to the threat
       has been flagged.
@@ -701,8 +708,27 @@ Internet-Draft                    TENP                          May 2020
       OPTIONAL.  An array of days when exposures happened formatted as
       per [RFC3339] without a time component.
 
+   before
+      REQUIRED.  The time of the most recent upload across all diagnosis
+      keys considered.
+
+   after
+      OPTIONAL.  The time of the the oldest upload across all diagnosis
+      keys considered.
+
+   threat
+      REQUIRED.  A threat URI as defined in Section 4 specifying which
+      threat to check for exposure.
+
    message
       A human-readable message to be displayed to the user.
+
+
+
+Yates & Salomon         Expires November 2, 2020               [Page 13]
+
+Internet-Draft                    TENP                          May 2020
+
 
    links
       A list of WebLinks for more information ( [RFC7033] [RFC8288]).
@@ -722,14 +748,6 @@ Internet-Draft                    TENP                          May 2020
    The specification for how a client establishes connections to servers
    is covered in Section 3.2.
 
-
-
-
-Yates & Salomon         Expires November 2, 2020               [Page 13]
-
-Internet-Draft                    TENP                          May 2020
-
-
    Information about the diagnosis, client, individual or scope can be
    attached to the upload using Assertions Section 5.
 
@@ -744,21 +762,30 @@ Internet-Draft                    TENP                          May 2020
    key_type
       REQUIRED.  A URI of a key type.
 
-   before
-      OPTIONAL.  A date to search for exposures before, formatted as
-      specified in [RFC3339] with no time zone offset.
-
    after
-      OPTIONAL.  A date to search for exposures after, formatted as
-      specified in [RFC3339] with no time zone offset.  If omitted, the
-      server SHOULD provide a reasonable default based on the specified
-      threats.
+      OPTIONAL.  A time to fetch for diagnosis keys uploaded at or
+      after, formatted as specified in [RFC3339] with no time zone
+      offset.  If omitted, the server SHOULD provide a reasonable
+      default based on the specified threats.
 
-   threats
+   before
+      OPTIONAL.  A time to fetch for diagnosis keys uploaded before,
+      formatted as specified in [RFC3339] with no time zone offset.  If
+      omitted, the server SHOULD use latest.
+
+   threat
       REQUIRED.  Array of strings specifying which threats to check for
       exposure to Section 4.
 
    assertions
+
+
+
+Yates & Salomon         Expires November 2, 2020               [Page 14]
+
+Internet-Draft                    TENP                          May 2020
+
+
       OPTIONAL.  An object providing additional assertions related to
       the upload, diagnosis, individual or scope.  The key is an
       Assertion defined as per Section 5.  The client MUST ignore any
@@ -779,13 +806,6 @@ Internet-Draft                    TENP                          May 2020
    https://tenprotocol.org/errors/threats-required
       The "threat" property is missing or is not a string.
 
-
-
-Yates & Salomon         Expires November 2, 2020               [Page 14]
-
-Internet-Draft                    TENP                          May 2020
-
-
    https://tenprotocol.org/errors/threat-not-supported
       The threat specified in the "threat" property is not supported by
       the server.
@@ -795,6 +815,10 @@ Internet-Draft                    TENP                          May 2020
 
    https://tenprotocol.org/errors/after-invalid
       The "after" property is invalid.
+
+   https://tenprotocol.org/errors/before-after-invalid
+      The "before" property denotes a time prior to the one denoted in
+      the "after" property.
 
 8.3.  Fetch Response
 
@@ -811,8 +835,27 @@ Internet-Draft                    TENP                          May 2020
    key_type
       REQUIRED.  A URI of a key type.
 
+
+
+Yates & Salomon         Expires November 2, 2020               [Page 15]
+
+Internet-Draft                    TENP                          May 2020
+
+
    keys
       REQUIRED.  An array of URI's for the requested key types.
+
+   before
+      REQUIRED.  The time of the most recent upload across all diagnosis
+      keys considered.
+
+   after
+      OPTIONAL.  The time of the the oldest upload across all diagnosis
+      keys considered.
+
+   threat
+      REQUIRED.  Array of strings specifying which threats to check for
+      exposure to Section 4.
 
 8.4.  Fetch Error
 
@@ -832,16 +875,6 @@ Internet-Draft                    TENP                          May 2020
    Information about the diagnosis, client, individual or scope can be
    attached to the upload using assertions Section 5.
 
-
-
-
-
-
-Yates & Salomon         Expires November 2, 2020               [Page 15]
-
-Internet-Draft                    TENP                          May 2020
-
-
 9.1.  Revoke Request
 
    The client SHOULD retrieve the request URI from the Threat Exposure
@@ -857,6 +890,14 @@ Internet-Draft                    TENP                          May 2020
       REQUIRED.  An array of URI's for the requested key types.
 
    assertions
+
+
+
+Yates & Salomon         Expires November 2, 2020               [Page 16]
+
+Internet-Draft                    TENP                          May 2020
+
+
       OPTIONAL.  An object providing additional assertions related to
       the upload, diagnosis, individual or scope.  The key is an
       Assertion defined as per Section 5.  The client MUST ignore any
@@ -890,14 +931,6 @@ Internet-Draft                    TENP                          May 2020
    [RFC7807] containing at least the "type", "status" and "detail" as
    specified in [RFC7807].
 
-
-
-
-Yates & Salomon         Expires November 2, 2020               [Page 16]
-
-Internet-Draft                    TENP                          May 2020
-
-
 10.  Security Considerations
 
 10.1.  Authentication and Authorization
@@ -911,6 +944,15 @@ Internet-Draft                    TENP                          May 2020
    While the Assertions mechanism allows the requests to be augmented,
    it is up to the client and server to ensure that any assertions
    provided to not expose any personally identifiable information (PII).
+
+
+
+
+
+Yates & Salomon         Expires November 2, 2020               [Page 17]
+
+Internet-Draft                    TENP                          May 2020
+
 
 10.3.  TLS Requirements
 
@@ -945,15 +987,6 @@ Internet-Draft                    TENP                          May 2020
    an appropriate subject (e.g., "Request to register Threat Exposure
    Notification Server Metadata: example").
 
-
-
-
-
-Yates & Salomon         Expires November 2, 2020               [Page 17]
-
-Internet-Draft                    TENP                          May 2020
-
-
    Within the review period, the Designated Experts will either approve
    or deny the registration request, communicating this decision to the
    review list and IANA.  Denials should include an explanation and, if
@@ -967,6 +1000,15 @@ Internet-Draft                    TENP                          May 2020
    functionality, determining whether it is likely to be of general
    applicability or whether it is useful only for a single application,
    and whether the registration makes sense.
+
+
+
+
+
+Yates & Salomon         Expires November 2, 2020               [Page 18]
+
+Internet-Draft                    TENP                          May 2020
+
 
    IANA must only accept registry updates from the Designated Experts
    and should direct all requests for registration to the review mailing
@@ -1002,14 +1044,6 @@ Internet-Draft                    TENP                          May 2020
    represented in JSON strings as escaped characters must not be
    accepted.
 
-
-
-
-Yates & Salomon         Expires November 2, 2020               [Page 18]
-
-Internet-Draft                    TENP                          May 2020
-
-
 11.1.1.  Registration Template
 
    Metadata Name:
@@ -1024,6 +1058,14 @@ Internet-Draft                    TENP                          May 2020
       Brief description of the metadata (e.g., "Query Endpoint URL").
 
    Metadata Type:
+
+
+
+Yates & Salomon         Expires November 2, 2020               [Page 19]
+
+Internet-Draft                    TENP                          May 2020
+
+
       Description of the metadata type (e.g., string, boolean, number)
       and whether multiple values are expected (e.g., array of strings,
       array of numbers).
@@ -1058,14 +1100,6 @@ Internet-Draft                    TENP                          May 2020
 
    o  Metadata Description: URL of the server's Query endpoint.
 
-
-
-
-Yates & Salomon         Expires November 2, 2020               [Page 19]
-
-Internet-Draft                    TENP                          May 2020
-
-
    o  Change Controller: tenp-ext-review@tenprotocol.org
 
    o  Specification Document(s): Section 3 of this specification.
@@ -1080,6 +1114,13 @@ Internet-Draft                    TENP                          May 2020
    o  Change Controller: tenp-ext-review@tenprotocol.org
 
    o  Specification Document(s): Section 3 of this specification.
+
+
+
+Yates & Salomon         Expires November 2, 2020               [Page 20]
+
+Internet-Draft                    TENP                          May 2020
+
 
    o  Metadata Name: upload_endpoint
 
@@ -1113,15 +1154,6 @@ Internet-Draft                    TENP                          May 2020
 
    o  Specification Document(s): Section 3 of this specification.
 
-
-
-
-
-Yates & Salomon         Expires November 2, 2020               [Page 20]
-
-Internet-Draft                    TENP                          May 2020
-
-
 11.2.  Well-Known URI Registry
 
    This specification registers the well-known URI defined in
@@ -1133,6 +1165,18 @@ Internet-Draft                    TENP                          May 2020
    o  Change controller: IESG
    o  Specification document: Section 3.2 of this specification.
    o  Related information: (none)
+
+
+
+
+
+
+
+
+Yates & Salomon         Expires November 2, 2020               [Page 21]
+
+Internet-Draft                    TENP                          May 2020
+
 
 12.  References
 
@@ -1171,13 +1215,6 @@ Internet-Draft                    TENP                          May 2020
               "WebFinger", RFC 7033, DOI 10.17487/RFC7033, September
               2013, <https://www.rfc-editor.org/info/rfc7033>.
 
-
-
-Yates & Salomon         Expires November 2, 2020               [Page 21]
-
-Internet-Draft                    TENP                          May 2020
-
-
    [RFC7230]  Fielding, R., Ed. and J. Reschke, Ed., "Hypertext Transfer
               Protocol (HTTP/1.1): Message Syntax and Routing",
               RFC 7230, DOI 10.17487/RFC7230, June 2014,
@@ -1188,6 +1225,14 @@ Internet-Draft                    TENP                          May 2020
               Security (TLS) and Datagram Transport Layer Security
               (DTLS)", BCP 195, RFC 7525, DOI 10.17487/RFC7525, May
               2015, <https://www.rfc-editor.org/info/rfc7525>.
+
+
+
+
+Yates & Salomon         Expires November 2, 2020               [Page 22]
+
+Internet-Draft                    TENP                          May 2020
+
 
    [RFC7807]  Nottingham, M. and E. Wilde, "Problem Details for HTTP
               APIs", RFC 7807, DOI 10.17487/RFC7807, March 2016,
@@ -1222,18 +1267,6 @@ Internet-Draft                    TENP                          May 2020
               content/uploads/2020/04/The-PACT-protocol-specification-
               ver-0.1.pdf>.
 
-
-
-
-
-
-
-
-Yates & Salomon         Expires November 2, 2020               [Page 22]
-
-Internet-Draft                    TENP                          May 2020
-
-
    [who]      World Health Organization (WHO) and Center for Disease
               Control and Prevention (CDC), "Emergency Guideline -
               Implementation and management of contact tracing for Ebola
@@ -1247,6 +1280,15 @@ A.1.  Example Configuration Request
 
    The client would make the following request to the server
    "https://example.com" to obtain its Configuration document:
+
+
+
+
+
+Yates & Salomon         Expires November 2, 2020               [Page 23]
+
+Internet-Draft                    TENP                          May 2020
+
 
    GET /.well-known/threat-exposure-configuration HTTP/1.1
    Accept: application/json
@@ -1285,7 +1327,21 @@ B.1.  Example Upload Request
 
 
 
-Yates & Salomon         Expires November 2, 2020               [Page 23]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Yates & Salomon         Expires November 2, 2020               [Page 24]
 
 Internet-Draft                    TENP                          May 2020
 
@@ -1341,7 +1397,7 @@ B.4.  Example Upload Error Response
 
 
 
-Yates & Salomon         Expires November 2, 2020               [Page 24]
+Yates & Salomon         Expires November 2, 2020               [Page 25]
 
 Internet-Draft                    TENP                          May 2020
 
@@ -1380,7 +1436,7 @@ C.1.  Example Query Request
            "D555096A727C49FEADD03488154E6152",
            "E48A37FB87924885AD6879857DC297B2"
        ],
-       "after": "2020-04-01T00:00:00",
+       "after": "2020-04-01T01:23:45",
        "threat": "https://tenprotocol.org/threats/diseases/covid19",
        "assertions": {
            "https://tenprotocol.org/assertions/geo/country/1.0": ["US"],
@@ -1397,7 +1453,7 @@ C.2.  Example Query Response
 
 
 
-Yates & Salomon         Expires November 2, 2020               [Page 25]
+Yates & Salomon         Expires November 2, 2020               [Page 26]
 
 Internet-Draft                    TENP                          May 2020
 
@@ -1407,8 +1463,11 @@ Internet-Draft                    TENP                          May 2020
    Content-Language: en
 
    {
+       "key_type" : "https://tenprotocol.org/keys/btle",
        "exposed": true,
        "exposures": ["2020-04-20"],
+       "before": "2020-05-01T02:13:42",
+       "threat": "https://tenprotocol.org/threats/diseases/covid19",
        "message": "You were exposed to COVID-19 on April 20th 2020.
           Please contact your local health authority.",
        "links": [
@@ -1450,10 +1509,7 @@ D.1.  Example Fetch Request
 
 
 
-
-
-
-Yates & Salomon         Expires November 2, 2020               [Page 26]
+Yates & Salomon         Expires November 2, 2020               [Page 27]
 
 Internet-Draft                    TENP                          May 2020
 
@@ -1493,7 +1549,9 @@ D.2.  Example Fetch Response
            "CFC046DEF50244D58CA58A0AD7FED287",
            "D555096A727C49FEADD03488154E6152",
            "E48A37FB87924885AD6879857DC297B2"
-       ]
+       ],
+       "before": "2020-08-01T02:22:10",
+       "threat": "https://tenprotocol.org/threats/diseases/covid19",
    }
 
 D.3.  Example Fetch Error Response
@@ -1507,9 +1565,7 @@ D.3.  Example Fetch Error Response
 
 
 
-
-
-Yates & Salomon         Expires November 2, 2020               [Page 27]
+Yates & Salomon         Expires November 2, 2020               [Page 28]
 
 Internet-Draft                    TENP                          May 2020
 
@@ -1565,7 +1621,7 @@ E.2.  Example Revoke Successful Response
 
 
 
-Yates & Salomon         Expires November 2, 2020               [Page 28]
+Yates & Salomon         Expires November 2, 2020               [Page 29]
 
 Internet-Draft                    TENP                          May 2020
 
@@ -1621,4 +1677,4 @@ Authors' Addresses
 
 
 
-Yates & Salomon         Expires November 2, 2020               [Page 29]
+Yates & Salomon         Expires November 2, 2020               [Page 30]
