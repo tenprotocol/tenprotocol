@@ -20,4 +20,4 @@ Start by creating an Issue in this GitHub repository, where we can discuss any c
 
 Changes can be made by creating a Pull Request and modifying `draft-yates-threat-exposure-notification-protocol-00.xml`
 (note do not edit the html and txt files as they are generated files). The Makefile should be used to regenerate the
-html and txt files and include those updates in the Pull Request.
+html and txt files and include those updates in the Pull Request. You must have the `xml2rfc` tool installed.
