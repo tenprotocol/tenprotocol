@@ -1,0 +1,40 @@
+name: Build
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: true
+        token: ${{ secrets.GITHUB_TOKEN }}
+    - uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+    - run: python -m pip install --upgrade pip
+    - run: pip install xml2rfc
+    - run: xml2rfc --prep --text --html draft-yates-threat-exposure-notification-protocol-00.xml
+    - run: mkdir -p public/rfc/html public/rfc/txt public/rfc/reference
+    - uses: peaceiris/actions-hugo@v2
+      with:
+        hugo-version: '0.71.0'
+    - run: hugo --minify -t terminal
+      working-directory: docs
+    - run: cp draft-yates-threat-exposure-notification-protocol-*.txt public/rfc/txt/
+    - run: cp draft-yates-threat-exposure-notification-protocol-*.html public/rfc/html/
+    - run: cp reference.draft-yates-threat-exposure-notification-protocol-*.xml public/rfc/reference/
+    - uses: peaceiris/actions-gh-pages@v3
+      with:
+        deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+        external_repository: tenprotocol/tenprotocol.github.io
+        publish_dir: ./public
+        publish_branch: master
