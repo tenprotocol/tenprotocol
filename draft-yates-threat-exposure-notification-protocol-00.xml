@@ -261,7 +261,7 @@ Deceased <--+ Diagnosed +----> Recovered
                         <t hangText="upload_endpoint">
                             <vspace/>
                             RECOMMENDED.
-                            URL of the server's Fetch endpoint.
+                            URL of the server's Upload endpoint.
                         </t>
 
                         <t hangText="supports_fetch">
@@ -273,7 +273,7 @@ Deceased <--+ Diagnosed +----> Recovered
                         <t hangText="fetch_endpoint">
                             <vspace/>
                             RECOMMENDED.
-                            URL of the server's Query endpoint.
+                            URL of the server's Fetch endpoint.
                         </t>
 
                         <t hangText="supports_revoke">
@@ -472,7 +472,7 @@ Deceased <--+ Diagnosed +----> Recovered
             <section anchor="UploadValidation" title="Upload Validation">
                 <t>
                     The server SHOULD validate the request, including ensuring e.g., that the
-                    <spanx style="verb">keys</spanx>
+                    <spanx style="verb">key_type</spanx>
                     is supported, <spanx style="verb">threat</spanx> is supported and <spanx style="verb">diagnosed
                 </spanx> is
                     a properly formatted time
