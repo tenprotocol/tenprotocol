@@ -360,14 +360,14 @@ Internet-Draft                    TENP                          May 2020
       the Upload operation.
 
    upload_endpoint
-      RECOMMENDED.  URL of the server's Fetch endpoint.
+      RECOMMENDED.  URL of the server's Upload endpoint.
 
    supports_fetch
       REQUIRED.  Boolean value indicating whether the server supports
       the Fetch operation.
 
    fetch_endpoint
-      RECOMMENDED.  URL of the server's Query endpoint.
+      RECOMMENDED.  URL of the server's Fetch endpoint.
 
    supports_revoke
       REQUIRED.  Boolean value indicating whether the server supports
@@ -542,8 +542,8 @@ Internet-Draft                    TENP                          May 2020
 6.2.  Upload Validation
 
    The server SHOULD validate the request, including ensuring e.g., that
-   the "keys" is supported, "threat" is supported and "diagnosed " is a
-   properly formatted time [RFC3339] occurring in the past.
+   the "key_type" is supported, "threat" is supported and "diagnosed "
+   is a properly formatted time [RFC3339] occurring in the past.
 
    The following Problem Detail Types [RFC7807] are defined for
    validation:

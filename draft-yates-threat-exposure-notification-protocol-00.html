@@ -447,7 +447,7 @@
 <link href="#rfc.authors" rel="Chapter">
 
 
-  <meta name="generator" content="xml2rfc version 2.43.0 - https://tools.ietf.org/tools/xml2rfc" />
+  <meta name="generator" content="xml2rfc version 2.44.0 - https://tools.ietf.org/tools/xml2rfc" />
   <link rel="schema.dct" href="http://purl.org/dc/terms/" />
 
   <meta name="dct.creator" content="Yates, S. and Y. Salomon" />
@@ -778,13 +778,13 @@ Deceased &lt;--+ Diagnosed +----&gt; Recovered
 <br> REQUIRED.  Boolean value indicating whether the server supports the Upload operation.  </dd>
 <dt>upload_endpoint</dt>
 <dd style="margin-left: 8">
-<br> RECOMMENDED.  URL of the server's Fetch endpoint.  </dd>
+<br> RECOMMENDED.  URL of the server's Upload endpoint.  </dd>
 <dt>supports_fetch</dt>
 <dd style="margin-left: 8">
 <br> REQUIRED.  Boolean value indicating whether the server supports the Fetch operation.  </dd>
 <dt>fetch_endpoint</dt>
 <dd style="margin-left: 8">
-<br> RECOMMENDED.  URL of the server's Query endpoint.  </dd>
+<br> RECOMMENDED.  URL of the server's Fetch endpoint.  </dd>
 <dt>supports_revoke</dt>
 <dd style="margin-left: 8">
 <br> REQUIRED.  Boolean value indicating whether the server supports the Revoke operation.  </dd>
@@ -890,7 +890,7 @@ Deceased &lt;--+ Diagnosed +----&gt; Recovered
 <h1 id="rfc.section.6.2">
 <a href="#rfc.section.6.2">6.2.</a> <a href="#UploadValidation" id="UploadValidation">Upload Validation</a>
 </h1>
-<p id="rfc.section.6.2.p.1">The server SHOULD validate the request, including ensuring e.g., that the <samp>keys</samp> is supported, <samp>threat</samp> is supported and <samp>diagnosed </samp> is a properly formatted time <a href="#RFC3339" class="xref">[RFC3339]</a> occurring in the past.  </p>
+<p id="rfc.section.6.2.p.1">The server SHOULD validate the request, including ensuring e.g., that the <samp>key_type</samp> is supported, <samp>threat</samp> is supported and <samp>diagnosed </samp> is a properly formatted time <a href="#RFC3339" class="xref">[RFC3339]</a> occurring in the past.  </p>
 <p id="rfc.section.6.2.p.2">The following Problem Detail Types <a href="#RFC7807" class="xref">[RFC7807]</a> are defined for validation: </p>
 
 <dl>
